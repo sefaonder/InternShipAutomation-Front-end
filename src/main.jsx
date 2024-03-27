@@ -2,13 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from 'src/App';
+import { BrowserRouter } from 'react-router-dom';
+
 import { store } from 'src/store/store';
-import { Provider } from 'react-redux';
+import { Provider as ReduxToolkitProvider } from 'react-redux';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ReduxToolkitProvider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ReduxToolkitProvider>
   </React.StrictMode>,
 );
