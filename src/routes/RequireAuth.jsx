@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentToken } from 'src/store/services/auth/authSlice';
 import React from 'react';
 
-export const RequireAuth = ({ children, roles }) => {
+export const RequireAuth = ({ roles }) => {
   // TODO: require more Role base control
   const token = useSelector(selectCurrentToken);
   console.log('token', token);
