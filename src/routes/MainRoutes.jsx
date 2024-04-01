@@ -54,16 +54,16 @@ const MainRoutes = {
     {
       path: '/profile',
       element: <RequireAuth />,
-      children: [{ path: '/', element: <ProfileDefault /> }],
+      children: [{ path: '/profile', element: <ProfileDefault /> }],
     },
     // InternStatusRoutes only for Auth users
     {
       path: '/intern-status',
       element: <RequireAuth />,
       children: [
-        { path: '/', element: <InternStatusList /> },
-        { path: '/:internStatusId', element: <InternStatusDetail /> },
-        { path: '/add', element: <InternStatusAdd /> },
+        { path: '/intern-status/', element: <InternStatusList /> },
+        { path: '/intern-status/:internStatusId', element: <InternStatusDetail /> },
+        { path: '/intern-status/add', element: <InternStatusAdd /> },
       ],
     },
     // InternFormRoutes only for Auth users
@@ -71,10 +71,10 @@ const MainRoutes = {
       path: '/intern-form',
       element: <RequireAuth />,
       children: [
-        { path: '/', element: <InternFormList /> },
-        { path: '/:internFormId', element: <InternFormDetail /> },
-        { path: '/add', element: <InternFormAdd /> },
-        { path: '/update/:internFormId', element: <InternFormUpdate /> },
+        { path: '/intern-form/', element: <InternFormList /> },
+        { path: '/intern-form/:internFormId', element: <InternFormDetail /> },
+        { path: '/intern-form/add', element: <InternFormAdd /> },
+        { path: '/intern-form/update/:internFormId', element: <InternFormUpdate /> },
       ],
     },
     // InterviewRoutes only for Auth users
@@ -82,10 +82,10 @@ const MainRoutes = {
       path: '/interview',
       element: <RequireAuth />,
       children: [
-        { path: '/', element: <InterviewList /> },
-        { path: '/:interviewId', element: <InterviewDetail /> },
-        { path: '/add', element: <InterviewAdd /> },
-        { path: '/update/:interviewId', element: <InterviewUpdate /> },
+        { path: '/interview/', element: <InterviewList /> },
+        { path: '/interview/:interviewId', element: <InterviewDetail /> },
+        { path: '/interview/add', element: <InterviewAdd /> },
+        { path: '/interview/update/:interviewId', element: <InterviewUpdate /> },
       ],
     },
     // SurveyList Only For Admin & Comission
@@ -93,10 +93,10 @@ const MainRoutes = {
       path: '/survey',
       element: <RequireAuth />,
       children: [
-        { path: '/', element: <SurveyList /> },
-        { path: '/:surveyId', element: <SurveyDetail /> },
-        { path: '/add', element: <SurveyAdd /> },
-        { path: '/update/:surveyId', element: <SurveyUpdate /> },
+        { path: '/survey/', element: <SurveyList /> },
+        { path: '/survey/:surveyId', element: <SurveyDetail /> },
+        { path: '/survey/add', element: <SurveyAdd /> },
+        { path: '/survey/update/:surveyId', element: <SurveyUpdate /> },
       ],
     },
     // confidential-report Only For Admin & Comission
@@ -104,10 +104,10 @@ const MainRoutes = {
       path: '/confidential-report',
       element: <RequireAuth />,
       children: [
-        { path: '/', element: <ConfidentalReportList /> },
-        { path: '/::confidentialReportId', element: <ConfidentalReportDetail /> },
-        { path: '/add', element: <ConfidentalReportAdd /> },
-        { path: '/update/::confidentialReportId', element: <ConfidentalReportUpdate /> },
+        { path: '/confidential-report/', element: <ConfidentalReportList /> },
+        { path: '/confidential-report/:confidentialReportId', element: <ConfidentalReportDetail /> },
+        { path: '/confidential-report/add', element: <ConfidentalReportAdd /> },
+        { path: '/confidential-report/update/:confidentialReportId', element: <ConfidentalReportUpdate /> },
       ],
     },
     // userList Only for Admin
@@ -115,16 +115,16 @@ const MainRoutes = {
       path: '/user',
       element: <RequireAuth />,
       children: [
-        { path: '/', element: <UserList /> },
-        { path: '/:userId', element: <UserDetail /> },
-        { path: '/add', element: <UserAdd /> },
-        { path: '/update/:userId', element: <UserUpdate /> },
+        { path: '/user/', element: <UserList /> },
+        { path: '/user/:userId', element: <UserDetail /> },
+        { path: '/user/add', element: <UserAdd /> },
+        { path: '/user/update/:userId', element: <UserUpdate /> },
       ],
     },
     {
       path: '/internship-panel',
       element: <RequireAuth />,
-      children: [{ path: '/', element: <InterShipPanel /> }],
+      children: [{ path: '/internship-panel/', element: <InterShipPanel /> }],
     },
   ],
   errorElement: <p>Hello something bad is happended</p>,
