@@ -6,13 +6,7 @@ import React from 'react';
 import NavItem from './NavItem';
 
 const NavGroup = ({ navigations }) => {
-  return (
-    <List>
-      {navigations.map((object, index) => (
-        <NavItem item={object} key={index} />
-      ))}
-    </List>
-  );
+  return <List>{navigations.map((object, index) => object?.permission && <NavItem item={object} key={index} />)}</List>;
 };
 
 NavGroup.propTypes = {
