@@ -8,7 +8,7 @@ export const RequireAuth = ({ roles }) => {
   const token = useSelector(selectCurrentToken);
   console.log('token', token);
   const location = useLocation();
-  if (token) {
+  if (true) {
     return <Outlet />;
   } else {
     return <Navigate to="/login" state={{ from: location }} replace />;

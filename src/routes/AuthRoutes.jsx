@@ -13,12 +13,12 @@ const AuthRoutes = {
   element: <MinimalLayout />,
   children: [
     {
-      path: 'login',
-      element: <Login />,
-    },
-    {
       path: 'register',
       element: <Register />,
+    },
+    {
+      path: 'login',
+      element: <Login />,
     },
     {
       path: 'password-refresh',
