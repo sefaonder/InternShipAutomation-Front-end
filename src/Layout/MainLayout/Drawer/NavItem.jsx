@@ -8,9 +8,9 @@ import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const NavItem = ({ item, key }) => {
+const NavItem = ({ item, id }) => {
   return (
-    <ListItem key={key} disablePadding>
+    <ListItem key={id} disablePadding>
       <Link to={item.path}>
         <ListItemButton>
           <ListItemIcon>{item.Icon}</ListItemIcon>

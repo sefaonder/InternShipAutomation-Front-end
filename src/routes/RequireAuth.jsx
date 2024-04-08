@@ -1,12 +1,12 @@
 import { useLocation, Navigate, Outlet, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from 'src/store/services/auth/authSlice';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const RequireAuth = ({ roles }) => {
   // TODO: require more Role base control
-  const token = useSelector(selectCurrentToken);
-  console.log('token', token);
+  const token = useSelector((state) => state.auth);
+
   const location = useLocation();
   if (token) {
     return <Outlet />;

@@ -6,28 +6,22 @@ import MinimalLayout from 'src/Layout/MinimalLayout';
 const Login = Loadable(lazy(() => import('src/pages/Auth/Login/Login')));
 const Register = Loadable(lazy(() => import('src/pages/Auth/Register/Register')));
 const PasswordRefresh = Loadable(lazy(() => import('src/pages/Auth/PasswordRefresh/PasswordRefresh')));
-const PasswordChange = Loadable(lazy(() => import('src/pages/Auth/PasswordChange/PasswordChange')));
 
 const AuthRoutes = {
   path: '/',
   element: <MinimalLayout />,
   children: [
     {
-      path: 'login',
-      element: <Login />,
-    },
-    {
       path: 'register',
       element: <Register />,
     },
     {
-      path: 'password-refresh',
-      element: <PasswordRefresh />,
+      path: 'login',
+      element: <Login />,
     },
     {
-      // Maybe this route required uniqe Role Check
-      path: 'password-change',
-      element: <PasswordChange />,
+      path: 'password-refresh',
+      element: <PasswordRefresh />,
     },
   ],
 };

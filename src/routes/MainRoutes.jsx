@@ -33,11 +33,6 @@ const ConfidentalReportDetail = Loadable(lazy(() => import('src/pages/Profile/Pr
 const ConfidentalReportAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 const ConfidentalReportUpdate = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 
-const UserList = Loadable(lazy(() => import('src/pages/User/User')));
-const UserDetail = Loadable(lazy(() => import('src/pages/User/User')));
-const UserAdd = Loadable(lazy(() => import('src/pages/User/User')));
-const UserUpdate = Loadable(lazy(() => import('src/pages/User/User')));
-
 const InterShipPanel = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -108,17 +103,6 @@ const MainRoutes = {
         { path: '/confidential-report/:confidentialReportId', element: <ConfidentalReportDetail /> },
         { path: '/confidential-report/add', element: <ConfidentalReportAdd /> },
         { path: '/confidential-report/update/:confidentialReportId', element: <ConfidentalReportUpdate /> },
-      ],
-    },
-    // userList Only for Admin
-    {
-      path: '/user',
-      element: <RequireAuth />,
-      children: [
-        { path: '/user/', element: <UserList /> },
-        { path: '/user/:userId', element: <UserDetail /> },
-        { path: '/user/add', element: <UserAdd /> },
-        { path: '/user/update/:userId', element: <UserUpdate /> },
       ],
     },
     {
