@@ -26,6 +26,9 @@ import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { Search } from '@mui/icons-material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { removeProfile } from 'src/store/services/profile/ProfileSlice';
+import { useNavigate } from 'react-router-dom';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
@@ -33,12 +36,19 @@ const Header = ({ open, handleDrawerToggle }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const settings = ['Profile'];
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    dispatch(removeProfile());
+    navigate('/login');
   };
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -89,6 +99,11 @@ const Header = ({ open, handleDrawerToggle }) => {
               </Typography>
             </MenuItem>
           ))}
+          <MenuItem onClick={handleLogout}>
+            <Typography textAlign="center">
+              <Link> Çıkış Yap </Link>
+            </Typography>
+          </MenuItem>
         </Menu>
       </Box>
     </Toolbar>

@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useLoginMutation } from 'src/store/services/auth/authApiSlice';
 import './login.css';
+import { setCredentials } from 'src/store/services/auth/authSlice';
 
 function Login() {
   const navigate = useNavigate();
@@ -20,6 +21,17 @@ function Login() {
     password: yup.string().required('Password is required'),
   });
 
+  const setToken = async (userData) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      try {
+        localStorage.setItem('token', JSON.stringify(userData));
+      } catch (err) {
+        console.log('Error occurred while fetching user data:', err);
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -28,8 +40,9 @@ function Login() {
     onSubmit: async (values) => {
       try {
         const userData = await login(values).unwrap();
-        //dispatch(setCredentials({ ...userData, user }));
-        console.log(userData);
+        dispatch(setCredentials(userData));
+        setToken(userData);
+        navigate('/');
       } catch (err) {
         if (!err?.originalStatus) {
           // isLoading: true until timeout occurs
