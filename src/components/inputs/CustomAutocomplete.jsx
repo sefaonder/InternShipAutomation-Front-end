@@ -22,7 +22,7 @@ const CustomAutocomplete = ({
   console.log('value', inputValue);
 
   useEffect(() => {
-    setInputValue(value.name ? `${value.name} ${value.last_name}` : '');
+    setInputValue(labelFunc(value));
   }, [value]);
 
   return (
@@ -31,7 +31,7 @@ const CustomAutocomplete = ({
       loading={isLoading}
       freeSolo
       renderOption={renderOption}
-      getOptionLabel={(option) => (option.name ? `${option.name} ${option.last_name}` : '')}
+      getOptionLabel={(option) => labelFunc(option)}
       value={value?.name || null}
       filterOptions={filterOptions}
       onChange={(event, newValue) => {
