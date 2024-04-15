@@ -13,10 +13,10 @@ const InternStatusList = Loadable(lazy(() => import('src/pages/Profile/Profile')
 const InternStatusDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 const InternStatusAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 
-const InternFormList = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InternFormDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InternFormAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InternFormUpdate = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+const InternFormList = Loadable(lazy(() => import('src/pages/InternForm/InternFormList')));
+const InternFormDetail = Loadable(lazy(() => import('src/pages/InternForm/InternFormDetail/InternFormDetail')));
+const InternFormAdd = Loadable(lazy(() => import('src/pages/InternForm/AddInternForm/InternFormAdd')));
+const InternFormUpdate = Loadable(lazy(() => import('src/pages/InternForm/InternFormList')));
 
 const InterviewList = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 const InterviewDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
@@ -32,6 +32,11 @@ const ConfidentalReportList = Loadable(lazy(() => import('src/pages/Profile/Prof
 const ConfidentalReportDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 const ConfidentalReportAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 const ConfidentalReportUpdate = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+
+const UserList = Loadable(lazy(() => import('src/pages/User/User')));
+const UserDetail = Loadable(lazy(() => import('src/pages/User/User')));
+const UserAdd = Loadable(lazy(() => import('src/pages/User/User')));
+const UserUpdate = Loadable(lazy(() => import('src/pages/User/User')));
 
 const InterShipPanel = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 
@@ -106,12 +111,22 @@ const MainRoutes = {
       ],
     },
     {
+      path: '/user',
+      element: <RequireAuth />,
+      children: [
+        { path: '/user/', element: <UserList /> },
+        { path: '/user/:userId', element: <UserDetail /> },
+        { path: '/user/add', element: <UserAdd /> },
+        { path: '/user/update/:userId', element: <UserUpdate /> },
+      ],
+    },
+    {
       path: '/internship-panel',
       element: <RequireAuth />,
       children: [{ path: '/internship-panel/', element: <InterShipPanel /> }],
     },
   ],
-  errorElement: <p>Hello something bad is happended</p>,
+  // errorElement: <p>Hello something bad is happended</p>,
 };
 
 export default MainRoutes;

@@ -6,6 +6,7 @@ const baseQuery = fetchBaseQuery({
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
+
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
@@ -18,20 +19,25 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
   if (result?.error?.originalStatus === 403) {
     console.log('sending refresh token');
-    // send refresh token to get new access token
+    // send refresh token to get new acces token
     const refreshResult = await baseQuery('/refresh', api, extraOptions);
-    console.log(refreshResult);
+    console.log('refreshResult', refreshResult);
+
     if (refreshResult?.data) {
       const user = api.getState().auth.user;
       // store the new token
+
       api.dispatch(setCredentials({ ...refreshResult.data, user }));
-      // retry the original query with new access token
+
+      // re-try the original query with new acces token
+
       result = await baseQuery(args, api, extraOptions);
     } else {
+      // TODO: refresh token expires
       api.dispatch(logOut());
     }
   }
-
+  // TODO: 401 error for permissions
   return result;
 };
 

@@ -22,13 +22,12 @@ function Login() {
   });
 
   const setToken = async (userData) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      try {
-        localStorage.setItem('token', JSON.stringify(userData));
-      } catch (err) {
-        console.log('Error occurred while fetching user data:', err);
-      }
+    try {
+      const authObject = { roles: userData.roles, token: userData.accessToken };
+      localStorage.setItem('token', JSON.stringify(authObject));
+    } catch (err) {
+      // TODO: snackbar error and navigate to login
+      console.log('Error occurred while fetching user data:', err);
     }
   };
 
@@ -41,7 +40,7 @@ function Login() {
       try {
         const userData = await login(values).unwrap();
         dispatch(setCredentials(userData));
-        setToken(userData);
+        await setToken(userData);
         navigate('/');
       } catch (err) {
         if (!err?.originalStatus) {

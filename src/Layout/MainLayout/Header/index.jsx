@@ -29,11 +29,13 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { removeProfile } from 'src/store/services/profile/ProfileSlice';
 import { useNavigate } from 'react-router-dom';
+import { useLogoutMutation } from 'src/store/services/auth/authApiSlice';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
 const Header = ({ open, handleDrawerToggle }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [logout, { isLoading }] = useLogoutMutation();
 
   const settings = ['Profile'];
   const navigate = useNavigate();
@@ -46,9 +48,18 @@ const Header = ({ open, handleDrawerToggle }) => {
     setAnchorElUser(event.currentTarget);
   };
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    dispatch(removeProfile());
-    navigate('/login');
+    logout()
+      .then(() => {
+        localStorage.removeItem('user');
+        dispatch(removeProfile());
+        navigate('/login');
+      })
+      .catch(() => {
+        // TODO: snackbar error
+        localStorage.removeItem('user');
+        dispatch(removeProfile());
+        navigate('/login');
+      });
   };
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));

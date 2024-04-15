@@ -10,24 +10,20 @@ function Dashboard() {
 
   useEffect(() => {
     const getUser = async () => {
-      const user = localStorage.getItem('user');
-      if (!user) {
-        try {
-          const response = await getProfile();
-          if (response.error) {
-            throw new Error(response.error.message);
-          }
-
-          const userData = response.data; // Assuming data is stored in response.data
-          if (userData) {
-            localStorage.setItem('user', JSON.stringify({ ...userData }));
-            dispatch(setProfile(userData));
-          } else {
-            console.log('User data is null or undefined.');
-          }
-        } catch (err) {
-          console.log('Error occurred while fetching user data:', err);
+      try {
+        const response = await getProfile();
+        if (response.error) {
+          throw new Error(response.error.message);
         }
+
+        const userData = response.data; // Assuming data is stored in response.data
+        if (userData) {
+          dispatch(setProfile(userData));
+        } else {
+          console.log('User data is null or undefined.');
+        }
+      } catch (err) {
+        console.log('Error occurred while fetching user data:', err);
       }
     };
     getUser();
