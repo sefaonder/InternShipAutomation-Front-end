@@ -3,10 +3,15 @@ import CompanyInfoAdd from './CompanyInfoAdd';
 import StudentInfoAdd from './StudentInfoAdd';
 import FormAdd from './FormAdd';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 function InternFormAdd() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  const internForm = useSelector((state) => state.internForm);
+
+  console.log('hibili', internForm);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -30,9 +35,23 @@ function InternFormAdd() {
         </Step>
       </Stepper>
       {isLoading && <CircularProgress />}
-      {step === 1 && <FormAdd nextStep={nextStep} setIsLoading={(e) => setIsLoading(e)} />}
-      {step === 2 && <StudentInfoAdd nextStep={nextStep} prevStep={prevStep} setIsLoading={(e) => setIsLoading(e)} />}
-      {step === 3 && <CompanyInfoAdd nextStep={nextStep} prevStep={prevStep} setIsLoading={(e) => setIsLoading(e)} />}
+      {step === 1 && <FormAdd internFormData={internForm} nextStep={nextStep} setIsLoading={(e) => setIsLoading(e)} />}
+      {step === 2 && (
+        <StudentInfoAdd
+          internFormData={internForm}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          setIsLoading={(e) => setIsLoading(e)}
+        />
+      )}
+      {step === 3 && (
+        <CompanyInfoAdd
+          internFormData={internForm}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          setIsLoading={(e) => setIsLoading(e)}
+        />
+      )}
     </Container>
   );
 }

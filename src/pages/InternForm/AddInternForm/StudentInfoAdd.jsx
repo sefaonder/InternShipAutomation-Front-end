@@ -1,15 +1,23 @@
 import { Button, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import CustomDateInput from 'src/components/inputs/CustomDateInput';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import moment from 'moment';
-import { useCreateNewStudentInfoMutation } from 'src/store/services/internForm/internFormApiSlice';
+import {
+  useCreateNewStudentInfoMutation,
+  useUpdateStudentInfoMutation,
+} from 'src/store/services/internForm/internFormApiSlice';
+import { useSelector } from 'react-redux';
 
-function StudentInfoAdd({ nextStep, prevStep }) {
+function StudentInfoAdd({ nextStep, prevStep, internFormData }) {
   const [data, setData] = useState('');
   const [createNewStudentInfo, { isLoading }] = useCreateNewStudentInfoMutation();
+  const [updateStudentInfo, { isLoadingUpdate }] = useUpdateStudentInfoMutation();
+
+  const internFormId = useSelector((state) => state.internForm.id);
+  const studentInfo = internFormData?.student_info?.student_info;
 
   const handleNext = () => {
     // Adım 1 verileri işle
@@ -22,10 +30,21 @@ function StudentInfoAdd({ nextStep, prevStep }) {
     prevStep();
   };
 
+  useEffect(() => {
+    if (studentInfo?.id) {
+      console.log('formil2', internFormData);
+      formik.setFieldValue('fathersName', studentInfo.fathers_name, false);
+      formik.setFieldValue('mothersName', studentInfo.mothers_name, false);
+      formik.setFieldValue('birthDate', studentInfo.birth_date, false);
+      formik.setFieldValue('birthPlace', studentInfo.birth_place, false);
+      formik.setFieldValue('address', studentInfo.address, false);
+    }
+  }, [internFormData]);
+
   const initialValues = {
     fathersName: '',
     mothersName: '',
-    birthDate: '11.06.2003',
+    birthDate: '',
     birthPlace: '',
     address: '',
   };
@@ -41,8 +60,14 @@ function StudentInfoAdd({ nextStep, prevStep }) {
   async function handleSubmit(values) {
     console.log('Step1', values);
     try {
-      const payload = { ...values, birthDate: moment(values.birthDate).toISOString() };
-      const response = await createNewStudentInfo(payload);
+      const payload = { ...values, internFormId: internFormId };
+      let response = null;
+      if (studentInfo?.id) {
+        response = await updateStudentInfo({ payload: payload, studentInfoId: studentInfo.id }).unwrap();
+      } else {
+        response = await createNewStudentInfo(payload).unwrap();
+      }
+      handleNext();
       console.log(response);
     } catch (error) {
       console.log('err', error);

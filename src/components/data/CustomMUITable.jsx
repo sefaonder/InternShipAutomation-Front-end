@@ -16,6 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { visuallyHidden } from '@mui/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -92,7 +93,7 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function EnhancedTable(props) {
-  const { data, columns } = props;
+  const { data, columns, isLoading } = props;
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
 
@@ -122,8 +123,12 @@ export default function EnhancedTable(props) {
 
   const visibleRows = React.useMemo(
     () => stableSort(data, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rowsPerPage, isLoading],
   );
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box sx={{ width: '100%' }}>

@@ -19,10 +19,10 @@ export const internFormSlice = apiSlice.injectEndpoints({
     }),
 
     updateForm: builder.mutation({
-      query: (internFormId, newForm) => ({
+      query: ({ payload, internFormId }) => ({
         url: `/api/intern-form/update/${internFormId}`,
         method: 'PUT',
-        body: newForm,
+        body: payload,
       }),
     }),
 
@@ -42,10 +42,10 @@ export const internFormSlice = apiSlice.injectEndpoints({
     }),
 
     updateStudentInfo: builder.mutation({
-      query: (studentInfoId, newForm) => ({
+      query: ({ payload, studentInfoId }) => ({
         url: `/api/intern-form/student-info/update/${studentInfoId}`,
         method: 'PUT',
-        body: newForm,
+        body: payload,
       }),
     }),
 
@@ -58,10 +58,10 @@ export const internFormSlice = apiSlice.injectEndpoints({
     }),
 
     updateCompanyInfo: builder.mutation({
-      query: (companyInfoId, newForm) => ({
+      query: ({ payload, companyInfoId }) => ({
         url: `/api/intern-form/company-info/update/${companyInfoId}`,
         method: 'PUT',
-        body: newForm,
+        body: payload,
       }),
     }),
   }),

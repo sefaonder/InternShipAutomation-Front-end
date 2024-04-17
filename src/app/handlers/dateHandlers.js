@@ -3,8 +3,9 @@ import moment from 'moment';
 export const getBusinessDays = (startDate, endDate, holidayDates) => {
   let count = 0;
   let currentDate = moment(startDate);
+  let finalDate = moment(endDate);
 
-  while (currentDate.isBefore(endDate)) {
+  while (currentDate.isBefore(finalDate)) {
     if (
       currentDate.day() !== 0 &&
       currentDate.day() !== 6 &&

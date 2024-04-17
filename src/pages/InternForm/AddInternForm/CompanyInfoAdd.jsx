@@ -1,12 +1,27 @@
 import { Button, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import moment from 'moment';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useFormik } from 'formik';
+import {
+  useCreateNewCompanyInfoMutation,
+  useUpdateCompanyInfoMutation,
+} from 'src/store/services/internForm/internFormApiSlice';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-function CompanyInfoAdd({ nextStep, prevStep }) {
+function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
   const [data, setData] = useState('');
+
+  const navigate = useNavigate();
+
+  const [createNewCompanyInfo, { isLoading }] = useCreateNewCompanyInfoMutation();
+  const [updateCompanyInfo, { isLoadingUpdate }] = useUpdateCompanyInfoMutation();
+
+  const internFormId = useSelector((state) => state.internForm.id);
+
+  const companyInfo = internFormData?.company_info?.company_info;
 
   const handleNext = () => {
     // Adım 2 verileri işle
@@ -19,6 +34,18 @@ function CompanyInfoAdd({ nextStep, prevStep }) {
     // Önceki adıma git
     prevStep();
   };
+
+  useEffect(() => {
+    if (companyInfo?.id) {
+      console.log('formil2', internFormData);
+      formik.setFieldValue('name', companyInfo.name, false);
+      formik.setFieldValue('address', companyInfo.address, false);
+      formik.setFieldValue('phone', companyInfo.phone, false);
+      formik.setFieldValue('fax', companyInfo.fax, false);
+      formik.setFieldValue('email', companyInfo.email, false);
+      formik.setFieldValue('serviceArea', companyInfo.service_area, false);
+    }
+  }, [internFormData]);
 
   const initialValues = {
     name: '',
@@ -38,16 +65,28 @@ function CompanyInfoAdd({ nextStep, prevStep }) {
     serviceArea: yup.string().required('Lütfen hizmet alanı girin'),
   });
 
-  function handleSubmit(values) {
-    console.log('Step1', values);
+  async function handleSubmit(values) {
+    console.log('Step3', values);
+    try {
+      const payload = { ...values, internFormId: internFormId };
+      let response = null;
+      if (companyInfo?.id) {
+        response = await updateCompanyInfo({ payload: payload, companyInfoId: companyInfo.id }).unwrap();
+      } else {
+        response = await createNewCompanyInfo(payload).unwrap();
+      }
+      console.log(response);
+
+      navigate('/intern-form/' + internFormId);
+    } catch (error) {
+      console.log('err', error);
+    }
   }
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: initialValues,
-    onSubmit: (values) => {
-      console.log('step1', values);
-    },
+    onSubmit: handleSubmit,
     validationSchema: validationSchema,
   });
 

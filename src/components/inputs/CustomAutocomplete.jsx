@@ -32,7 +32,7 @@ const CustomAutocomplete = ({
       freeSolo
       renderOption={renderOption}
       getOptionLabel={(option) => labelFunc(option)}
-      value={value?.name || null}
+      value={value}
       filterOptions={filterOptions}
       onChange={(event, newValue) => {
         onChange(newValue);
