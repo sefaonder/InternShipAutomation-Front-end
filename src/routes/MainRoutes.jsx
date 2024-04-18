@@ -9,9 +9,10 @@ import MainLayout from 'src/Layout/MainLayout';
 const DashboardDefault = Loadable(lazy(() => import('src/pages/Dashboard/Dashboard')));
 const ProfileDefault = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 
-const InternStatusList = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InternStatusDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InternStatusAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+const InternStatusList = Loadable(lazy(() => import('src/pages/InternStatus/InternStatusList')));
+const InternStatusDetail = Loadable(lazy(() => import('src/pages/InternStatus/InternStatusDetail/InternStatusDetail')));
+const InternStatusAdd = Loadable(lazy(() => import('src/pages/InternStatus/AddInternStatus')));
+const InternStatusUpdate = Loadable(lazy(() => import('src/pages/InternStatus/AddInternStatus')));
 
 const InternFormList = Loadable(lazy(() => import('src/pages/InternForm/InternFormList')));
 const InternFormDetail = Loadable(lazy(() => import('src/pages/InternForm/InternFormDetail/InternFormDetail')));
@@ -63,7 +64,8 @@ const MainRoutes = {
       children: [
         { path: '/intern-status/', element: <InternStatusList /> },
         { path: '/intern-status/:internStatusId', element: <InternStatusDetail /> },
-        { path: '/intern-status/add', element: <InternStatusAdd /> },
+        // { path: '/intern-status/add', element: <InternStatusAdd /> },
+        { path: '/intern-status/update/:internFormId', element: <InternStatusUpdate /> },
       ],
     },
     // InternFormRoutes only for Auth users

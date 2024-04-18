@@ -1,25 +1,24 @@
-import { Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
-import moment from 'moment';
+import { Box, Button, CircularProgress, Paper } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
-import { useGetFormDetailQuery } from 'src/store/services/internForm/internFormApiSlice';
-import { setInternFormData } from 'src/store/services/internForm/internFormSlice';
+import { useGetStatusDetailQuery } from 'src/store/services/internStatus/internStatusApiSlice';
+import { setInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
 
-function InternFormDetail() {
+function InternStatusDetail() {
   const dispatch = useDispatch();
 
-  const { internFormId } = useParams();
+  const { internStatusId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isLoading, isSuccess, isError, error } = useGetFormDetailQuery(internFormId);
+  const { data, isLoading, isSuccess, isError, error } = useGetStatusDetailQuery(internStatusId);
 
-  let internFormData = {};
+  let internStatusData = {};
 
   useEffect(() => {
     if (isSuccess && data.data) {
-      dispatch(setInternFormData(data?.data));
+      dispatch(setInternStatusData(data?.data));
     }
   }, [isSuccess]);
 
@@ -29,7 +28,7 @@ function InternFormDetail() {
   }
 
   if (isSuccess) {
-    internFormData = data.data;
+    internStatusData = data.data;
   }
 
   return (
@@ -42,14 +41,14 @@ function InternFormDetail() {
           marginBottom: '1rem',
         }}
       >
-        <Button onClick={() => navigate('/intern-form/update/' + internFormId)}>Güncelle</Button>
+        <Button onClick={() => navigate('/intern-status/update/' + internStatusId)}>Güncelle</Button>
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>Main Card</Paper>
-        <RecordTraceCard record={internFormData} />
+        <RecordTraceCard record={internStatusData} />
       </Box>
     </div>
   );
 }
 
-export default InternFormDetail;
+export default InternStatusDetail;

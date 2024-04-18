@@ -7,6 +7,8 @@ import profileReducer from 'src/store/services/profile/ProfileSlice';
 
 import internFormReducer from 'src/store/services/internForm/internFormSlice';
 
+import internStatusReducer from 'src/store/services/internStatus/internStatusSlice';
+
 export const store = configureStore({
   reducer: {
     app: appSlice,
@@ -14,6 +16,7 @@ export const store = configureStore({
     auth: authReducer,
     profile: profileReducer,
     internForm: internFormReducer,
+    internStatus: internStatusReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
   devTools: true,
