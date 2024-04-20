@@ -3,7 +3,7 @@ import { apiSlice } from 'src/app/api/apiSlice';
 export const internStatusSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getStatuses: builder.query({
-      query: (params) => ({ url: 'api/intern-status/get', params: params }),
+      query: (params) => ({ url: '/api/intern-status/get', params: params }),
     }),
 
     getStatusDetail: builder.query({

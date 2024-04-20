@@ -19,10 +19,10 @@ const InternFormDetail = Loadable(lazy(() => import('src/pages/InternForm/Intern
 const InternFormAdd = Loadable(lazy(() => import('src/pages/InternForm/AddInternForm/InternFormAdd')));
 const InternFormUpdate = Loadable(lazy(() => import('src/pages/InternForm/AddInternForm/InternFormAdd')));
 
-const InterviewList = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InterviewDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InterviewAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const InterviewUpdate = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+const InterviewList = Loadable(lazy(() => import('src/pages/Interview/InterviewList')));
+const InterviewDetail = Loadable(lazy(() => import('src/pages/Interview/InterviewDetail/InterviewDetail')));
+const InterviewAdd = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
+const InterviewUpdate = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
 
 const SurveyList = Loadable(lazy(() => import('src/pages/Profile/Profile')));
 const SurveyDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
