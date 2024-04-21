@@ -34,9 +34,9 @@ const NavBarItems = [
     permission: true,
   },
   {
-    title: 'Confidential Report',
+    title: 'confidental Report',
     Icon: <AbcIcon />,
-    path: '/confidential-report',
+    path: '/confidental-report',
     permission: true,
   },
   {

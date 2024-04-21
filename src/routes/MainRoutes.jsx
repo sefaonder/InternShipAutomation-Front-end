@@ -21,18 +21,20 @@ const InternFormUpdate = Loadable(lazy(() => import('src/pages/InternForm/AddInt
 
 const InterviewList = Loadable(lazy(() => import('src/pages/Interview/InterviewList')));
 const InterviewDetail = Loadable(lazy(() => import('src/pages/Interview/InterviewDetail/InterviewDetail')));
-const InterviewAdd = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
-const InterviewUpdate = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
+// const InterviewAdd = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
+// const InterviewUpdate = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
 
-const SurveyList = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const SurveyDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const SurveyAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const SurveyUpdate = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+const SurveyDetail = Loadable(lazy(() => import('src/pages/Survey/SurveyDetail/SurveyDetail')));
+const SurveyAdd = Loadable(lazy(() => import('src/pages/Survey/SurveyAdd')));
+const SurveyList = Loadable(lazy(() => import('src/pages/Survey/SurveyList')));
+const SurveyUpdate = Loadable(lazy(() => import('src/pages/Survey/SurveyUpdate')));
 
-const ConfidentalReportList = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const ConfidentalReportDetail = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const ConfidentalReportAdd = Loadable(lazy(() => import('src/pages/Profile/Profile')));
-const ConfidentalReportUpdate = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+const ConfidentalReportList = Loadable(lazy(() => import('src/pages/ConfidentalReport/ConfidentalReportList')));
+const ConfidentalReportDetail = Loadable(
+  lazy(() => import('src/pages/ConfidentalReport/ConfidentalReportDetail/ConfidentalReportDetail')),
+);
+const ConfidentalReportAdd = Loadable(lazy(() => import('src/pages/ConfidentalReport/ConfidentalReportAdd')));
+const ConfidentalReportUpdate = Loadable(lazy(() => import('src/pages/ConfidentalReport/ConfidentalReportUpdate')));
 
 const UserList = Loadable(lazy(() => import('src/pages/User/User')));
 const UserDetail = Loadable(lazy(() => import('src/pages/User/User')));
@@ -86,8 +88,8 @@ const MainRoutes = {
       children: [
         { path: '/interview/', element: <InterviewList /> },
         { path: '/interview/:interviewId', element: <InterviewDetail /> },
-        { path: '/interview/add', element: <InterviewAdd /> },
-        { path: '/interview/update/:interviewId', element: <InterviewUpdate /> },
+        // { path: '/interview/add', element: <InterviewAdd /> },
+        // { path: '/interview/update/:interviewId', element: <InterviewUpdate /> },
       ],
     },
     // SurveyList Only For Admin & Comission
@@ -103,13 +105,13 @@ const MainRoutes = {
     },
     // confidential-report Only For Admin & Comission
     {
-      path: '/confidential-report',
+      path: '/confidental-report',
       element: <RequireAuth />,
       children: [
-        { path: '/confidential-report/', element: <ConfidentalReportList /> },
-        { path: '/confidential-report/:confidentialReportId', element: <ConfidentalReportDetail /> },
-        { path: '/confidential-report/add', element: <ConfidentalReportAdd /> },
-        { path: '/confidential-report/update/:confidentialReportId', element: <ConfidentalReportUpdate /> },
+        { path: '/confidental-report/', element: <ConfidentalReportList /> },
+        { path: '/confidental-report/:confidentalReportId', element: <ConfidentalReportDetail /> },
+        { path: '/confidental-report/add', element: <ConfidentalReportAdd /> },
+        { path: '/confidental-report/update/:confidentalReportId', element: <ConfidentalReportUpdate /> },
       ],
     },
     {
