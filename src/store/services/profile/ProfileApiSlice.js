@@ -2,10 +2,9 @@ import { apiSlice } from 'src/app/api/apiSlice';
 
 export const getProfileSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProfile: builder.mutation({
+    getProfile: builder.query({
       query: () => ({
         url: '/api/profile/myprofile',
-        method: 'GET',
       }),
     }),
     updateProfile: builder.mutation({
@@ -18,5 +17,5 @@ export const getProfileSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetProfileMutation } = getProfileSlice;
+export const { useGetProfileQuery } = getProfileSlice;
 export const { useUpdateProfileMutation } = getProfileSlice;
