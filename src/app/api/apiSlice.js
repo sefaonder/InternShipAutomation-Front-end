@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logOut } from 'src/store/services/auth/authSlice';
+import { Mutex } from 'async-mutex';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:3001',
@@ -14,30 +15,52 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+const mutex = new Mutex();
+
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+  +(await mutex.waitForUnlock());
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result?.error?.originalStatus === 403) {
-    console.log('sending refresh token');
-    // send refresh token to get new acces token
-    const refreshResult = await baseQuery('/token', api, extraOptions);
-    console.log('refreshResult', refreshResult);
+  if (result.error && result.error.status === 401) {
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
 
-    if (refreshResult?.data) {
-      const user = api.getState().auth.user;
-      // store the new token
+      try {
+        const refreshResult = await baseQuery(
+          {
+            url: 'auth/refresh/',
+            method: 'POST',
+          },
+          api,
+          extraOptions,
+        );
 
-      api.dispatch(setCredentials({ ...refreshResult.data, user }));
+        if (refreshResult.data) {
+          const user = api.getState().auth.user;
+          // store the new token
 
-      // re-try the original query with new acces token
+          api.dispatch(setCredentials({ ...refreshResult.data, user }));
 
-      result = await baseQuery(args, api, extraOptions);
+          // re-try the original query with new acces token
+
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          const logOutResult = await baseQuery('/auth/logout', api, extraOptions);
+          api.dispatch(logOut());
+          localStorage.removeItem('token');
+
+          history.pushState(null, '', '/login');
+          window.location.href = '/login';
+        }
+      } finally {
+        release();
+      }
     } else {
-      // TODO: refresh token expires
-      api.dispatch(logOut());
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
   }
-  // TODO: 401 error for permissions
+
   return result;
 };
 
