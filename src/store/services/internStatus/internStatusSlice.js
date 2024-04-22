@@ -6,18 +6,18 @@ const internStatusSlice = createSlice({
     id: null,
     interview_id: null,
     form_id: null,
-    user: {},
+    student: {},
     status: null,
   },
   reducers: {
     setInternStatusData: (state, action) => {
-      const { id, interview_id, form, form_id, user, status } = action.payload;
+      const { id, interview_id, form, form_id, student, status } = action.payload;
       state.id = id;
       state.interview_id = interview_id;
       state.form_id = form_id;
 
       state.form = { ...state.form, form };
-      state.user = { ...state.user, user };
+      state.student = { ...state.student, student };
       state.status = status;
     },
     clearInternStatusData: (state, action) => {
@@ -25,7 +25,7 @@ const internStatusSlice = createSlice({
       state.interview_id = null;
       state.form_id = null;
 
-      state.user = {};
+      state.student = {};
       state.form = {};
       state.status = null;
     },

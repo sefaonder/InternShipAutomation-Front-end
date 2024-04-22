@@ -18,7 +18,7 @@ function AddInternStatus() {
   const internStatusData = useSelector((state) => state.internStatus);
 
   const initialValues = {
-    user: {},
+    student: {},
     form: {},
     interview: {},
     status: '',
@@ -27,7 +27,7 @@ function AddInternStatus() {
   useEffect(() => {
     if (internStatusData?.id) {
       console.log('formil', internStatusData);
-      formik.setFieldValue('user', internStatusData.user.user, true);
+      formik.setFieldValue('student', internStatusData.student.student, true);
       formik.setFieldValue('form', internStatusData.form.form, true);
       internStatusData?.interview && formik.setFieldValue('interview', internStatusData.interview.interview, true);
       formik.setFieldValue('status', internStatusData.status, false);
@@ -53,7 +53,7 @@ function AddInternStatus() {
     try {
       const payload = {
         ...values,
-        studentId: values.user.id,
+        studentId: values.student.id,
         formId: values.form.id,
         interviewId: values?.interview?.id,
       };
@@ -108,14 +108,14 @@ function AddInternStatus() {
       <Typography variant="h6">Adım 1</Typography>
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <CustomAutocomplete
-          name="user"
-          id="user"
+          name="student"
+          id="student"
           useACSlice={useGetStudentACQuery}
-          value={formik.values.user}
+          value={formik.values.student}
           filterOptions={filterOptions}
-          onChange={(value) => formik.setFieldValue('user', value, true)}
-          error={formik.touched.user && Boolean(formik.errors.user)}
-          helperText={formik.touched.user && formik.errors.user}
+          onChange={(value) => formik.setFieldValue('student', value, true)}
+          error={formik.touched.student && Boolean(formik.errors.student)}
+          helperText={formik.touched.student && formik.errors.student}
           labelFunc={StudentACLabelFunction}
           renderOption={(props, option) => (
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>

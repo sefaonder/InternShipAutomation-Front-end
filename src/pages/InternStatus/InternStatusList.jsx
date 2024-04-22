@@ -15,12 +15,12 @@ function InternStatusList() {
 
   const headers = [
     {
-      id: 'user',
+      id: 'student',
       numeric: false,
       disablePadding: true,
       label: 'Öğrenci',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value.name}</p>,
+      cellComponent: (value) => <p className="">{value?.name}</p>,
     },
     {
       id: 'form',
@@ -28,7 +28,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Form Yetkilisi',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value.follow_up.name}</p>,
+      cellComponent: (value) => <p className="">{value?.follow_up.name}</p>,
     },
     {
       id: 'interview',
