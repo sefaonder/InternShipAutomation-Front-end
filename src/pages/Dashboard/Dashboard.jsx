@@ -1,10 +1,35 @@
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from 'src/store/services/auth/authSlice';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useGetProfileMutation } from 'src/store/services/profile/ProfileApiSlice';
+import { setProfile } from 'src/store/services/profile/ProfileSlice';
 
 function Dashboard() {
-  const user = useSelector(selectCurrentUser);
-  console.log('user', user);
-  return <div>{user}</div>;
+  const [getProfile, { isLoading }] = useGetProfileMutation();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await getProfile();
+        if (response.error) {
+          throw new Error(response.error.message);
+        }
+
+        const userData = response.data; // Assuming data is stored in response.data
+        if (userData) {
+          dispatch(setProfile(userData));
+        } else {
+          console.log('User data is null or undefined.');
+        }
+      } catch (err) {
+        console.log('Error occurred while fetching user data:', err);
+      }
+    };
+    getUser();
+  }, [getProfile, dispatch]);
+
+  return <div>asd asdasd</div>;
 }
 
 export default Dashboard;

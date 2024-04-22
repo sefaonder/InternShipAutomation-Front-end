@@ -11,6 +11,7 @@ import Drawer from './Drawer';
 import { openSideBar } from 'src/store/services/app/appSlice';
 import NavBarItems from 'src/menu-items/NavBarItems';
 import Header from './Header';
+import CustomMUIBreadcrumbs from 'src/components/feedback/CustomMUIBreadcrumbs';
 
 // types
 
@@ -47,7 +48,7 @@ const MainLayout = () => {
       <Drawer open={open} handleDrawerToggle={handleDrawerToggle} navigations={NavBarItems} />
       <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar />
-        {/* <Breadcrumbs navigation={navigation} title /> */}
+        <CustomMUIBreadcrumbs />
         <Outlet />
       </Box>
     </Box>
