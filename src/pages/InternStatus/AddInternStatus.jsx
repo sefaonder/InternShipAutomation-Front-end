@@ -82,11 +82,11 @@ function AddInternStatus() {
   });
 
   function StudentACLabelFunction(value) {
-    return value.name ? `${value.name} ${value.last_name}` : '';
+    return value?.name ? `${value.name} ${value.last_name}` : '';
   }
 
   function InternFormACLabelFunction(value) {
-    return value.id ? `${value.id}` : '';
+    return value?.id ? `${value.id}` : '';
   }
 
   const filterOptions = (options, { inputValue }) => {
