@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { useLoginMutation } from 'src/store/services/auth/authApiSlice';
 import './login.css';
 import { setCredentials } from 'src/store/services/auth/authSlice';
+import { Link } from '@mui/material';
 
 function Login() {
   const navigate = useNavigate();
@@ -93,6 +94,10 @@ function Login() {
         <Button className="p-3" type="submit" color="primary" variant="outlined">
           Gönder
         </Button>
+
+        <Link component="a" href="/password-change">
+          Şifremi unuttum
+        </Link>
       </form>
     </div>
   );
