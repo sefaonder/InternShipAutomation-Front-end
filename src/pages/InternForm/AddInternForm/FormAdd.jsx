@@ -5,7 +5,7 @@ import moment from 'moment';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useFormik } from 'formik';
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
-import { useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
+import { useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 import CustomDateInput from 'src/components/inputs/CustomDateInput';
 import { getBusinessDays, shouldDisableDate } from 'src/app/handlers/dateHandlers';
 import { useCreateNewFormMutation, useUpdateFormMutation } from 'src/store/services/internForm/internFormApiSlice';
@@ -30,16 +30,16 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
     student: {},
     startDate: '',
     endDate: '',
-    eduYear: '',
+    eduYear: {},
   };
 
   useEffect(() => {
     if (internFormData?.id) {
       console.log('formil', internFormData);
-      formik.setFieldValue('student', internFormData.student.student, true);
+      formik.setFieldValue('student', internFormData?.student, true);
       formik.setFieldValue('startDate', internFormData.start_date, false);
       formik.setFieldValue('endDate', internFormData.end_date, false);
-      formik.setFieldValue('eduYear', internFormData.edu_year, false);
+      formik.setFieldValue('eduYear', internFormData?.edu_year, false);
     }
   }, [internFormData]);
 
@@ -54,13 +54,13 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
         const businessDays = getBusinessDays(startDate, value, []);
         return businessDays <= 60;
       }),
-    eduYear: yup.string().required('Lütfen eduYear girin'),
+    eduYear: yup.object().required('Lütfen geçerli bir dönem girin'),
   });
 
   async function handleSubmit(values) {
     console.log('Step1', values);
     try {
-      const payload = { ...values, studentId: values.student.id };
+      const payload = { ...values, studentId: values.student.id, eduYearId: values.eduYear.id };
       let response = null;
       if (internFormData?.id) {
         response = await updateForm({ payload: payload, internFormId: internFormData?.id });
@@ -96,6 +96,10 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
     return value.name ? `${value.name} ${value.last_name}` : '';
   }
 
+  function InternFormACLabelFunction(value) {
+    return value.name ? `${value.name}` : '';
+  }
+
   const filterOptions = (options, { inputValue }) => {
     return options.filter((option) => {
       // Arama metniyle eşleşen seçenekleri filtrele
@@ -109,6 +113,7 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
     });
   };
   console.log('formik', formik.values);
+  console.log('fielderror', formik.errors);
 
   return (
     <div>
@@ -167,14 +172,29 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
           </Typography>
         )}
 
-        <CustomTextInput
-          id="eduYear"
+        <CustomAutocomplete
           name="eduYear"
-          label="eduYear"
+          id="eduYear"
+          useACSlice={useGetEduYearACQuery}
           value={formik.values.eduYear}
-          onChange={formik.handleChange}
+          //   filterOptions={filterOptions}
+          onChange={(value) => formik.setFieldValue('eduYear', value, true)}
           error={formik.touched.eduYear && Boolean(formik.errors.eduYear)}
           helperText={formik.touched.eduYear && formik.errors.eduYear}
+          labelFunc={InternFormACLabelFunction}
+          renderOption={(props, option) => (
+            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+              <ListItem
+                key={option.id}
+                {...props}
+                disablePadding
+                button
+                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
+              >
+                <ListItemText primary={option?.id} secondary={option?.name} />
+              </ListItem>
+            </List>
+          )}
         />
 
         <Button type="submit" variant="outlined" disabled={formik.errors?.length > 0}>

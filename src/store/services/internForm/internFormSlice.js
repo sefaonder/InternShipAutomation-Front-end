@@ -7,10 +7,10 @@ const internFormSlice = createSlice({
     start_date: null,
     end_date: null,
     edu_year: null,
-    student_info: {},
-    company_info: {},
-    student: {},
-    follow_up: {},
+    student_info: null,
+    company_info: null,
+    student: null,
+    follow_up: null,
   },
   reducers: {
     setInternFormData: (state, action) => {
@@ -19,20 +19,20 @@ const internFormSlice = createSlice({
       state.start_date = start_date;
       state.end_date = end_date;
       state.edu_year = edu_year;
-      state.student_info = { ...state.student_info, student_info };
-      state.company_info = { ...state.company_info, company_info };
-      state.student = { ...state.student, student };
-      state.follow_up = { ...state.follow_up, follow_up };
+      state.student_info = student_info;
+      state.company_info = company_info;
+      state.student = student;
+      state.follow_up = follow_up;
     },
     clearInternFormData: (state, action) => {
       state.id = null;
       state.start_date = null;
       state.end_date = null;
       state.edu_year = null;
-      state.student_info = {};
-      state.company_info = {};
-      state.student = {};
-      state.follow_up = {};
+      state.student_info = null;
+      state.company_info = null;
+      state.student = null;
+      state.follow_up = null;
     },
     setStudentInfoData: (state, action) => {
       const { student_info } = action.payload;
