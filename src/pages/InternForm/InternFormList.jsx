@@ -1,7 +1,8 @@
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
 import AddButton from 'src/components/inputs/AddButton';
@@ -10,9 +11,25 @@ import { useGetFormsQuery } from 'src/store/services/internForm/internFormApiSli
 function InternFormList() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { data, isLoading, isSuccess, isError, error } = useGetFormsQuery();
+  const [filter, setFilter] = useState({});
+  const { data, currentData, isLoading, isSuccess, isError, error, refetch, isFetching } = useGetFormsQuery(filter);
 
-  console.log('data', data);
+  const handleFilterChange = (values) => {
+    const filterPayload = {
+      ...values,
+      studentId: values.student?.id ? values.student.id : undefined,
+      eduYearId: values.eduYear?.id ? values.eduYear.id : undefined,
+    };
+
+    const filteredValues = Object.entries(filterPayload).reduce((acc, [key, value]) => {
+      if (value !== '' && value !== undefined && value !== null) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
+    setFilter({ ...filteredValues });
+  };
 
   const headers = [
     {
@@ -57,10 +74,33 @@ function InternFormList() {
     },
   ];
 
+  const internFormFilters = [
+    { id: 'student', type: 'autocomplete', componentProps: { useACSlice: useGetStudentACQuery, label: 'Öğrenci' } },
+    { id: 'eduYear', type: 'autocomplete', componentProps: { useACSlice: useGetEduYearACQuery, label: 'Staj Dönemi' } },
+    { id: 'startDate', type: 'date', componentProps: { label: 'Başlangıç Tarihi' } },
+    { id: 'endDate', type: 'date', componentProps: { label: 'Bitiş Tarihi' } },
+    { id: 'name', type: 'text', componentProps: { label: 'Öğrenci ismi' } },
+    { id: 'schoolNumber', type: 'text', componentProps: { label: 'Okul Numarası' } },
+    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
+    // { id: 'status', type: 'enum', componentProps: {enumObject:{InternStatusEnum},label:'Staj durumu'} },
+  ];
+
   return (
     <Paper>
-      <CustomTableFilter />
-      <EnhancedTable columns={headers} data={data?.data || []} isLoading={isLoading} />
+      <CustomTableFilter
+        filterOptions={internFormFilters}
+        filterValues={filter}
+        onChangeFilterValues={handleFilterChange}
+        setRefresh={() => refetch()}
+      />
+      <EnhancedTable
+        columns={headers}
+        data={currentData?.data || []}
+        isLoading={isFetching || isLoading}
+        isSuccess={isSuccess}
+        filter={filter}
+        setFilter={(values) => setFilter({ ...filter, ...values })}
+      />
       <AddButton onClick={() => navigate(location.pathname + '/add')} />
     </Paper>
   );
