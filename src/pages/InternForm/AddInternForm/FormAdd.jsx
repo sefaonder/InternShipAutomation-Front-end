@@ -92,28 +92,7 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
     validationSchema: validationSchema,
   });
 
-  function StudentACLabelFunction(value) {
-    return value.name ? `${value.name} ${value.last_name}` : '';
-  }
-
-  function InternFormACLabelFunction(value) {
-    return value.name ? `${value.name}` : '';
-  }
-
-  const filterOptions = (options, { inputValue }) => {
-    return options.filter((option) => {
-      // Arama metniyle eşleşen seçenekleri filtrele
-      const searchText = inputValue.toLowerCase();
-      const { last_name, name, school_number } = option;
-      return (
-        last_name.toLowerCase().includes(searchText) ||
-        name.toLowerCase().includes(searchText) ||
-        school_number.toLowerCase().includes(searchText)
-      );
-    });
-  };
   console.log('formik', formik.values);
-  console.log('fielderror', formik.errors);
 
   return (
     <div>
@@ -124,24 +103,9 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
           id="student"
           useACSlice={useGetStudentACQuery}
           value={formik.values.student}
-          filterOptions={filterOptions}
           onChange={(value) => formik.setFieldValue('student', value, true)}
           error={formik.touched.student && Boolean(formik.errors.student)}
           helperText={formik.touched.student && formik.errors.student}
-          labelFunc={StudentACLabelFunction}
-          renderOption={(props, option) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem
-                key={option.school_number}
-                {...props}
-                disablePadding
-                button
-                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-              >
-                <ListItemText primary={option?.name + ' ' + option?.last_name} secondary={option?.school_number} />
-              </ListItem>
-            </List>
-          )}
         />
 
         <CustomDateInput
@@ -177,24 +141,9 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
           id="eduYear"
           useACSlice={useGetEduYearACQuery}
           value={formik.values.eduYear}
-          //   filterOptions={filterOptions}
           onChange={(value) => formik.setFieldValue('eduYear', value, true)}
           error={formik.touched.eduYear && Boolean(formik.errors.eduYear)}
           helperText={formik.touched.eduYear && formik.errors.eduYear}
-          labelFunc={InternFormACLabelFunction}
-          renderOption={(props, option) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem
-                key={option.id}
-                {...props}
-                disablePadding
-                button
-                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-              >
-                <ListItemText primary={option?.id} secondary={option?.name} />
-              </ListItem>
-            </List>
-          )}
         />
 
         <Button type="submit" variant="outlined" disabled={formik.errors?.length > 0}>

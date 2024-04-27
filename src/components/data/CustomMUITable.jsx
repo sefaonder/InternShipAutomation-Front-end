@@ -93,15 +93,19 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function EnhancedTable(props) {
-  const { data, columns, isLoading } = props;
+  const { data, columns, isLoading, isSucces, filter, setFilter } = props;
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('createdAt');
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    setFilter({ sortedBy: orderBy, sortedWay: order, page: page, pageSize: rowsPerPage });
+  }, [order, orderBy, page, rowsPerPage]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -123,8 +127,10 @@ export default function EnhancedTable(props) {
 
   const visibleRows = React.useMemo(
     () => stableSort(data, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage, isLoading],
+    [order, orderBy, page, rowsPerPage, isLoading, data],
   );
+
+  console.log('visibleRow', visibleRows);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -156,7 +162,7 @@ export default function EnhancedTable(props) {
                   >
                     {columns.map((header) => {
                       return (
-                        <TableCell className={header.style} id={header.id}>
+                        <TableCell key={header.id} className={header.style} id={header.id}>
                           {header?.cellComponent ? header.cellComponent(row[header.id]) : row[header.id]}
                           {/* {row[header.id]} */}
                         </TableCell>

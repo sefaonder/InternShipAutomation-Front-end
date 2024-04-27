@@ -6,6 +6,10 @@ export const autocompleteSlice = apiSlice.injectEndpoints({
       query: (params) => ({ url: '/api/user/autocomplete/student', params: params }),
     }),
 
+    getComissionAC: builder.query({
+      query: (params) => ({ url: '/api/user/autocomplete/comission', params: params }),
+    }),
+
     getInternFormAC: builder.query({
       query: (params) => ({ url: '/api/intern-form/autocomplete', params: params }),
     }),
@@ -20,5 +24,10 @@ export const autocompleteSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetStudentACQuery, useGetInternFormACQuery, useGetInterviewACQuery, useGetEduYearACQuery } =
-  autocompleteSlice;
+export const {
+  useGetStudentACQuery,
+  useGetInternFormACQuery,
+  useGetInterviewACQuery,
+  useGetEduYearACQuery,
+  useGetComissionACQuery,
+} = autocompleteSlice;
