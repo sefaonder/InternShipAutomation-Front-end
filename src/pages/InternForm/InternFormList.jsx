@@ -1,16 +1,19 @@
 import { Box, Paper } from '@mui/material';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
 import AddButton from 'src/components/inputs/AddButton';
 import { useGetFormsQuery } from 'src/store/services/internForm/internFormApiSlice';
+import { clearInternFormData } from 'src/store/services/internForm/internFormSlice';
 
 function InternFormList() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [filter, setFilter] = useState({});
   const { data, currentData, isLoading, isSuccess, isError, error, refetch, isFetching } = useGetFormsQuery(filter);
 
@@ -30,6 +33,11 @@ function InternFormList() {
 
     setFilter({ ...filteredValues });
   };
+
+  useEffect(() => {
+    refetch();
+    dispatch(clearInternFormData());
+  }, [location, navigate]);
 
   const headers = [
     {
@@ -82,7 +90,6 @@ function InternFormList() {
     { id: 'name', type: 'text', componentProps: { label: 'Öğrenci ismi' } },
     { id: 'schoolNumber', type: 'text', componentProps: { label: 'Okul Numarası' } },
     { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
-    // { id: 'status', type: 'enum', componentProps: {enumObject:{InternStatusEnum},label:'Staj durumu'} },
   ];
 
   return (

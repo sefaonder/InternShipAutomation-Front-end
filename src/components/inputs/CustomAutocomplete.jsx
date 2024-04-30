@@ -4,7 +4,19 @@ import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import { List, ListItem, ListItemButton, ListItemText, useTheme } from '@mui/material';
 
-const CustomAutocomplete = ({ value, sx, field, onChange, label, useACSlice, error, helperText }) => {
+const CustomAutocomplete = ({
+  value,
+  sx,
+  field,
+  onChange,
+  label,
+  useACSlice,
+  error,
+  helperText,
+  disabled,
+  required,
+  filterId,
+}) => {
   const [inputValue, setInputValue] = useState('');
   const { data: data, isLoading, isSucces } = useACSlice();
   const theme = useTheme();
@@ -31,7 +43,10 @@ const CustomAutocomplete = ({ value, sx, field, onChange, label, useACSlice, err
   const filterOptions = (options, { inputValue }) => {
     return options.filter((option) => {
       const searchText = value?.id ? '' : inputValue.toLowerCase();
-      const { label, subtext } = option;
+      const { label, subtext, id } = option;
+      if (filterId && id !== filterId) {
+        return false;
+      }
       return label.toLowerCase().includes(searchText) || subtext.toLowerCase().includes(searchText);
     });
   };
@@ -39,8 +54,11 @@ const CustomAutocomplete = ({ value, sx, field, onChange, label, useACSlice, err
   return (
     <Autocomplete
       sx={sx}
+      disabled={disabled}
+      aria-required={required}
       options={data?.data || []}
       loading={isLoading}
+      getOptionDisabled={(option) => option.disabled}
       freeSolo
       renderOption={(props, option) => (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>

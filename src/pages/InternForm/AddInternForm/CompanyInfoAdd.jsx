@@ -8,12 +8,10 @@ import {
   useCreateNewCompanyInfoMutation,
   useUpdateCompanyInfoMutation,
 } from 'src/store/services/internForm/internFormApiSlice';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
-  const [data, setData] = useState('');
-
   const navigate = useNavigate();
 
   const [createNewCompanyInfo, { isLoading }] = useCreateNewCompanyInfoMutation();
@@ -21,19 +19,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
 
   const internFormId = useSelector((state) => state.internForm.id);
 
-  const companyInfo = internFormData?.company_info?.company_info;
-
-  const handleNext = () => {
-    // Adım 2 verileri işle
-    console.log('Adım 2 verisi:', data);
-    // Sonraki adıma git
-    nextStep();
-  };
-
-  const handleBack = () => {
-    // Önceki adıma git
-    prevStep();
-  };
+  const companyInfo = internFormData?.company_info;
 
   useEffect(() => {
     if (companyInfo?.id) {
@@ -66,12 +52,13 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
   });
 
   async function handleSubmit(values) {
-    console.log('Step3', values);
     try {
       const payload = { ...values, internFormId: internFormId };
       let response = null;
       if (companyInfo?.id) {
-        response = await updateCompanyInfo({ payload: payload, companyInfoId: companyInfo.id }).unwrap();
+        if (formik.status) {
+          response = await updateCompanyInfo({ payload: payload, companyInfoId: companyInfo.id }).unwrap();
+        }
       } else {
         response = await createNewCompanyInfo(payload).unwrap();
       }
@@ -92,14 +79,16 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
 
   return (
     <div>
-      <Typography variant="h6">Adım 2</Typography>
-      <form className="flex flex-col" onSubmit={formik.handleSubmit}>
+      <Typography className="my-4" variant="h4">
+        3.Adım Şirket Bilgileri
+      </Typography>
+      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
         <CustomTextInput
           id="name"
           name="name"
           label="Firma ismi"
           value={formik.values.name}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('name', value.target.value, true) && formik.setStatus(true)}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
         />
@@ -109,7 +98,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
           name="address"
           label="Firma Adresi"
           value={formik.values.address}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('address', value.target.value, true) && formik.setStatus(true)}
           error={formik.touched.address && Boolean(formik.errors.address)}
           helperText={formik.touched.address && formik.errors.address}
         />
@@ -119,7 +108,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
           name="phone"
           label="Firma Telefon Numarası"
           value={formik.values.phone}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('phone', value.target.value, true) && formik.setStatus(true)}
           error={formik.touched.phone && Boolean(formik.errors.phone)}
           helperText={formik.touched.phone && formik.errors.phone}
         />
@@ -129,7 +118,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
           name="fax"
           label="Firma Fax Numarası"
           value={formik.values.fax}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('fax', value.target.value, true) && formik.setStatus(true)}
           error={formik.touched.fax && Boolean(formik.errors.fax)}
           helperText={formik.touched.fax && formik.errors.fax}
         />
@@ -139,7 +128,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
           name="email"
           label="Firma Email"
           value={formik.values.email}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('email', value.target.value, true) && formik.setStatus(true)}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
@@ -149,21 +138,15 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
           name="serviceArea"
           label="Firma Hizmet Alanı"
           value={formik.values.serviceArea}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('serviceArea', value.target.value, true) && formik.setStatus(true)}
           error={formik.touched.serviceArea && Boolean(formik.errors.serviceArea)}
           helperText={formik.touched.serviceArea && formik.errors.serviceArea}
         />
 
-        <Button type="submit" variant="outlined" disabled={formik.errors?.length > 0}>
+        <Button type="submit" variant="outlined" disabled={!formik.isValid}>
           ilerle
         </Button>
       </form>
-      <Button variant="outlined" onClick={handleBack}>
-        Geri
-      </Button>
-      <Button variant="outlined" onClick={handleNext}>
-        Sonraki
-      </Button>
     </div>
   );
 }
