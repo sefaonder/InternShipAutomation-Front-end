@@ -2,16 +2,32 @@ import { CircularProgress, Container, Step, StepLabel, Stepper } from '@mui/mate
 import CompanyInfoAdd from './CompanyInfoAdd';
 import StudentInfoAdd from './StudentInfoAdd';
 import FormAdd from './FormAdd';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { clearInternFormData } from 'src/store/services/internForm/internFormSlice';
 
 function InternFormAdd() {
   const [step, setStep] = useState(1);
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { internFormId } = useParams();
 
   const internForm = useSelector((state) => state.internForm);
 
   console.log('hibili', internForm);
+
+  useEffect(() => {
+    if (internFormId && !Boolean(internForm?.id)) {
+      // navigate back detail page
+      navigate('/intern-form/' + internFormId);
+    }
+
+    if (!internFormId) {
+      dispatch(clearInternFormData());
+    }
+  }, []);
 
   const nextStep = () => {
     setStep(step + 1);

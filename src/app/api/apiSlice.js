@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logOut } from 'src/store/services/auth/authSlice';
 import { Mutex } from 'async-mutex';
+import { enqueueSnackbar } from 'notistack';
+import parseJWT from '../handlers/jwtHandler';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:3001',
@@ -39,7 +41,10 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
           const user = api.getState().auth.user;
           // store the new token
 
-          api.dispatch(setCredentials({ ...refreshResult.data, user }));
+          // TODO: 404
+          const parsedData = parseJWT(refreshResult.data.accessToken);
+          console.log('userId', parsedData);
+          api.dispatch(setCredentials({ ...refreshResult.data, roles: parsedData.roles, userId: parsedData.userId }));
 
           // re-try the original query with new acces token
 
@@ -59,6 +64,16 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       await mutex.waitForUnlock();
       result = await baseQuery(args, api, extraOptions);
     }
+  }
+
+  if (result.error && result.error.status === 400) {
+    const message = result.error.data?.message?.errorCode || '';
+    enqueueSnackbar(message, { variant: 'error' });
+  }
+
+  if (result.error && result.error.status === 403) {
+    const message = result.error.data?.message?.errorCode || '';
+    enqueueSnackbar(message, { variant: 'error' });
   }
 
   return result;

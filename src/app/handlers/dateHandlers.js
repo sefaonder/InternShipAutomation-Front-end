@@ -1,16 +1,12 @@
 import moment from 'moment';
 
-export const getBusinessDays = (startDate, endDate, holidayDates) => {
+export const getBusinessDays = (startDate, endDate, holidayDates, weekDayWork) => {
   let count = 0;
   let currentDate = moment(startDate);
   let finalDate = moment(endDate);
 
   while (currentDate.isBefore(finalDate)) {
-    if (
-      currentDate.day() !== 0 &&
-      currentDate.day() !== 6 &&
-      !holidayDates.includes(currentDate.format('DD-MM-YYYY'))
-    ) {
+    if (calculateWeeklyWork(currentDate, weekDayWork) && !isHoliday(currentDate, holidayDates)) {
       count++;
     }
     currentDate.add(1, 'days');
@@ -19,15 +15,23 @@ export const getBusinessDays = (startDate, endDate, holidayDates) => {
   return count;
 };
 
-export const shouldDisableDate = (date, holidayDates) => {
+function calculateWeeklyWork(date, weekDayWork) {
+  const weeklyDay = weekDayWork || [];
+  const day = date.day();
+  return weeklyDay.includes(day);
+}
+
+function isHoliday(date, holidays) {
+  return holidays.some((holiday) => moment(holiday).isSame(date, 'day'));
+}
+
+export const shouldDisableDate = (date, holidayDates, weekDayWork) => {
   // Tarih hafta sonuna mı denk geliyor?
-  const weekendDays = [0, 6];
-  console.log('date', date);
-  if (weekendDays.includes(date.day())) {
+  if (!calculateWeeklyWork(date, weekDayWork)) {
     return true;
   }
   // Özel tatil günleri devre dışı bırak
-  if (holidayDates.some((holiday) => moment(holiday).isSame(date, 'day'))) {
+  if (isHoliday(date, holidayDates)) {
     return true;
   }
   return false;
