@@ -148,13 +148,13 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     data: ['Evet', 'Hayır'],
   };
   const internship_evulation = [
-    { name: 'Çalışmada Dikkat ve Sorumluluk', type: 'responsibility', data: ['İyi', 'Orta', 'İyi Değil'] },
-    { name: 'İşi Yapmadaki Başarısı', type: 'success', data: ['İyi', 'Orta', 'İyi Değil'] },
-    { name: 'Öğrenme ve Araştırma İlgisi', type: 'interest', data: ['İyi', 'Orta', 'İyi Değil'] },
-    { name: 'Üstelerine Karşı Davranışı', type: 'behaviour_to_auths', data: ['İyi', 'Orta', 'İyi Değil'] },
-    { name: 'Çalışma Arkadaşlarına Davranışı', type: 'behaviour_to_coworkers', data: ['İyi', 'Orta', 'İyi Değil'] },
-    { name: 'İş Güvenliği Kurallarına Uyumu', type: 'work_safety', data: ['İyi', 'Orta', 'İyi Değil'] },
-    { name: 'Meslek Bilgi Düzeyi', type: 'competence', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Çalışmada Dikkat ve Sorumluluk', type: 'responsibility', data: ['İyi', 'Orta', 'Iyi Degil'] },
+    { name: 'İşi Yapmadaki Başarısı', type: 'success', data: ['Iyi', 'Orta', 'Iyi Degil'] },
+    { name: 'Öğrenme ve Araştırma İlgisi', type: 'interest', data: ['Iyi', 'Orta', 'İyi Değil'] },
+    { name: 'Üstelerine Karşı Davranışı', type: 'behaviour_to_auths', data: ['Iyi', 'Orta', 'Iyi Degil'] },
+    { name: 'Çalışma Arkadaşlarına Davranışı', type: 'behaviour_to_coworkers', data: ['Iyi', 'Orta', 'Iyi Degil'] },
+    { name: 'İş Güvenliği Kurallarına Uyumu', type: 'work_safety', data: ['Iyi', 'Orta', 'Iyi Degil'] },
+    { name: 'Meslek Bilgi Düzeyi', type: 'competence', data: ['Iyi', 'Orta', 'Iyi Degil'] },
   ];
 
   return (

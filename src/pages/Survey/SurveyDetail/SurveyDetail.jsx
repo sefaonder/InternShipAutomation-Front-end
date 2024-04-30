@@ -4,26 +4,43 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSurveyQuery } from 'src/store/services/survey/surveyApiSlice';
 import moment from 'moment';
 import { dataSingle } from '../SurveyComponents/SurveyQs';
+import { useDispatch } from 'react-redux';
+import { setSurvey } from 'src/store/services/survey/surveySlice';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PdfSurvey from 'src/PDF/PdfSurvey';
+
 const SurveyDetail = () => {
   const { surveyId } = useParams();
-
   const { data, isLoading, isSuccess, isError, error } = useGetSurveyQuery(surveyId);
   const [mixedSingleQuestions, setMixedSingleQuestions] = useState();
   const [mixedMultiQuestions, setMixedMultiQuestions] = useState();
+  const [mixedIntermQuestions, setIntermMultiQuestions] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   let mixedSingle;
   let mixedMulti;
+  let mixedInterm;
+
   useEffect(() => {
-    mixedSingle = data?.answers.slice(0, 27).map((eleman1, index) => ({
-      answer: eleman1,
-      question: dataSingle[index]?.question,
-    }));
-    mixedMulti = data?.answers.slice(27).map((eleman1, index) => ({
-      answer: eleman1,
-      question: dataSingle[index]?.question,
-    }));
-    setMixedMultiQuestions(mixedMulti);
-    setMixedSingleQuestions(mixedSingle);
+    if (data) {
+      console.log('---', data);
+      mixedSingle = data?.answers.slice(0, 27).map((eleman1, index) => ({
+        answer: eleman1,
+        question: dataSingle[index]?.question,
+      }));
+      mixedMulti = data?.answers.slice(27, 31).map((eleman1, index) => ({
+        answer: eleman1,
+        question: dataSingle[index]?.question,
+      }));
+      mixedInterm = data?.answers.slice(31).map((eleman1, index) => ({
+        answer: eleman1,
+        question: dataSingle[index]?.question,
+      }));
+      setMixedMultiQuestions(mixedMulti);
+      setMixedSingleQuestions(mixedSingle);
+      setIntermMultiQuestions(mixedInterm);
+      dispatch(setSurvey(data));
+    }
   }, [isSuccess]);
 
   return (
@@ -36,6 +53,13 @@ const SurveyDetail = () => {
           marginBottom: '1rem',
         }}
       >
+        {data && (
+          <Button>
+            <PDFDownloadLink fileName="FORM" document={<PdfSurvey data={data} />}>
+              {({ loading }) => (loading ? <button>loading Document..</button> : <button> download </button>)}
+            </PDFDownloadLink>
+          </Button>
+        )}
         <Button onClick={() => navigate('/survey/update/' + surveyId)}>Güncelle</Button>
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
@@ -101,6 +125,17 @@ const SurveyDetail = () => {
                       <Typography className=""> {item} </Typography>
                     ))}{' '}
                   </Typography>
+                </Box>
+              ))}
+              <Typography className="font-extrabold text-red-400">Dönem İçi Staj Yapanlar için Sorular</Typography>
+
+              {mixedIntermQuestions?.map((item, index) => (
+                <Box>
+                  <Typography className="font-semibold">
+                    {' '}
+                    {index + 1}: {item.question}{' '}
+                  </Typography>
+                  <Typography className=""> {item.answer} </Typography>
                 </Box>
               ))}
             </Box>

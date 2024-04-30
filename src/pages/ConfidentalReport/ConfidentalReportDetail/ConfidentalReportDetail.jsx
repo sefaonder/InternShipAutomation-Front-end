@@ -1,19 +1,24 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
 import moment from 'moment';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetConfidentalReportQuery } from 'src/store/services/confidentalReport/confidentalReportApiSlice';
+import { setConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
 
 const ConfidentalReportDetail = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { confidentalReportId } = useParams();
   const { data, isLoading, isSuccess, isError, error } = useGetConfidentalReportQuery(confidentalReportId);
-  console.log(data);
+
   useEffect(() => {
     if (data) {
-      console.log(<data className="intern_evaluation"></data>);
+      dispatch(setConfidentalReport(data));
     }
   }, [data]);
+
   return (
     <div>
       <Paper
