@@ -24,16 +24,11 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
   const userAuth = useSelector((state) => state.auth);
   const checkPermission = usePermission();
 
-  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION);
-
-  console.log('comissionPer', userAuth, isAdvancedComission);
-
-  console.log('formAdd', userAuth);
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
 
   const dispatch = useDispatch();
 
   const handleNext = () => {
-    // Önceki adıma git
     nextStep();
   };
 

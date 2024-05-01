@@ -48,9 +48,24 @@ const confidentalReportSlice = createSlice({
       state.auth_tc_number = auth_tc_number;
       state.auth_title = auth_title;
     },
+    resetConfidentalReport: (state, action) => {
+      state.company_name = null;
+      state.address = null;
+      state.start_date = null;
+      state.end_date = null;
+      state.department = null;
+      state.days_of_absence = null;
+      state.is_edu_program = null;
+      state.intern_evaluation = null;
+      state.auth_name = null;
+      state.auth_position = null;
+      state.reg_number = null;
+      state.auth_tc_number = null;
+      state.auth_title = null;
+    },
   },
 });
 
-export const { setConfidentalReport } = confidentalReportSlice.actions;
+export const { setConfidentalReport, resetConfidentalReport } = confidentalReportSlice.actions;
 
 export default confidentalReportSlice.reducer;

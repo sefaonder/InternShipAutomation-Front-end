@@ -1,7 +1,8 @@
-import { CircularProgress } from '@mui/material';
-import React from 'react';
+import { Box, Button, CircularProgress, Paper } from '@mui/material';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import { useGetInterviewDetailQuery } from 'src/store/services/interview/interviewApiSlice';
 import { setInterviewData } from 'src/store/services/interview/interviewSlice';
 
@@ -9,9 +10,11 @@ function InterviewDetail() {
   const dispatch = useDispatch();
 
   const { interviewId } = useParams();
-  const navigate = useNavigate();
 
-  const { data, isLoading, isSuccess, isError, error } = useGetInterviewDetailQuery(interviewId);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { data, isLoading, isSuccess, isError, error, refetch } = useGetInterviewDetailQuery(interviewId);
 
   let interviewData = {};
 
@@ -20,6 +23,17 @@ function InterviewDetail() {
       dispatch(setInterviewData(data?.data));
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (error) {
+      //TODO:  error snackbar
+      navigate('/interview');
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    refetch();
+  }, [location, navigate]);
 
   console.log('data', data);
   if (isLoading) {

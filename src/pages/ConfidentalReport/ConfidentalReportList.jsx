@@ -1,15 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Paper } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
 import AddButton from 'src/components/inputs/AddButton';
 import { useGetConfidentalReportsQuery } from 'src/store/services/confidentalReport/confidentalReportApiSlice';
+import { resetConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
+import { useDispatch } from 'react-redux';
+import { InternStatusEnum } from 'src/app/enums/internStatus';
+import { useGetComissionACQuery, useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 
 const ConfidentalReportList = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { data, isLoading, isSuccess, isError, error } = useGetConfidentalReportsQuery();
+  const dispatch = useDispatch();
+
+  const [filter, setFilter] = useState({});
+  const { data, isLoading, isSuccess, isError, error, refetch, currentData, isFetching } =
+    useGetConfidentalReportsQuery();
+
+  const handleFilterChange = (values) => {
+    const filterPayload = {
+      ...values,
+      studentId: values.student?.id ? values.student.id : undefined,
+      eduYearId: values.eduYear?.id ? values.eduYear.id : undefined,
+    };
+
+    const filteredValues = Object.entries(filterPayload).reduce((acc, [key, value]) => {
+      if (value !== '' && value !== undefined && value !== null) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
+    setFilter({ ...filteredValues });
+  };
+
+  useEffect(() => {
+    refetch();
+    dispatch(resetConfidentalReport());
+  }, [location, navigate]);
 
   const headers = [
     {
@@ -109,12 +139,40 @@ const ConfidentalReportList = () => {
       cellComponent: (value) => <p className="">{value}</p>,
     },
   ];
+
+  const confidentalReportFilters = [
+    { id: 'student', type: 'autocomplete', componentProps: { useACSlice: useGetStudentACQuery, label: 'Öğrenci' } },
+    { id: 'eduYear', type: 'autocomplete', componentProps: { useACSlice: useGetEduYearACQuery, label: 'Staj Dönemi' } },
+    {
+      id: 'comission',
+      type: 'autocomplete',
+      componentProps: { useACSlice: useGetComissionACQuery, label: 'Mülakat yapan' },
+    },
+    { id: 'companyName', type: 'text', componentProps: { label: 'Firma adı' } },
+    { id: 'startDate', type: 'date', componentProps: { label: 'Başlangıç Tarihi' } },
+    { id: 'endDate', type: 'date', componentProps: { label: 'Bitiş Tarihi' } },
+    { id: 'status', type: 'enum', componentProps: { enumObject: InternStatusEnum, label: 'Staj durumu' } },
+    { id: 'isMailSended', type: 'boolean', componentProps: { label: 'Mail Gönderilenler' } },
+    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
+  ];
+
   return (
     <div>
-      {' '}
       <Paper>
-        <CustomTableFilter />
-        <EnhancedTable columns={headers} data={data?.data || []} isLoading={isLoading} />
+        <CustomTableFilter
+          filterOptions={confidentalReportFilters}
+          filterValues={filter}
+          onChangeFilterValues={handleFilterChange}
+          setRefresh={() => refetch()}
+        />
+        <EnhancedTable
+          columns={headers}
+          data={currentData?.data || []}
+          isLoading={isFetching || isLoading}
+          isSuccess={isSuccess}
+          filter={filter}
+          setFilter={(values) => setFilter({ ...filter, ...values })}
+        />
 
         <AddButton onClick={() => navigate(location.pathname + '/add')} />
       </Paper>

@@ -12,7 +12,7 @@ function RecordTraceCard({ record }) {
         </Box>
         <Box className="flex flex-col gap-2">
           <Typography variant="h5">Kaydı oluşturan kişi</Typography>
-          <Typography>{record.createdBy.name + ' ' + record.createdBy.last_name}</Typography>
+          <Typography>{record.createdBy?.name + ' ' + record.createdBy?.last_name}</Typography>
         </Box>
 
         <Box className="flex flex-col gap-2">

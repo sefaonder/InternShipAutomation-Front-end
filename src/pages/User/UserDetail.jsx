@@ -1,50 +1,50 @@
-import { Alert, AlertTitle, Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
-import moment from 'moment';
-import React, { useEffect, useReducer } from 'react';
+import { Box, CircularProgress, Paper, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { UserRolesEnum } from 'src/app/enums/roleList';
-import { permissionControll } from 'src/app/permissions/permissionController';
-import SealedRecordAlert from 'src/components/details/SealedRecordAlert';
 import DeleteButton from 'src/components/inputs/DeleteButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
-import { useDeleteFormMutation, useGetFormDetailQuery } from 'src/store/services/internForm/internFormApiSlice';
-import { setInternFormData } from 'src/store/services/internForm/internFormSlice';
+import usePermission from 'src/hooks/usePermission';
+import { useGetUserDetailQuery } from 'src/store/services/user/userApiSlice';
+import { setUserData } from 'src/store/services/user/userSlice';
 
-function InternFormDetail() {
+function UserDetail() {
   const dispatch = useDispatch();
 
-  const { internFormId } = useParams();
+  const { userId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isLoading, isSuccess, isError, error, refetch } = useGetFormDetailQuery(internFormId);
-  const [
-    deleteForm,
-    {
-      isLoading: isLoadingDeleteForm,
-      isSuccess: isSuccesDeleteForm,
-      isError: isErrorDeleteForm,
-      error: errorDeleteForm,
-    },
-  ] = useDeleteFormMutation();
+  const { data, isLoading, isSuccess, isError, error, refetch } = useGetUserDetailQuery(userId);
+  //   const [
+  //     deleteUser,
+  //     {
+  //       isLoading: isLoadingDeleteUser,
+  //       isSuccess: isSuccesDeleteForm,
+  //       isError: isErrorDeleteForm,
+  //       error: errorDeleteForm,
+  //     },
+  //   ] = useDeleteUse();
 
-  const userRole = useSelector((state) => state.auth.roles);
-  const studentPermission = permissionControll(userRole, UserRolesEnum.COMISSION.id);
+  const userAuth = useSelector((state) => state.auth);
+  const checkPermission = usePermission();
 
-  let internFormData = {};
+  const isAdvancedAdmin = checkPermission(UserRolesEnum.ADMIN.id);
+
+  let userData = {};
 
   useEffect(() => {
     if (error) {
       //TODO:  error snackbar
-      navigate('/intern-form');
+      navigate('/user');
     }
   }, [isError]);
 
   useEffect(() => {
     if (isSuccess && data.data) {
-      dispatch(setInternFormData(data?.data));
+      dispatch(setUserData(data?.data));
     }
   }, [isSuccess]);
 
@@ -58,7 +58,7 @@ function InternFormDetail() {
     } catch (error) {
       console.log('error', error);
     }
-    navigate('/intern-form');
+    navigate('/user');
   };
 
   console.log('data', data);
@@ -67,11 +67,11 @@ function InternFormDetail() {
   }
 
   if (isSuccess) {
-    internFormData = data.data;
+    userData = data.data;
 
     return (
       <div>
-        <Typography variant="h2">Staj Formu</Typography>
+        <Typography variant="h2">Kullanıcı</Typography>
         <Paper
           sx={{
             display: 'flex',
@@ -83,17 +83,17 @@ function InternFormDetail() {
             gap: '1rem',
           }}
         >
-          {studentPermission && (
+          {isAdvancedAdmin && (
             <DeleteButton
               onClick={handleDelete}
               variant="outlined"
-              loading={isLoadingDeleteForm}
-              disabled={isLoadingDeleteForm}
+              //   loading={isLoadingDeleteForm}
+              //   disabled={isLoadingDeleteForm}
             />
           )}
           <UpdateButton
-            onClick={() => navigate('/intern-form/update/' + internFormId)}
-            disabled={(internFormData?.isSealed && !studentPermission) || isLoading}
+            onClick={() => navigate('/user/update/' + userId)}
+            disabled={!isAdvancedAdmin || isLoading}
             variant="outlined"
             loading={isLoading}
           />
@@ -101,18 +101,17 @@ function InternFormDetail() {
         <Box className="flex flex-col sm:flex-row gap-4">
           <Paper sx={{ flex: 2, padding: '1rem' }}>
             <Box>
-              <Typography variant="h3">Staj Bilgileri</Typography>
+              <Typography variant="h3">Kullanıcı Bilgileri</Typography>
               <Box>
                 <Typography variant="h5">Öğrenci</Typography>
                 <Typography>
-                  {internFormData?.student?.name} {internFormData?.student?.last_name}
+                  {userData?.student?.name} {userData?.student?.last_name}
                 </Typography>
               </Box>
             </Box>
           </Paper>
           <Box className="flex flex-1 flex-col">
-            {internFormData?.isSealed && <SealedRecordAlert />}
-            <RecordTraceCard record={internFormData} />
+            <RecordTraceCard record={userData} />
           </Box>
         </Box>
       </div>
@@ -122,4 +121,4 @@ function InternFormDetail() {
   return null;
 }
 
-export default InternFormDetail;
+export default UserDetail;

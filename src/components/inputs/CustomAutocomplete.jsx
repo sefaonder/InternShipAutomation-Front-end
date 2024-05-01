@@ -3,6 +3,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import { List, ListItem, ListItemButton, ListItemText, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const CustomAutocomplete = ({
   value,
@@ -20,6 +21,7 @@ const CustomAutocomplete = ({
   const [inputValue, setInputValue] = useState('');
   const { data: data, isLoading, isSucces } = useACSlice();
   const theme = useTheme();
+  const { t } = useTranslation();
 
   function ACLabelFunction(value) {
     return value?.label ? `${value.label}` : '';
@@ -43,12 +45,16 @@ const CustomAutocomplete = ({
   const filterOptions = (options, { inputValue }) => {
     return options.filter((option) => {
       const searchText = value?.id ? '' : inputValue.toLowerCase();
-      const { label, subtext, id } = option;
+      const { label, subtext, id, translate } = option;
       console.log('filterId', filterId);
       if (Boolean(filterId) && id !== filterId) {
         return false;
       }
-      return label.toLowerCase().includes(searchText) || subtext.toLowerCase().includes(searchText);
+      return (
+        label.toLowerCase().includes(searchText) ||
+        subtext.toLowerCase().includes(searchText) ||
+        t(translate).toLowerCase().includes(searchText)
+      );
     });
   };
 
@@ -64,7 +70,10 @@ const CustomAutocomplete = ({
       renderOption={(props, option) => (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           <ListItemButton key={option.id} {...props} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
-            <ListItemText primary={option?.label} secondary={option?.subtext} />
+            <ListItemText
+              primary={option?.label}
+              secondary={option.translate ? `${option?.subtext} -> ${option?.translate}` : option?.subtext}
+            />
           </ListItemButton>
         </List>
       )}
