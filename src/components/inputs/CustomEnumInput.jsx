@@ -1,13 +1,30 @@
-import { MenuItem, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
 
-function CustomEnumInput({ labelId, id, value, label, onChange, enumObject, name }) {
+function CustomEnumInput({ id, value, label, onChange, enumObject, name, sx }) {
+  console.log('inside value', value);
   return (
-    <Select labelId={labelId} id={id} value={value} label={label} onChange={onChange} name={name}>
-      {Object.values(enumObject).map((item) => (
-        <MenuItem value={item.id}>{item.label}</MenuItem>
-      ))}
-    </Select>
+    <FormControl sx={sx}>
+      <InputLabel id={`select-${id}`}>{label}</InputLabel>
+      <Select
+        labelId={`select-${id}`}
+        id={id}
+        value={value}
+        label={label}
+        onChange={onChange}
+        name={name}
+        defaultValue=""
+      >
+        <MenuItem key={'none'} disabled value={null}>
+          <em>Hiçbiri</em>
+        </MenuItem>
+        {Object.values(enumObject).map((item) => (
+          <MenuItem key={item.id} value={item.id}>
+            {item.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
 

@@ -16,6 +16,7 @@ function CustomDateInput({
   maxDate,
   shouldDisableDate,
   style,
+  required,
 }) {
   const handleClear = () => {
     onChange(null);
@@ -34,6 +35,7 @@ function CustomDateInput({
           textField: {
             id: id,
             name: name,
+            required: required,
             error: error,
             helperText: helperText,
           },

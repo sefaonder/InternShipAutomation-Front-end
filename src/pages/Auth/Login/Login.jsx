@@ -9,6 +9,7 @@ import { useLoginMutation } from 'src/store/services/auth/authApiSlice';
 import './login.css';
 import { setCredentials } from 'src/store/services/auth/authSlice';
 import { Link } from '@mui/material';
+import parseJWT from 'src/app/handlers/jwtHandler';
 
 function Login() {
   const navigate = useNavigate();
@@ -24,7 +25,8 @@ function Login() {
 
   const setToken = async (userData) => {
     try {
-      const authObject = { roles: userData.roles, token: userData.accessToken };
+      const authObject = { token: userData.accessToken };
+
       localStorage.setItem('token', JSON.stringify(authObject));
     } catch (err) {
       // TODO: snackbar error and navigate to login
@@ -40,10 +42,15 @@ function Login() {
     onSubmit: async (values) => {
       try {
         const userData = await login(values).unwrap();
-        dispatch(setCredentials(userData));
+        const parsedData = parseJWT(userData.accessToken);
+        console.log('pardesData', parsedData);
+        dispatch(
+          setCredentials({ accessToken: userData.accessToken, roles: parsedData.roles, userId: parsedData.userId }),
+        );
         await setToken(userData);
         navigate('/');
       } catch (err) {
+        console.log('err', err);
         if (!err?.originalStatus) {
           // isLoading: true until timeout occurs
           //setErrMsg('No Server Response');

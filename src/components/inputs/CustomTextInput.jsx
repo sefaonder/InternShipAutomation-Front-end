@@ -23,7 +23,7 @@ function CustomTextInput({
       id={id}
       name={name}
       sx={style}
-      value={value}
+      value={value || ''}
       label={label}
       onChange={onChange}
       disabled={disabled}

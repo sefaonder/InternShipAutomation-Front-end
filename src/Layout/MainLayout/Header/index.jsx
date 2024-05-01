@@ -24,22 +24,40 @@ import AppBarStyled from './AppBarStyled';
 import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { Search } from '@mui/icons-material';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { removeProfile } from 'src/store/services/profile/ProfileSlice';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeProfile, setProfile } from 'src/store/services/profile/ProfileSlice';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from 'src/store/services/auth/authApiSlice';
+import { useGetProfileQuery } from 'src/store/services/profile/ProfileApiSlice';
+import { useTranslation } from 'react-i18next';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
 const Header = ({ open, handleDrawerToggle }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [logout, { isLoading }] = useLogoutMutation();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const userAuth = useSelector((state) => state.auth);
+  const userProfile = useSelector((state) => state.profile.user);
+
+  const { data, isLoading: isLoadingProfile, isSuccess, isError, error, refetch } = useGetProfileQuery();
+  const { t } = useTranslation();
+
+  const dispatch = useDispatch();
+
+  // console.log('userAuth', userAuth, userProfile);
+
+  useEffect(() => {
+    if (isSuccess && data?.data) {
+      dispatch(setProfile(data.data));
+    }
+  }, [isSuccess]);
 
   const settings = ['Profile'];
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -52,13 +70,17 @@ const Header = ({ open, handleDrawerToggle }) => {
       .then(() => {
         localStorage.removeItem('user');
         dispatch(removeProfile());
-        navigate('/login');
+
+        history.pushState(null, '', '/login');
+        window.location.href = '/login';
       })
       .catch(() => {
         // TODO: snackbar error
         localStorage.removeItem('user');
         dispatch(removeProfile());
-        navigate('/login');
+
+        history.pushState(null, '', '/login');
+        window.location.href = '/login';
       });
   };
   const theme = useTheme();
@@ -81,12 +103,15 @@ const Header = ({ open, handleDrawerToggle }) => {
         {!open ? <MenuOpenOutlinedIcon /> : <MenuOutlinedIcon />}
       </IconButton>
 
+      <Typography>{userAuth?.roles}</Typography>
+      <Typography>{`${userProfile?.name} ${userProfile?.last_name}`}</Typography>
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
             <Avatar alt="Remy Sharp" src={avatar} />
           </IconButton>
         </Tooltip>
+
         <Menu
           sx={{ mt: '45px' }}
           id="menu-appbar"
