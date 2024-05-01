@@ -4,6 +4,9 @@ const ROLE_PERMISSIONS = {
   ADMIN: 3,
 };
 
-export const permissionControll = ({ userRole, requiredRole }) => {
-  return ROLE_PERMISSIONS[userRole] >= ROLE_PERMISSIONS[requiredRole];
+export const permissionControll = (userRole, requiredRole) => {
+  // console.log('permissionControl', userRole, requiredRole);
+  const currentRole = userRole || 'STUDENT';
+  const reqRole = requiredRole || 'ADMIN';
+  return ROLE_PERMISSIONS[currentRole] >= ROLE_PERMISSIONS[reqRole];
 };
