@@ -15,13 +15,18 @@ import CustomBooleanMultiSelectInput from 'src/components/inputs/CustomBooleanMu
 import CustomBooleanInput from 'src/components/inputs/CustomBooleanInput';
 import { permissionControll } from 'src/app/permissions/permissionController';
 import { UserRolesEnum } from 'src/app/enums/roleList';
+import usePermission from 'src/hooks/usePermission';
 
 function FormAdd({ prevStep, nextStep, internFormData }) {
   const [createNewForm, { isLoading }] = useCreateNewFormMutation();
   const [updateForm, { isLoadingUpdate }] = useUpdateFormMutation();
 
   const userAuth = useSelector((state) => state.auth);
-  const studentPermission = userAuth.userRole && permissionControll(userAuth.userRole, UserRolesEnum.COMISSION);
+  const checkPermission = usePermission();
+
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION);
+
+  console.log('comissionPer', userAuth, isAdvancedComission);
 
   console.log('formAdd', userAuth);
 
@@ -154,7 +159,7 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
           id="student"
           disabled={internFormData?.id}
           required
-          filterId={userAuth?.userId}
+          filterId={!isAdvancedComission && userAuth?.userId}
           useACSlice={useGetStudentACQuery}
           label={'Öğrenci'}
           value={formik.values.student}

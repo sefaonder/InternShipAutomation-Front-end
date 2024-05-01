@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
 
-function CustomEnumInput({ id, value, label, onChange, enumObject, name, sx }) {
+function CustomEnumInput({ id, value, label, onChange, enumObject, name, sx, required }) {
   console.log('inside value', value);
   return (
     <FormControl sx={sx}>
@@ -12,6 +12,7 @@ function CustomEnumInput({ id, value, label, onChange, enumObject, name, sx }) {
         value={value}
         label={label}
         onChange={onChange}
+        required={required}
         name={name}
         defaultValue=""
       >
