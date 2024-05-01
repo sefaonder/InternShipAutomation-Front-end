@@ -44,7 +44,8 @@ const CustomAutocomplete = ({
     return options.filter((option) => {
       const searchText = value?.id ? '' : inputValue.toLowerCase();
       const { label, subtext, id } = option;
-      if (filterId && id !== filterId) {
+      console.log('filterId', filterId);
+      if (Boolean(filterId) && id !== filterId) {
         return false;
       }
       return label.toLowerCase().includes(searchText) || subtext.toLowerCase().includes(searchText);

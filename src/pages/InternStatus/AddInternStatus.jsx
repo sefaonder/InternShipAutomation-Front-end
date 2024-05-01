@@ -8,6 +8,7 @@ import { InternStatusEnum } from 'src/app/enums/internStatus';
 import InternFormACList from 'src/components/ACLists/InternFormACList';
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 import CustomEnumInput from 'src/components/inputs/CustomEnumInput';
+import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useUpdateStatusMutation } from 'src/store/services/internStatus/internStatusApiSlice';
 import * as yup from 'yup';
 
@@ -18,18 +19,13 @@ function AddInternStatus() {
   const internStatusData = useSelector((state) => state.internStatus);
 
   const initialValues = {
-    student: {},
-    form: {},
-    interview: {},
     status: '',
+    desc: '',
   };
 
   useEffect(() => {
     if (internStatusData?.id) {
       console.log('formil', internStatusData);
-      formik.setFieldValue('student', internStatusData.student.student, true);
-      formik.setFieldValue('form', internStatusData.form.form, true);
-      internStatusData?.interview && formik.setFieldValue('interview', internStatusData.interview.interview, true);
       formik.setFieldValue('status', internStatusData.status, false);
     }
   }, [internStatusData]);
@@ -53,9 +49,6 @@ function AddInternStatus() {
     try {
       const payload = {
         ...values,
-        studentId: values.student.id,
-        formId: values.form.id,
-        interviewId: values?.interview?.id,
       };
       let response = null;
       if (internStatusData?.id) {
@@ -64,13 +57,11 @@ function AddInternStatus() {
         console.log('hii');
       }
       console.log(response);
-      if (response?.data) {
-        // handleNext();
-        navigate('/intern-status');
-      }
       console.log('oops something bad req');
     } catch (error) {
       console.log(error);
+    } finally {
+      navigate('/intern-status');
     }
   }
 
@@ -81,88 +72,36 @@ function AddInternStatus() {
     validationSchema: validationSchema,
   });
 
-  function StudentACLabelFunction(value) {
-    return value?.name ? `${value.name} ${value.last_name}` : '';
-  }
-
-  function InternFormACLabelFunction(value) {
-    return value?.id ? `${value.id}` : '';
-  }
-
-  const filterOptions = (options, { inputValue }) => {
-    return options.filter((option) => {
-      // Arama metniyle eşleşen seçenekleri filtrele
-      const searchText = inputValue.toLowerCase();
-      const { last_name, name, school_number } = option;
-      return (
-        last_name.toLowerCase().includes(searchText) ||
-        name.toLowerCase().includes(searchText) ||
-        school_number.toLowerCase().includes(searchText)
-      );
-    });
-  };
   console.log('formik', formik.values);
 
   return (
     <div>
       <Typography variant="h6">Adım 1</Typography>
-      <form className="flex flex-col" onSubmit={formik.handleSubmit}>
-        <CustomAutocomplete
-          name="student"
-          id="student"
-          useACSlice={useGetStudentACQuery}
-          value={formik.values.student}
-          filterOptions={filterOptions}
-          onChange={(value) => formik.setFieldValue('student', value, true)}
-          error={formik.touched.student && Boolean(formik.errors.student)}
-          helperText={formik.touched.student && formik.errors.student}
-          labelFunc={StudentACLabelFunction}
-          renderOption={(props, option) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem
-                key={option.school_number}
-                {...props}
-                disablePadding
-                button
-                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-              >
-                <ListItemText primary={option?.name + ' ' + option?.last_name} secondary={option?.school_number} />
-              </ListItem>
-            </List>
-          )}
-        />
-
-        <CustomAutocomplete
-          name="form"
-          id="form"
-          useACSlice={useGetInternFormACQuery}
-          value={formik.values.form}
-          //   filterOptions={filterOptions}
-          onChange={(value) => formik.setFieldValue('form', value, true)}
-          error={formik.touched.form && Boolean(formik.errors.form)}
-          helperText={formik.touched.form && formik.errors.form}
-          labelFunc={InternFormACLabelFunction}
-          renderOption={(props, option) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem
-                key={option.id}
-                {...props}
-                disablePadding
-                button
-                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-              >
-                <ListItemText primary={option?.id} secondary={option?.school_number} />
-              </ListItem>
-            </List>
-          )}
-        />
+      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+        <Typography>{`Önceki Staj Durumu : ${InternStatusEnum[internStatusData?.status]?.label}`}</Typography>
 
         <CustomEnumInput
           id="status"
           name="status"
+          required
+          label={'Staj Durumu'}
           value={formik.values.status}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('status', value.target.value, true) && formik.setStatus(true)}
           enumObject={InternStatusEnum}
+        />
+
+        <Typography>
+          Dikkat Açıklama alanı girilirse yapılacak staj durumu güncellemesi kayda ait staj durumu listesine
+          eklenecektir
+        </Typography>
+        <CustomTextInput
+          id="desc"
+          name="desc"
+          label="Açıklama"
+          value={formik.values.desc}
+          onChange={(value) => formik.setFieldValue('desc', value.target.value, true) && formik.setStatus(true)}
+          error={Boolean(formik.errors.desc)}
+          helperText={formik.errors.desc}
         />
 
         <Button type="submit" variant="outlined" disabled={formik.errors?.length > 0}>
