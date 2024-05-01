@@ -1,20 +1,14 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useGetProfileQuery } from 'src/store/services/profile/ProfileApiSlice';
 import { setProfile } from 'src/store/services/profile/ProfileSlice';
 
 function Dashboard() {
-  const { data, isLoading, isSuccess, isError, error } = useGetProfileQuery();
+  const location = useLocation();
+  const { data, isLoading, isSuccess, isError, error, refetch } = useGetProfileQuery();
   const { t } = useTranslation();
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (isSuccess && data.data) {
-      dispatch(setProfile(data));
-    }
-  }, [isSuccess]);
 
   return (
     <div>

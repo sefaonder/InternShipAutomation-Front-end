@@ -43,7 +43,10 @@ function Login() {
       try {
         const userData = await login(values).unwrap();
         const parsedData = parseJWT(userData.accessToken);
-        setCredentials({ accessToken: userData.accessToken, roles: parsedData.roles, userId: parsedData.userId });
+        console.log('pardesData', parsedData);
+        dispatch(
+          setCredentials({ accessToken: userData.accessToken, roles: parsedData.roles, userId: parsedData.userId }),
+        );
         await setToken(userData);
         navigate('/');
       } catch (err) {
