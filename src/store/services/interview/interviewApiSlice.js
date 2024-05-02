@@ -6,7 +6,7 @@ export const interviewSlice = apiSlice.injectEndpoints({
       query: (params) => ({ url: '/api/interview/get', params: params }),
     }),
     getInterviewDetail: builder.query({
-      query: (interviewId) => ({ url: `/api/intern-status/get/${interviewId}` }),
+      query: (interviewId) => ({ url: `/api/interview/get/${interviewId}` }),
     }),
 
     createNewInterview: builder.mutation({

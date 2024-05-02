@@ -1,14 +1,19 @@
 import { Paper } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useGetComissionACQuery, useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
-import AddButton from 'src/components/inputs/AddButton';
 import { useGetStatusesQuery } from 'src/store/services/internStatus/internStatusApiSlice';
+import { clearInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
 
 function InternStatusList() {
   const [filter, setFilter] = useState({});
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { data, currentData, isLoading, isFetching, isSuccess, isError, error, refetch } = useGetStatusesQuery(filter);
 
   const handleFilterChange = (values) => {
@@ -27,6 +32,11 @@ function InternStatusList() {
 
     setFilter({ ...filteredValues });
   };
+
+  useEffect(() => {
+    refetch();
+    dispatch(clearInternStatusData());
+  }, [location, navigate]);
 
   const headers = [
     {

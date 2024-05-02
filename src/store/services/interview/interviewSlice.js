@@ -5,27 +5,28 @@ const interviewSlice = createSlice({
   initialState: {
     id: null,
     date: null,
-    intern: {},
-    comission: {},
-    InternStatus: {},
+
+    student: null,
+    comission: null,
+    internStatus: null,
   },
   reducers: {
     setInterviewData: (state, action) => {
-      const { id, date, intern, comission, InternStatus } = action.payload;
+      const { id, date, student, comission, internStatus } = action.payload;
       state.id = id;
       state.date = date;
 
-      state.intern = { ...state.intern, intern };
-      state.comission = { ...state.comission, comission };
-      state.InternStatus = { ...state.InternStatus, InternStatus };
+      state.student = student;
+      state.comission = comission;
+      state.internStatus = internStatus;
     },
     clearInterviewData: (state, action) => {
       state.id = null;
       state.date = null;
 
-      state.intern = {};
-      state.comission = {};
-      state.InternStatus = {};
+      state.student = null;
+      state.comission = null;
+      state.internStatus = null;
     },
   },
 });

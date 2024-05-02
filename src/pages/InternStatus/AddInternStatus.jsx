@@ -1,12 +1,9 @@
-import { Button, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useGetInternFormACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 import { InternStatusEnum } from 'src/app/enums/internStatus';
-import InternFormACList from 'src/components/ACLists/InternFormACList';
-import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 import CustomEnumInput from 'src/components/inputs/CustomEnumInput';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useUpdateStatusMutation } from 'src/store/services/internStatus/internStatusApiSlice';

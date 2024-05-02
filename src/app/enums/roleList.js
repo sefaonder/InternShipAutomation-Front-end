@@ -1,5 +1,5 @@
 export const UserRolesEnum = {
-  STUDENT: 'STUDENT',
-  COMISSION: 'COMISSION',
-  ADMIN: 'ADMIN',
+  STUDENT: { id: 'STUDENT', label: 'Öğrenci' },
+  COMISSION: { id: 'COMISSION', label: 'Komisyon' },
+  ADMIN: { id: 'ADMIN', label: 'Admin' },
 };

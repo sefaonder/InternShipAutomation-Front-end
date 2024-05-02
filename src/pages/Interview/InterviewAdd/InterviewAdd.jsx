@@ -1,70 +1,73 @@
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
+import * as yup from 'yup';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useGetInternFormACQuery } from 'src/app/api/autocompleteSlice';
+import { useGetComissionACQuery, useGetInternStatusACQuery } from 'src/app/api/autocompleteSlice';
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
+import {
+  useCreateNewInterviewMutation,
+  useUpdateInterviewMutation,
+} from 'src/store/services/interview/interviewApiSlice';
+import CustomDateInput from 'src/components/inputs/CustomDateInput';
+import moment from 'moment';
+import { shouldDisableDate } from 'src/app/handlers/dateHandlers';
 
 function InterviewAdd() {
-  // const [createNewForm, { isLoading }] = useCreateNewFormMutation();
-  const [updateStatus, { isLoading }] = useUpdateStatusMutation();
+  const [createNewInterview, { isLoading }] = useCreateNewInterviewMutation();
+  const [updateInterview, { isLoadingUpdate }] = useUpdateInterviewMutation();
+
   const navigate = useNavigate();
-  const interviewData = useSelector((state) => state.internStatus);
+  const interviewData = useSelector((state) => state.interview);
 
   const initialValues = {
     comission: {},
     internStatus: {},
-    intern: {},
     date: '',
   };
 
   useEffect(() => {
     if (interviewData?.id) {
-      console.log('formil', internStatusData);
-      formik.setFieldValue('user', internStatusData.user.user, true);
-      formik.setFieldValue('form', internStatusData.form.form, true);
-      formik.setFieldValue('status', internStatusData.status, false);
+      console.log('formil', interviewData);
+      formik.setFieldValue('comission', interviewData.comission, false);
+      formik.setFieldValue('internStatus', interviewData.internStatus, false);
+      formik.setFieldValue('date', interviewData.date, false);
     }
   }, [interviewData]);
 
   const validationSchema = yup.object({
-    // student: yup.object().required('Lütfen öğrenci girin'),
-    // startDate: yup.date().required('Lütfen Staj başlangıç tarihi girin'),
-    // endDate: yup
-    //   .date()
-    //   .required('Bitiş tarihi gereklidir')
-    //   .test('is-valid-range', 'Tarih aralığı 60 iş gününden fazla olamaz', function (value) {
-    //     const startDate = this.parent.startDate;
-    //     const businessDays = getBusinessDays(startDate, value, []);
-    //     return businessDays <= 60;
-    //   }),
+    comission: yup.object().shape({
+      id: yup.string().required('Lütfen Mülakat Yetkilisi Girin'),
+    }),
+    internStatus: yup.object().shape({
+      id: yup.string().required('Lütfen geçerli bir Staj Durumu Girin'),
+    }),
     date: yup.date().required('Lütfen Mülakat Tarihi Seçin'),
   });
 
   async function handleSubmit(values) {
-    console.log('Step1', values);
     try {
       const payload = {
         ...values,
-        studentId: values.user.id,
-        formId: values.form.id,
-        interviewId: values?.interview?.id,
+        comissionId: values.comission.id,
+        internStatusId: values.internStatus.id,
       };
       let response = null;
-      if (internStatusData?.id) {
-        response = await updateStatus({ payload: payload, internStatusId: internStatusData?.id });
+      if (interviewData?.id) {
+        response = await updateInterview({ payload: payload, interviewId: interviewData?.id });
       } else {
-        console.log('hii');
+        response = await createNewInterview(payload);
       }
-      console.log(response);
-      if (response?.data) {
-        // handleNext();
-        navigate('/intern-status');
-      }
-      console.log('oops something bad req');
+      console.log('response', response);
     } catch (error) {
       console.log(error);
+    } finally {
+      if (interviewData?.id) {
+        navigate('/interview/' + interviewData?.id);
+      } else {
+        navigate('/interview');
+      }
     }
   }
 
@@ -75,119 +78,51 @@ function InterviewAdd() {
     validationSchema: validationSchema,
   });
 
-  function StudentACLabelFunction(value) {
-    return value.name ? `${value.name} ${value.last_name}` : '';
-  }
-
-  function InternFormACLabelFunction(value) {
-    return value.id ? `${value.id}` : '';
-  }
-
-  const filterOptions = (options, { inputValue }) => {
-    return options.filter((option) => {
-      // Arama metniyle eşleşen seçenekleri filtrele
-      const searchText = inputValue.toLowerCase();
-      const { last_name, name, school_number } = option;
-      return (
-        last_name.toLowerCase().includes(searchText) ||
-        name.toLowerCase().includes(searchText) ||
-        school_number.toLowerCase().includes(searchText)
-      );
-    });
-  };
   console.log('formik', formik.values);
 
   return (
     <div>
-      <Typography variant="h6">Adım 1</Typography>
-      <form className="flex flex-col" onSubmit={formik.handleSubmit}>
+      <Typography variant="h6">Mülakat</Typography>
+      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
         <CustomAutocomplete
-          name="user"
-          id="user"
-          useACSlice={useGetStudentACQuery}
-          value={formik.values.user}
-          filterOptions={filterOptions}
-          onChange={(value) => formik.setFieldValue('user', value, true)}
-          error={formik.touched.user && Boolean(formik.errors.user)}
-          helperText={formik.touched.user && formik.errors.user}
-          labelFunc={StudentACLabelFunction}
-          renderOption={(props, option) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem
-                key={option.school_number}
-                {...props}
-                disablePadding
-                button
-                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-              >
-                <ListItemText primary={option?.name + ' ' + option?.last_name} secondary={option?.school_number} />
-              </ListItem>
-            </List>
-          )}
+          name="internStatus"
+          id="internStatus"
+          // disabled={internFormData?.id}
+          required
+          useACSlice={useGetInternStatusACQuery}
+          label={'İlgili Staj Durumu'}
+          value={formik.values.internStatus}
+          onChange={(value) => formik.setFieldValue('internStatus', value, true) && formik.setStatus(true)}
+          error={Boolean(formik.errors?.internStatus)}
+          helperText={formik.errors.internStatus?.id}
         />
 
         <CustomAutocomplete
-          name="form"
-          id="form"
-          useACSlice={useGetInternFormACQuery}
-          value={formik.values.form}
-          //   filterOptions={filterOptions}
-          onChange={(value) => formik.setFieldValue('form', value, true)}
-          error={formik.touched.form && Boolean(formik.errors.form)}
-          helperText={formik.touched.form && formik.errors.form}
-          labelFunc={InternFormACLabelFunction}
-          renderOption={(props, option) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem
-                key={option.id}
-                {...props}
-                disablePadding
-                button
-                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-              >
-                <ListItemText primary={option?.id} secondary={option?.school_number} />
-              </ListItem>
-            </List>
-          )}
-        />
-
-        <CustomAutocomplete
-          name="form"
-          id="form"
-          useACSlice={useGetInternFormACQuery}
-          value={formik.values.form}
-          //   filterOptions={filterOptions}
-          onChange={(value) => formik.setFieldValue('form', value, true)}
-          error={formik.touched.form && Boolean(formik.errors.form)}
-          helperText={formik.touched.form && formik.errors.form}
-          labelFunc={InternFormACLabelFunction}
-          renderOption={(props, option) => (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem
-                key={option.id}
-                {...props}
-                disablePadding
-                button
-                // style={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-              >
-                <ListItemText primary={option?.id} secondary={option?.school_number} />
-              </ListItem>
-            </List>
-          )}
+          name="comission"
+          id="comission"
+          // disabled={internFormData?.id}
+          required
+          useACSlice={useGetComissionACQuery}
+          label={'Mülakat Yetkilisi'}
+          value={formik.values.comission}
+          onChange={(value) => formik.setFieldValue('comission', value, true) && formik.setStatus(true)}
+          error={Boolean(formik.errors?.comission)}
+          helperText={formik.errors.comission?.id}
         />
 
         <CustomDateInput
-          id="startDate"
-          name="startDate"
-          label="Başlangıç Tarihi"
+          id="date"
+          name="date"
+          required
+          label="Mülakat Tarihi"
           shouldDisableDate={(date) => shouldDisableDate(date, [])}
-          value={moment(formik.values.startDate)}
-          onChange={(value) => formik.setFieldValue('startDate', value, true)}
-          error={formik.touched.startDate && Boolean(formik.errors.startDate)}
-          helperText={formik.touched.startDate && formik.errors.startDate}
+          value={moment(formik.values.date)}
+          onChange={(value) => formik.setFieldValue('date', value, true) && formik.setStatus(true)}
+          error={Boolean(formik.errors.date)}
+          helperText={formik.errors.date}
         />
 
-        <Button type="submit" variant="outlined" disabled={formik.errors?.length > 0}>
+        <Button type="submit" variant="outlined" disabled={!formik.isValid}>
           Kaydet
         </Button>
       </form>

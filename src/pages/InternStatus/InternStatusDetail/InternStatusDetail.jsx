@@ -1,18 +1,19 @@
 import { Box, Button, CircularProgress, Paper } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import { useGetStatusDetailQuery } from 'src/store/services/internStatus/internStatusApiSlice';
 import { setInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
 
 function InternStatusDetail() {
   const dispatch = useDispatch();
-
-  const { internStatusId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const { data, isLoading, isSuccess, isError, error } = useGetStatusDetailQuery(internStatusId);
+  const { internStatusId } = useParams();
+
+  const { data, isLoading, isSuccess, isError, error, refetch } = useGetStatusDetailQuery(internStatusId);
 
   let internStatusData = {};
 
@@ -22,7 +23,12 @@ function InternStatusDetail() {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    refetch();
+  }, [location, navigate]);
+
   console.log('data', data);
+
   if (isLoading) {
     return <CircularProgress />;
   }

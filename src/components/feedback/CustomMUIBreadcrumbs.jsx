@@ -14,11 +14,13 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Link as RouterLink, Route, Routes, MemoryRouter, useLocation } from 'react-router-dom';
 
 const breadcrumbNameMap = {
+  '/intern-status': 'Intern Status',
+  '/intern-form': 'Intern Form',
+  '/interview': 'Interview',
+  '/survey': 'Survey',
+  '/confidental-report': 'Confidental Report',
   '/user': 'User',
-  '/inbox/important': 'Important',
-  '/trash': 'Trash',
-  '/spam': 'Spam',
-  '/drafts': 'Drafts',
+  'internship-panel': 'InternShip Panel',
 };
 
 function ListItemLink(props) {
@@ -54,9 +56,9 @@ const CustomMUIBreadcrumbs = () => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <Breadcrumbs aria-label="breadcrumb">
+    <Breadcrumbs aria-label="breadcrumb" className="mb-4">
       <LinkRouter underline="hover" color="inherit" to="/">
-        Home
+        Dashboard
       </LinkRouter>
       {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1;

@@ -11,7 +11,6 @@ const ProfileDefault = Loadable(lazy(() => import('src/pages/Profile/Profile')))
 
 const InternStatusList = Loadable(lazy(() => import('src/pages/InternStatus/InternStatusList')));
 const InternStatusDetail = Loadable(lazy(() => import('src/pages/InternStatus/InternStatusDetail/InternStatusDetail')));
-const InternStatusAdd = Loadable(lazy(() => import('src/pages/InternStatus/AddInternStatus')));
 const InternStatusUpdate = Loadable(lazy(() => import('src/pages/InternStatus/AddInternStatus')));
 
 const InternFormList = Loadable(lazy(() => import('src/pages/InternForm/InternFormList')));
@@ -21,8 +20,8 @@ const InternFormUpdate = Loadable(lazy(() => import('src/pages/InternForm/AddInt
 
 const InterviewList = Loadable(lazy(() => import('src/pages/Interview/InterviewList')));
 const InterviewDetail = Loadable(lazy(() => import('src/pages/Interview/InterviewDetail/InterviewDetail')));
-// const InterviewAdd = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
-// const InterviewUpdate = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
+const InterviewAdd = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
+const InterviewUpdate = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
 
 const SurveyDetail = Loadable(lazy(() => import('src/pages/Survey/SurveyDetail/SurveyDetail')));
 const SurveyAdd = Loadable(lazy(() => import('src/pages/Survey/SurveyAdd')));
@@ -36,12 +35,12 @@ const ConfidentalReportDetail = Loadable(
 const ConfidentalReportAdd = Loadable(lazy(() => import('src/pages/ConfidentalReport/ConfidentalReportAdd')));
 const ConfidentalReportUpdate = Loadable(lazy(() => import('src/pages/ConfidentalReport/ConfidentalReportUpdate')));
 
-const UserList = Loadable(lazy(() => import('src/pages/User/User')));
-const UserDetail = Loadable(lazy(() => import('src/pages/User/User')));
-const UserAdd = Loadable(lazy(() => import('src/pages/User/User')));
-const UserUpdate = Loadable(lazy(() => import('src/pages/User/User')));
+const UserList = Loadable(lazy(() => import('src/pages/User/UserList')));
+const UserDetail = Loadable(lazy(() => import('src/pages/User/UserDetail')));
+const UserAdd = Loadable(lazy(() => import('src/pages/User/UserAdd')));
+const UserUpdate = Loadable(lazy(() => import('src/pages/User/UserAdd')));
 
-const InterShipPanel = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+const InterShipPanel = Loadable(lazy(() => import('src/pages/InternshipPanel/InternShipPanel')));
 
 const ConfidentalReportPDF = Loadable(lazy(() => import('src/PDF/PdfConfidentalReport')));
 
@@ -98,8 +97,8 @@ const MainRoutes = {
       children: [
         { path: '/interview/', element: <InterviewList /> },
         { path: '/interview/:interviewId', element: <InterviewDetail /> },
-        // { path: '/interview/add', element: <InterviewAdd /> },
-        // { path: '/interview/update/:interviewId', element: <InterviewUpdate /> },
+        { path: '/interview/add', element: <InterviewAdd /> },
+        { path: '/interview/update/:interviewId', element: <InterviewUpdate /> },
       ],
     },
     // SurveyList Only For Admin & Comission

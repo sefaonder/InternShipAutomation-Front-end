@@ -27,7 +27,7 @@ function isHoliday(date, holidays) {
 
 export const shouldDisableDate = (date, holidayDates, weekDayWork) => {
   // Tarih hafta sonuna mı denk geliyor?
-  if (!calculateWeeklyWork(date, weekDayWork)) {
+  if (weekDayWork && !calculateWeeklyWork(date, weekDayWork)) {
     return true;
   }
   // Özel tatil günleri devre dışı bırak

@@ -51,6 +51,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
           result = await baseQuery(args, api, extraOptions);
         } else {
           const logOutResult = await baseQuery('/auth/logout', api, extraOptions);
+          // api.dispatch(api.util.resetApiState());
           api.dispatch(logOut());
           localStorage.removeItem('token');
 
