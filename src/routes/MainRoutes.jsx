@@ -40,7 +40,7 @@ const UserDetail = Loadable(lazy(() => import('src/pages/User/UserDetail')));
 const UserAdd = Loadable(lazy(() => import('src/pages/User/UserAdd')));
 const UserUpdate = Loadable(lazy(() => import('src/pages/User/UserAdd')));
 
-const InterShipPanel = Loadable(lazy(() => import('src/pages/Profile/Profile')));
+const InterShipPanel = Loadable(lazy(() => import('src/pages/InternshipPanel/InternShipPanel')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
