@@ -1,12 +1,15 @@
 import { Alert, AlertTitle, Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import PdfInternform from 'src/PDF/internform/PdfInternform';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import { permissionControll } from 'src/app/permissions/permissionController';
 import SealedRecordAlert from 'src/components/details/SealedRecordAlert';
 import DeleteButton from 'src/components/inputs/DeleteButton';
+import DownloadButton from 'src/components/inputs/DownloadButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import { useDeleteFormMutation, useGetFormDetailQuery } from 'src/store/services/internForm/internFormApiSlice';
@@ -97,6 +100,19 @@ function InternFormDetail() {
             variant="outlined"
             loading={isLoading}
           />
+          {data && (
+            <PDFDownloadLink fileName="FORM" document={<PdfInternform data={data.data} />}>
+              {({ loading }) =>
+                loading ? (
+                  <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
+                ) : (
+                  <DownloadButton variant="outlined" loading={loading} text={'Download...'}>
+                    {' '}
+                  </DownloadButton>
+                )
+              }
+            </PDFDownloadLink>
+          )}
         </Paper>
         <Box className="flex flex-col sm:flex-row gap-4">
           <Paper sx={{ flex: 2, padding: '1rem' }}>

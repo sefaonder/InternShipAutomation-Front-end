@@ -1,10 +1,9 @@
 import React from 'react';
 import { Document, Font, Image, Page, Text, View } from '@react-pdf/renderer';
-import PdfTable from './pdfComponents/PdfTable';
-import PdfTableMultiOptions from './pdfComponents/PdfTableMultiOptions';
-import { Height } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
-import PdfHeader from './pdfComponents/PdfHeader';
+import PdfTable from '../pdfComponents/PdfTable';
+import PdfTableMultiOptions from '../pdfComponents/PdfTableMultiOptions';
+import PdfHeader from '../pdfComponents/PdfHeader';
+import turkish from '../pdfComponents/turkish2.ttf';
 
 const PdfConfidentalReport = ({ data }) => {
   console.log(data);
@@ -15,38 +14,40 @@ const PdfConfidentalReport = ({ data }) => {
     { name: 'Okul Numarası', value: 'asdasd' },
   ];
   const companyInfo = [
-    { name: 'Firma Adı', value: data.company_name },
-    { name: 'Adresi', value: data.address },
+    { name: 'Firma Adı', value: data?.company_name },
+    { name: 'Adresi', value: data?.address },
   ];
   const internshipInfo = [
-    { name: 'Staja Başlama ve Bitiş Tarihleri', value: data.start_date },
-    { name: 'Öğrencinin Devamsızlık Günleri ve Sayısı', value: data.days_of_absence },
-    { name: 'Staj Yapilan Departman', value: data.department },
-    { name: 'Staj Icerisinde Egitim Programi Uygulandı mı?', value: data.is_edu_program ? 'Evet' : 'Hayır' },
+    { name: 'Staja Başlama ve Bitiş Tarihleri', value: data?.start_date },
+    { name: 'Öğrencinin Devamsızlık Günleri ve Sayısı', value: data?.days_of_absence },
+    { name: 'Staj Yapilan Departman', value: data?.department },
+    { name: 'Staj Icerisinde Egitim Programi Uygulandı mı?', value: data?.is_edu_program ? 'Evet' : 'Hayır' },
   ];
   const authInfo = [
-    { name: 'Adi Soyadi / Görevi', value: data.auth_name },
-    { name: 'Diploma Unvani', value: data.auth_position },
-    { name: 'Oda Sicil No (varsa)', value: data.reg_number },
+    { name: 'Adi Soyadi / Görevi', value: data?.auth_name },
+    { name: 'Diploma Unvani', value: data?.auth_position },
+    { name: 'Oda Sicil No (varsa)', value: data?.reg_number },
     { name: 'Tarih / İmza', value: 'asdasd caddesi' },
   ];
 
   const internEvuluation = {
     titles: ['Başari Olculeri', 'Iyi', 'Orta', 'Iyi Degil'],
     data: [
-      { name: 'Calisma Dikkat ve Sorumluluk', value: data.intern_evaluation.responsibility },
-      { name: 'İsi Yapmadaki Basarisi', value: data.intern_evaluation.success },
-      { name: 'Ogrenme ve Arastirma Ilgisi', value: data.intern_evaluation.interest },
-      { name: 'Ustelerine Karsi Davranisi', value: data.intern_evaluation.behaviour_to_auths },
-      { name: 'Calisma Arkadaslarina Davranisi', value: data.intern_evaluation.behaviour_to_coworkers },
-      { name: 'Is Guvenligi Kurallarina Uyumu', value: data.intern_evaluation.work_safety },
-      { name: 'Meslek Bilgi Duzeyi', value: data.intern_evaluation.competence },
+      { name: 'Calisma Dikkat ve Sorumluluk', value: data?.intern_evaluation.responsibility },
+      { name: 'İsi Yapmadaki Basarisi', value: data?.intern_evaluation.success },
+      { name: 'Ogrenme ve Arastirma Ilgisi', value: data?.intern_evaluation.interest },
+      { name: 'Ustelerine Karsi Davranisi', value: data?.intern_evaluation.behaviour_to_auths },
+      { name: 'Calisma Arkadaslarina Davranisi', value: data?.intern_evaluation.behaviour_to_coworkers },
+      { name: 'Is Guvenligi Kurallarina Uyumu', value: data?.intern_evaluation.work_safety },
+      { name: 'Meslek Bilgi Duzeyi', value: data?.intern_evaluation.competence },
     ],
   };
 
+  Font.register({ family: 'Turkish', src: turkish });
+
   return (
     <Document>
-      <Page size="A4">
+      <Page style={{ fontFamily: 'Turkish' }} size="A4">
         <View style={styles.viewContainer}>
           <PdfHeader></PdfHeader>
           <View style={styles.view}>

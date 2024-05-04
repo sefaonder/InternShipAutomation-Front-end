@@ -1,36 +1,31 @@
 import React from 'react';
 import { Document, Font, Image, Page, Text, View } from '@react-pdf/renderer';
-import PdfTable from './pdfComponents/PdfTable';
-import PdfTableMultiOptions from './pdfComponents/PdfTableMultiOptions';
-import { Height } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
-import PdfHeader from './pdfComponents/PdfHeader';
-import CollectiveQuestions from './pdfComponents/CollectiveQuestions';
-import turkish from './pdfComponents/turkish2.ttf';
-import PdfCheckbox from './pdfComponents/PdfCheckbox';
-import { width } from '@mui/system';
+import PdfTable from '../pdfComponents/PdfTable';
+import PdfHeader from '../pdfComponents/PdfHeader';
+import CollectiveQuestions from '../pdfComponents/CollectiveQuestions';
+import turkish from '../pdfComponents/turkish2.ttf';
 
 const PdfSurvey = ({ data }) => {
-  console.log(data);
-  const companyInfo = [
-    { name: 'Firma Adı', value: 'asd' },
-    { name: 'Adresi', value: 'asdasd' },
+  let companyInfo = [
+    { name: 'Firma Adı', value: data?.company_name },
+    { name: 'Adresi', value: data?.address },
   ];
-  const studentInfo = [
-    { name: 'Ögretim Türü', value: 'asdasdas' },
-    { name: 'GANO', value: 'asdasd' },
-    { name: 'Staj Grubu', value: 'asdasd' },
-    { name: 'Staj Turu', value: 'asdasd' },
-    { name: 'Tarih', value: '23-12-2022' },
+  let studentInfo = [
+    { name: 'Ögretim Türü', value: data?.teach_type },
+    { name: 'GANO', value: data?.gano },
+    { name: 'Staj Grubu', value: data?.intern_group },
+    { name: 'Staj Turu', value: data?.intern_type },
+    { name: 'Tarih', value: data?.date },
   ];
-  Font.register({
-    family: 'TurkishFont',
-    src: turkish,
-  });
+  Font.register({ family: 'Turkish', src: turkish });
+
+  if (!data) {
+    return 'asd';
+  }
 
   return (
     <Document>
-      <Page style={{ fontFamily: 'TurkishFont' }} size="A4">
+      <Page style={{ fontFamily: 'Turkish' }} size="A4">
         <View style={styles.viewContainer}>
           <PdfHeader></PdfHeader>
           <View style={styles.descContainer}>
@@ -53,7 +48,7 @@ const PdfSurvey = ({ data }) => {
           <View style={styles.view}>
             <Text style={{ marginBottom: 5 }}>Staj Degerlendirme Anket Formu</Text>
             <Text style={styles.subTitle}> Ögrenci Kimlik Bilgileri:</Text>
-            <PdfTable data={companyInfo} />
+            {data && <PdfTable data={companyInfo} />}
             <Text style={styles.subTitle}> Staj Yapan Ögrencinin:</Text>
             <PdfTable data={studentInfo} />
             <Text style={{ marginTop: 8 }}> Anket Soruları: </Text>

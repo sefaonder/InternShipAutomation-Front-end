@@ -1,8 +1,12 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
+import DownloadButton from 'src/components/inputs/DownloadButton';
+import UpdateButton from 'src/components/inputs/UpdateButton';
 import { useGetConfidentalReportQuery } from 'src/store/services/confidentalReport/confidentalReportApiSlice';
 import { setConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
 
@@ -27,9 +31,29 @@ const ConfidentalReportDetail = () => {
           flexDirection: 'row-reverse',
           padding: '1rem',
           marginBottom: '1rem',
+          marginTop: '1rem',
+          overflowX: 'auto',
+          gap: '1rem',
         }}
       >
-        <Button onClick={() => navigate('/confidental-report/update/' + confidentalReportId)}>Güncelle</Button>
+        <UpdateButton
+          loading={isLoading}
+          variant="outlined"
+          onClick={() => navigate('/confidental-report/update/' + confidentalReportId)}
+        >
+          Güncelle
+        </UpdateButton>
+        {data && (
+          <PDFDownloadLink fileName="FORM" document={<PdfConfidentalReport data={data} />}>
+            {({ loading }) =>
+              loading ? (
+                <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
+              ) : (
+                <DownloadButton variant="outlined" loading={loading} text={'Download...'}></DownloadButton>
+              )
+            }
+          </PDFDownloadLink>
+        )}
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
