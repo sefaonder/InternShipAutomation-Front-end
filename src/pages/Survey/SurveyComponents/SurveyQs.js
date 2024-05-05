@@ -503,25 +503,101 @@ export const dataSingle = [
 export const dataMulti = [
   {
     id: 1,
-    question: 'Staj yerinde çalışılan projelere aktif olarak katılabildiniz mi?',
+    question: 'Staj yaptığınız kurum veya kuruluşu belirlerken en önemli kıstasınız nedir?',
     answers: [
       {
-        text: 'Evet',
+        text: 'Büyük bir firma olması',
       },
       {
-        text: 'Kısmen',
+        text: 'Bulunduğu şehir',
       },
       {
-        text: 'Hayır',
+        text: 'Faaliyet Alanı',
       },
       {
-        text: 'Fikrim Yok',
+        text: 'Ulaşım imkânları',
+      },
+      {
+        text: 'Hiçbir kıstasım yoktu',
       },
     ],
   },
   {
     id: 2,
-    question: 'Staj sırasında teorik bilgilerinizi kullanabildiniz mi?',
+    question: 'Staj yaptığınız işyeri stajınızı yaptığınız süre boyunca aşağıdaki imkânlardan hangisini sağladı?',
+    answers: [
+      {
+        text: 'Servis',
+      },
+      {
+        text: 'Maaş',
+      },
+      {
+        text: 'Yemek',
+      },
+      {
+        text: 'Sosyal imkânlar',
+      },
+      {
+        text: 'Hiçbiri',
+      },
+    ],
+  },
+  {
+    id: 3,
+    question: 'Bitirme projenizin konusunun belirlenmesinde ve gerçekleştirilmesinde staj yerinin katkısı nedir?',
+    answers: [
+      {
+        text: 'Bölümdeki danışmanımla belirlediğim konu üzerinde işyerinde çalışma imkânı verildi.',
+      },
+      {
+        text: 'İşyerindeki yardımcı danışmanım ile burada yapılan çalışmalarla ilgili bir konu belirlendi.',
+      },
+      {
+        text: 'Her iki danışmanımla birlikte ortak bir konu belirlenip konu üzerinde çalışma imkânı verildi.',
+      },
+      {
+        text: 'Staj yaptığım işyerinde bitirme projesi ile ilgili bir çalışma yapmadım.',
+      },
+    ],
+  },
+  {
+    id: 4,
+    question: 'Bitirme projesi çalışmalarınızda staj yerinizin sunduğu olanaklar nelerdir?',
+    answers: [
+      {
+        text: 'Maddi destek',
+      },
+      {
+        text: 'Teknik bilgi desteği',
+      },
+      {
+        text: 'Deney yapma imkânı',
+      },
+      {
+        text: 'Hiçbiri',
+      },
+    ],
+  },
+];
+
+export const dataInterm = [
+  {
+    id: 1,
+    question: 'Dönem içi staj için gittiğiniz işyerinde sizden sorumlu bir staj koçu/danışmanı atandı mı?',
+    answers: [
+      {
+        text: 'Evet',
+      },
+      {
+        text: 'Hayır',
+      },
+    ],
+  },
+  {
+    id: 2,
+    question:
+      'Staj koçunuzun ya da birlikte çalıştığınız sorumlu mühendisin, yapmış olduğunuz çalışmalarda sizi yeterince yönlendirdiğini veya bilgi paylaşımında istekli olduğunu düşünüyor musunuz?',
     answers: [
       {
         text: 'Evet',
@@ -537,10 +613,10 @@ export const dataMulti = [
       },
     ],
   },
-
   {
     id: 3,
-    question: 'Mezuniyet sonrası staj yaptığınız işletmede görev yapmayı ister misiniz?',
+    question:
+      'İşyerinde, dönem içi staj yapacaklar için bir stajyer programı (staj çalışması yapılacak bölümler çalışılacak kişiler, çalışma konuları, verilecek eğitimler vb.) mevcut muydu?',
     answers: [
       {
         text: 'Evet',
@@ -550,6 +626,98 @@ export const dataMulti = [
       },
       {
         text: 'Hayır',
+      },
+      {
+        text: 'Fikrim Yok',
+      },
+    ],
+  },
+  {
+    id: 4,
+    question: 'Staj yaptığınız sürede dönem içi staj ile ilgili işyeri tarafından bir proje konusu belirlendi mi?',
+    answers: [
+      {
+        text: 'Evet',
+      },
+      {
+        text: 'Hayır',
+      },
+    ],
+  },
+
+  {
+    id: 5,
+    question: 'Bu projenin konusu Bilgisayar Mühendisliği mesleki alanı ile ilgili miydi?',
+    answers: [
+      {
+        text: 'Evet',
+      },
+      {
+        text: 'Kısmen',
+      },
+      {
+        text: 'Hayır',
+      },
+    ],
+  },
+
+  {
+    id: 6,
+    question:
+      'İşyerinde çalıştığınız proje konusunu bölümünüzde “Bitirme Projesi” ya da “Mühendislik Tasarımı çalışmasına dönüştürebildiniz mi?',
+    answers: [
+      {
+        text: 'Evet',
+      },
+      {
+        text: 'Hayır',
+      },
+    ],
+  },
+
+  {
+    id: 7,
+    question:
+      'Bölümünüzde (Bilgisayar Mühendisliği) dönem içi çalışmalarınızda size rehberlik edecek bir staj danışmanı atandı mı?',
+    answers: [
+      {
+        text: 'Evet',
+      },
+      {
+        text: 'Hayır',
+      },
+    ],
+  },
+
+  {
+    id: 8,
+    question:
+      'Dönem içi staj süresince bölümünüzdeki (Bilgisayar Mühendisliği) staj danışmanınızla sağlıklı ve etkin bir iletişim sağlayabildiğinizi düşünüyor musunuz?',
+    answers: [
+      {
+        text: 'Evet',
+      },
+      {
+        text: 'Kısmen',
+      },
+      {
+        text: 'Hayır',
+      },
+    ],
+  },
+
+  {
+    id: 9,
+    question: 'Dönem içi staj ile dönem dışı stajı karşılaştırdığınızda; size göre DÖNEM İÇİ STAJ:',
+    answers: [
+      {
+        text: 'Daha İyi',
+      },
+      {
+        text: 'Bir Fark Yok',
+      },
+      {
+        text: 'Daha Kötü',
       },
       {
         text: 'Fikrim Yok',

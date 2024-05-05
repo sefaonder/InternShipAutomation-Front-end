@@ -4,33 +4,45 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSurveyQuery } from 'src/store/services/survey/surveyApiSlice';
 import moment from 'moment';
 import { dataSingle } from '../SurveyComponents/SurveyQs';
+import { useDispatch } from 'react-redux';
+import { setSurvey } from 'src/store/services/survey/surveySlice';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import DownloadButton from 'src/components/inputs/DownloadButton';
+import UpdateButton from 'src/components/inputs/UpdateButton';
+import PdfSurvey from 'src/PDF/survey/PdfSurvey';
+
 const SurveyDetail = () => {
   const { surveyId } = useParams();
-
   const { data, isLoading, isSuccess, isError, error } = useGetSurveyQuery(surveyId);
   const [mixedSingleQuestions, setMixedSingleQuestions] = useState();
   const [mixedMultiQuestions, setMixedMultiQuestions] = useState();
-  const [optionalQuestions, setOptionalQuestions] = useState();
+  const [mixedIntermQuestions, setIntermMultiQuestions] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   let mixedSingle;
   let mixedMulti;
-  let mixedOptional;
+  let mixedInterm;
+
   useEffect(() => {
-    mixedSingle = data?.answers.slice(0, 27).map((eleman1, index) => ({
-      answer: eleman1,
-      question: dataSingle[index]?.question,
-    }));
-    mixedMulti = data?.answers.slice(27, 31).map((eleman1, index) => ({
-      answer: eleman1,
-      question: dataSingle[index]?.question,
-    }));
-    mixedOptional = data?.answers.slice(32).map((eleman1, index) => ({
-      answer: eleman1,
-      question: dataSingle[index]?.question,
-    }));
-    setMixedMultiQuestions(mixedMulti);
-    setMixedSingleQuestions(mixedSingle);
-    setOptionalQuestions(mixedOptional);
+    if (data) {
+      console.log('---', data);
+      mixedSingle = data?.answers.slice(0, 27).map((eleman1, index) => ({
+        answer: eleman1,
+        question: dataSingle[index]?.question,
+      }));
+      mixedMulti = data?.answers.slice(27, 31).map((eleman1, index) => ({
+        answer: eleman1,
+        question: dataSingle[index]?.question,
+      }));
+      mixedInterm = data?.answers.slice(31).map((eleman1, index) => ({
+        answer: eleman1,
+        question: dataSingle[index]?.question,
+      }));
+      setMixedMultiQuestions(mixedMulti);
+      setMixedSingleQuestions(mixedSingle);
+      setIntermMultiQuestions(mixedInterm);
+      dispatch(setSurvey(data));
+    }
   }, [isSuccess]);
   console.log(data);
   return (
@@ -41,9 +53,27 @@ const SurveyDetail = () => {
           flexDirection: 'row-reverse',
           padding: '1rem',
           marginBottom: '1rem',
+          marginTop: '1rem',
+          overflowX: 'auto',
+          gap: '1rem',
         }}
       >
-        <Button onClick={() => navigate('/survey/update/' + surveyId)}>Güncelle</Button>
+        <UpdateButton loading={isLoading} variant="outlined" onClick={() => navigate('/survey/update/' + surveyId)}>
+          Güncelle
+        </UpdateButton>
+        {data && (
+          <PDFDownloadLink fileName="FORM" document={<PdfSurvey data={data} />}>
+            {({ loading }) =>
+              loading ? (
+                <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
+              ) : (
+                <DownloadButton variant="outlined" loading={loading} text={'Download...'}>
+                  {' '}
+                </DownloadButton>
+              )
+            }
+          </PDFDownloadLink>
+        )}
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
@@ -110,9 +140,9 @@ const SurveyDetail = () => {
                   </Typography>
                 </Box>
               ))}
-              <Typography className="font-extrabold text-red-400">Dönem İçi Staj Yapanlar İçin: </Typography>
+              <Typography className="font-extrabold text-red-400">Dönem İçi Staj Yapanlar için Sorular</Typography>
 
-              {optionalQuestions?.map((item, index) => (
+              {mixedIntermQuestions?.map((item, index) => (
                 <Box>
                   <Typography className="font-semibold">
                     {' '}

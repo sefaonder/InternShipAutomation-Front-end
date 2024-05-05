@@ -20,6 +20,7 @@ import { useCreateNewSurveyMutation, useUpdateSurveyMutation } from 'src/store/s
 const SurveyAdd = ({ survey, surveyId }) => {
   const [selectedAnswersSingle, setSelectedAnswersSingle] = useState([]);
   const [selectedAnswersMulti, setSelectedAnswersMulti] = useState([]);
+  const [selectedAnswersInterm, setSelectedAnswersInterm] = useState([]);
 
   const [createSurvey, { isLoading }] = useCreateNewSurveyMutation();
   const [updateSurvey, { isLoadingUpdate }] = useUpdateSurveyMutation();
@@ -32,9 +33,11 @@ const SurveyAdd = ({ survey, surveyId }) => {
       formik.setFieldValue('gano', survey.gano, false);
       if (survey?.answers?.length != 0) {
         setSelectedAnswersSingle([...survey?.answers?.slice(0, 27)]);
-        const res = survey?.answers?.slice(27);
+        const res = survey?.answers?.slice(27, 31);
         const newArray = [, ...res];
         setSelectedAnswersMulti(newArray);
+        const resInterm = survey?.answers.slice(31);
+        setSelectedAnswersInterm(resInterm);
       }
     }
   }, [survey]);
@@ -44,7 +47,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
     company_address: yup.string().required('Şirket Adresi Zorunlu'),
     teach_type: yup.string().required('Öğrenim Türü Zorunlu'),
     gano: yup.string().required('Gano Bilgisi Zorunlu'),
-    answers: yup.array().required('Anket Soruları Zorunlu').min(30, 'Bütün Sorular Cevaplanmalı'),
+    answers: yup.array().required('Anket Soruları Zorunlu').min(40, 'Bütün Sorular Cevaplanmalı'),
   });
   const formik = useFormik({
     initialValues: {
@@ -59,10 +62,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
     },
     onSubmit: async (values) => {
       try {
-        console.log(values);
         if (survey) {
-          console.log(surveyId);
-
           await updateSurvey({ payload: values, surveyId: surveyId }).unwrap();
         } else {
           await createSurvey(values).unwrap();
@@ -72,8 +72,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
     validationSchema: validationSchema,
   });
   useEffect(() => {
-    formik.values.answers = [...selectedAnswersSingle, ...selectedAnswersMulti.slice(1)];
-    //console.log(selectedAnswersMulti);
+    formik.values.answers = [...selectedAnswersSingle, ...selectedAnswersMulti.slice(1), ...selectedAnswersInterm];
   }, [formik]);
 
   const teach_type_data = { name: 'Öğretim Türü', type: 'teach_type', data: ['1. Öğretim', '2. Öğretim'] };
@@ -152,6 +151,8 @@ const SurveyAdd = ({ survey, surveyId }) => {
               setSelectedAnswersSingle={setSelectedAnswersSingle}
               selectedAnswersMulti={selectedAnswersMulti}
               setSelectedAnswersMulti={setSelectedAnswersMulti}
+              selectedAnswersInterm={selectedAnswersInterm}
+              setSelectedAnswersInterm={setSelectedAnswersInterm}
             />
             <Typography className="flex justify-end">
               {formik.touched.answers && Boolean(formik.errors.answers) && (
