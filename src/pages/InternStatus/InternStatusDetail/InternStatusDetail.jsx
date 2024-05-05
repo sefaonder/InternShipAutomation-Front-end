@@ -1,7 +1,8 @@
-import { Box, Button, CircularProgress, Paper } from '@mui/material';
+import { Box, Button, CircularProgress, Paper, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import { useGetStatusDetailQuery } from 'src/store/services/internStatus/internStatusApiSlice';
 import { setInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
@@ -37,6 +38,24 @@ function InternStatusDetail() {
     internStatusData = data.data;
   }
 
+  const accordionData = [
+    [{ text: 'Statüs: ', value: data?.data.status }],
+    [
+      { text: 'Komisyon Adı: ', value: data?.data.interview.comission.name },
+      { text: 'Soyadı: ', value: data?.data.interview.comission.last_name },
+    ],
+    [
+      { text: 'Staj Sorumlusu Adı: ', value: data?.data.form.follow_up.name },
+      { text: 'Staj Sorumlusu Soyadı: ', value: data?.data.form.follow_up.last_name },
+    ],
+    [
+      { text: 'Öğrenci Ad: ', value: data?.data.student.name },
+      { text: 'Öğrenci Soyadı: ', value: data?.data.student.last_name },
+      { text: 'Okul Numarası: ', value: data?.data.student.school_number },
+      { text: 'Tc Kimlik No: ', value: data?.data.student.tc_number },
+    ],
+  ];
+
   return (
     <div>
       <Paper
@@ -50,7 +69,9 @@ function InternStatusDetail() {
         <Button onClick={() => navigate('/intern-status/update/' + internStatusId)}>Güncelle</Button>
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
-        <Paper sx={{ flex: 2, padding: '1rem' }}>Main Card</Paper>
+        <Paper sx={{ flex: 2 }}>
+          <CustomDetailPageBox data={accordionData} />
+        </Paper>
         <RecordTraceCard record={internStatusData} />
       </Box>
     </div>

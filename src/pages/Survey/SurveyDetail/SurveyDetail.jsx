@@ -44,7 +44,7 @@ const SurveyDetail = () => {
       dispatch(setSurvey(data));
     }
   }, [isSuccess]);
-
+  console.log(data);
   return (
     <div>
       <Paper
@@ -134,7 +134,7 @@ const SurveyDetail = () => {
                   </Typography>
                   <Typography className="flex gap-2">
                     {' '}
-                    {item.answer?.map((item) => (
+                    {item?.answer?.map((item) => (
                       <Typography className=""> {item} </Typography>
                     ))}{' '}
                   </Typography>
