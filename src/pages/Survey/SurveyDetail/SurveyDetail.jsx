@@ -10,22 +10,29 @@ const SurveyDetail = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetSurveyQuery(surveyId);
   const [mixedSingleQuestions, setMixedSingleQuestions] = useState();
   const [mixedMultiQuestions, setMixedMultiQuestions] = useState();
+  const [optionalQuestions, setOptionalQuestions] = useState();
   const navigate = useNavigate();
   let mixedSingle;
   let mixedMulti;
+  let mixedOptional;
   useEffect(() => {
     mixedSingle = data?.answers.slice(0, 27).map((eleman1, index) => ({
       answer: eleman1,
       question: dataSingle[index]?.question,
     }));
-    mixedMulti = data?.answers.slice(27).map((eleman1, index) => ({
+    mixedMulti = data?.answers.slice(27, 31).map((eleman1, index) => ({
+      answer: eleman1,
+      question: dataSingle[index]?.question,
+    }));
+    mixedOptional = data?.answers.slice(32).map((eleman1, index) => ({
       answer: eleman1,
       question: dataSingle[index]?.question,
     }));
     setMixedMultiQuestions(mixedMulti);
     setMixedSingleQuestions(mixedSingle);
+    setOptionalQuestions(mixedOptional);
   }, [isSuccess]);
-
+  console.log(data);
   return (
     <div>
       <Paper
@@ -97,10 +104,21 @@ const SurveyDetail = () => {
                   </Typography>
                   <Typography className="flex gap-2">
                     {' '}
-                    {item.answer?.map((item) => (
+                    {item?.answer?.map((item) => (
                       <Typography className=""> {item} </Typography>
                     ))}{' '}
                   </Typography>
+                </Box>
+              ))}
+              <Typography className="font-extrabold text-red-400">Dönem İçi Staj Yapanlar İçin: </Typography>
+
+              {optionalQuestions?.map((item, index) => (
+                <Box>
+                  <Typography className="font-semibold">
+                    {' '}
+                    {index + 1}: {item.question}{' '}
+                  </Typography>
+                  <Typography className=""> {item.answer} </Typography>
                 </Box>
               ))}
             </Box>

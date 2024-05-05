@@ -50,7 +50,7 @@ function InterviewList() {
       disablePadding: true,
       label: 'Öğrenci',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value.name}</p>,
+      cellComponent: (value) => <p className="">{value?.name}</p>,
     },
     {
       id: 'comission',
@@ -58,7 +58,7 @@ function InterviewList() {
       disablePadding: true,
       label: 'Mülakat Yetkilisi',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value.name}</p>,
+      cellComponent: (value) => <p className="">{value?.name}</p>,
     },
     {
       id: 'date',
@@ -74,7 +74,7 @@ function InterviewList() {
       disablePadding: true,
       label: 'Staj Durumu',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{InternStatusEnum[value.status].label}</p>,
+      cellComponent: (value) => <p className="">{InternStatusEnum[value?.status]?.label}</p>,
     },
   ];
 
