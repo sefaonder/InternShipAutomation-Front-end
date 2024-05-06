@@ -9,10 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 
 import { visuallyHidden } from '@mui/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -69,6 +66,7 @@ function EnhancedTableHead(props) {
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
+              disabled={headCell?.notSortable}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
@@ -93,7 +91,7 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function EnhancedTable(props) {
-  const { data, columns, isLoading, isSucces, filter, setFilter } = props;
+  const { data, columns, isLoading, isSucces, filter, setFilter, dataLength } = props;
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
 
@@ -123,10 +121,10 @@ export default function EnhancedTable(props) {
   };
 
   // Avoid a layout jump when reaching the last page with empty data.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataLength) : 0;
 
   const visibleRows = React.useMemo(
-    () => stableSort(data, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    () => stableSort(data, getComparator(order, orderBy)),
     [order, orderBy, page, rowsPerPage, isLoading, data],
   );
 
@@ -186,7 +184,7 @@ export default function EnhancedTable(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={data.length}
+          count={dataLength || 0}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

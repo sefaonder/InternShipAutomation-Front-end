@@ -123,6 +123,7 @@ const SurveyList = () => {
       <EnhancedTable
         columns={headers}
         data={currentData?.data || []}
+        dataLength={currentData?.dataLength}
         isLoading={isFetching || isLoading}
         isSuccess={isSuccess}
         filter={filter}
