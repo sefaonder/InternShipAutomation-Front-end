@@ -42,8 +42,6 @@ const UserUpdate = Loadable(lazy(() => import('src/pages/User/UserAdd')));
 
 const InterShipPanel = Loadable(lazy(() => import('src/pages/InternshipPanel/InternShipPanel')));
 
-const ConfidentalReportPDF = Loadable(lazy(() => import('src/PDF/PdfConfidentalReport')));
-
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -59,14 +57,6 @@ const MainRoutes = {
       path: '/profile',
       element: <RequireAuth />,
       children: [{ path: '/profile', element: <ProfileDefault /> }],
-    },
-    {
-      path: '/pdf',
-      element: <RequireAuth />,
-      children: [
-        { path: '/pdf/confidental/', element: <ConfidentalReportPDF /> },
-        { path: '/pdf/survey', element: <ConfidentalReportPDF /> },
-      ],
     },
     // InternStatusRoutes only for Auth users
     {
