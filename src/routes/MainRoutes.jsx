@@ -42,7 +42,7 @@ const UserUpdate = Loadable(lazy(() => import('src/pages/User/UserAdd')));
 
 const InterShipPanel = Loadable(lazy(() => import('src/pages/InternshipPanel/InternShipPanel')));
 
-const ConfidentalReportPDF = Loadable(lazy(() => import('src/PDF/PdfConfidentalReport')));
+const ConfidentalReportPDF = Loadable(lazy(() => import('src/PDF/confidentalReport/PdfConfidentalReport')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 

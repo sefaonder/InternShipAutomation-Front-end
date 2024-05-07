@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import avatar from '/images/fff.png';
+// import avatar from '/images/fff.png';
 
 // project import
 import AppBarStyled from './AppBarStyled';
@@ -108,7 +108,7 @@ const Header = ({ open, handleDrawerToggle }) => {
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src={avatar} />
+            {/* <Avatar alt="Remy Sharp" src={avatar} /> */}
           </IconButton>
         </Tooltip>
 
