@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer, useMediaQuery } from '@mui/material';
+import { Avatar, Box, Drawer, Typography, useMediaQuery } from '@mui/material';
 import NavGroup from './NavGroup';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import MiniDrawerStyled from './MiniDrawerStyled';
-
+import logo from '/public/images/uuLogoRenkli.png';
 const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -20,12 +20,16 @@ const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
     <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">
       {!matchDownMD ? (
         <MiniDrawerStyled variant="permanent" open={open}>
-          <Toolbar />
+          <Toolbar className="px-4 flex justify-between">
+            <Avatar alt="Remy Sharp" src={logo} />
+            <Typography>B.U.Ü. Staj Otomasyonu</Typography>
+          </Toolbar>
           <Divider />
           <NavGroup navigations={navigations} />
         </MiniDrawerStyled>
       ) : (
         <Drawer
+          className="bbbb "
           container={container}
           variant="temporary"
           open={open}
@@ -42,7 +46,10 @@ const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
             },
           }}
         >
-          <Toolbar />
+          <Toolbar className="px-4 flex justify-between">
+            <Avatar alt="Remy Sharp" src={logo} />
+            <Typography>B.U.Ü. Staj Otomasyonu</Typography>
+          </Toolbar>
           <Divider />
           <NavGroup navigations={navigations} />
         </Drawer>
