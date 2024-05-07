@@ -29,7 +29,6 @@ const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
         </MiniDrawerStyled>
       ) : (
         <Drawer
-          className="bbbb "
           container={container}
           variant="temporary"
           open={open}
