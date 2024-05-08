@@ -16,6 +16,7 @@ import CustomBooleanInput from 'src/components/inputs/CustomBooleanInput';
 import { permissionControll } from 'src/app/permissions/permissionController';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import usePermission from 'src/hooks/usePermission';
+import dayjs from 'dayjs';
 
 function FormAdd({ prevStep, nextStep, internFormData }) {
   const [createNewForm, { isLoading }] = useCreateNewFormMutation();
@@ -183,8 +184,8 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
           label="Başlangıç Tarihi"
           shouldDisableDate={(date) => shouldDisableDate(date, [], formik.values.weekDayWork)}
           disabled={formik.values.weekDayWork.length < 0}
-          value={moment(formik.values.startDate)}
-          onChange={(value) => formik.setFieldValue('startDate', value, true) && formik.setStatus(true)}
+          value={dayjs(formik.values.startDate)}
+          onChange={(value) => formik.setFieldValue('startDate', dayjs(value).toDate(), true) && formik.setStatus(true)}
           error={Boolean(formik.errors.startDate)}
           helperText={formik.errors.startDate}
         />
@@ -196,8 +197,8 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
           shouldDisableDate={(date) => shouldDisableDate(date, [], formik.values.weekDayWork)}
           label="Bitiş Tarihi"
           disabled={formik.values.weekDayWork.length < 0}
-          value={moment(formik.values.endDate)}
-          onChange={(value) => formik.setFieldValue('endDate', value, true) && formik.setStatus(true)}
+          value={dayjs(formik.values.endDate)}
+          onChange={(value) => formik.setFieldValue('endDate', dayjs(value).toDate(), true) && formik.setStatus(true)}
           error={Boolean(formik.errors.endDate)}
           helperText={formik.errors.endDate}
         />

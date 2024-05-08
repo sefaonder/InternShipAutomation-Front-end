@@ -1,13 +1,9 @@
-import React from 'react';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import 'dayjs/locale/tr';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { trTR } from '@mui/x-date-pickers/locales';
+import React from 'react';
 
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-function CustomDateInput({
+function CustomDateTimeInput({
   id,
   name,
   value,
@@ -21,7 +17,7 @@ function CustomDateInput({
   shouldDisableDate,
   style,
   required,
-  format = 'DD.MM.YYYY',
+  format = 'DD.MM.YYYY - HH:mm',
 }) {
   const handleClear = () => {
     onChange(null);
@@ -33,7 +29,7 @@ function CustomDateInput({
       adapterLocale="tr"
       localeText={trTR.components.MuiLocalizationProvider.defaultProps.localeText}
     >
-      <DatePicker
+      <DateTimePicker
         name={name}
         format={format}
         sx={style}
@@ -59,4 +55,4 @@ function CustomDateInput({
   );
 }
 
-export default CustomDateInput;
+export default CustomDateTimeInput;

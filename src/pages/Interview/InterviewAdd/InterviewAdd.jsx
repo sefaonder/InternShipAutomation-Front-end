@@ -13,6 +13,8 @@ import {
 import CustomDateInput from 'src/components/inputs/CustomDateInput';
 import moment from 'moment';
 import { shouldDisableDate } from 'src/app/handlers/dateHandlers';
+import CustomDateTimeInput from 'src/components/inputs/CustomDateTimeInput';
+import dayjs from 'dayjs';
 
 function InterviewAdd() {
   const [createNewInterview, { isLoading }] = useCreateNewInterviewMutation();
@@ -87,7 +89,7 @@ function InterviewAdd() {
         <CustomAutocomplete
           name="internStatus"
           id="internStatus"
-          // disabled={internFormData?.id}
+          disabled={interviewData?.id}
           required
           useACSlice={useGetInternStatusACQuery}
           label={'İlgili Staj Durumu'}
@@ -100,7 +102,7 @@ function InterviewAdd() {
         <CustomAutocomplete
           name="comission"
           id="comission"
-          // disabled={internFormData?.id}
+          disabled={interviewData?.id}
           required
           useACSlice={useGetComissionACQuery}
           label={'Mülakat Yetkilisi'}
@@ -110,14 +112,13 @@ function InterviewAdd() {
           helperText={formik.errors.comission?.id}
         />
 
-        <CustomDateInput
+        <CustomDateTimeInput
           id="date"
           name="date"
           required
           label="Mülakat Tarihi"
-          shouldDisableDate={(date) => shouldDisableDate(date, [])}
-          value={moment(formik.values.date)}
-          onChange={(value) => formik.setFieldValue('date', value, true) && formik.setStatus(true)}
+          value={dayjs(formik.values.date)}
+          onChange={(value) => formik.setFieldValue('date', dayjs(value).toDate(), true) && formik.setStatus(true)}
           error={Boolean(formik.errors.date)}
           helperText={formik.errors.date}
         />

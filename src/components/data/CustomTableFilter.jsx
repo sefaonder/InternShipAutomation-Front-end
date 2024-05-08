@@ -9,9 +9,16 @@ import CustomEnumInput from '../inputs/CustomEnumInput';
 import { useFormik } from 'formik';
 import moment from 'moment';
 import CustomBooleanInput from '../inputs/CustomBooleanInput';
+import usePermission from 'src/hooks/usePermission';
+import { UserRolesEnum } from 'src/app/enums/roleList';
+import dayjs from 'dayjs';
 
 function CustomTableFilter({ filterOptions, filterValues, onChangeFilterValues, setRefresh }) {
   const [open, setOpen] = useState(false);
+
+  const checkPermission = usePermission();
+
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
 
   const handleSubmit = (values) => {
     console.log('values submitted');
@@ -41,11 +48,13 @@ function CustomTableFilter({ filterOptions, filterValues, onChangeFilterValues, 
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Filter list">
-          <IconButton sx={{}} onClick={() => setOpen(!open)}>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        {isAdvancedComission && (
+          <Tooltip title="Filter list">
+            <IconButton sx={{}} onClick={() => setOpen(!open)}>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
 
       <Divider sx={{ width: '100%' }} />
@@ -85,9 +94,9 @@ function CustomTableFilter({ filterOptions, filterValues, onChangeFilterValues, 
                       name={filterOption.id}
                       label={filterOption.componentProps.label}
                       id={filterOption.id}
-                      value={formik.values?.[filterOption?.id] ? moment(formik.values?.[filterOption?.id]) : null}
+                      value={formik.values?.[filterOption?.id] ? dayjs(formik.values?.[filterOption?.id]) : null}
                       onChange={(value) =>
-                        formik.setFieldValue(filterOption.id, moment(value).format('DD.MM.YYYY'), true)
+                        formik.setFieldValue(filterOption.id, dayjs(value).format('DD.MM.YYYY'), true)
                       }
                     />
                   )}

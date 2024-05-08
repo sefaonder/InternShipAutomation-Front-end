@@ -10,6 +10,7 @@ import {
   useUpdateStudentInfoMutation,
 } from 'src/store/services/internForm/internFormApiSlice';
 import { useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 
 function StudentInfoAdd({ nextStep, prevStep, internFormData }) {
   const [createNewStudentInfo, { isLoading }] = useCreateNewStudentInfoMutation();
@@ -108,8 +109,8 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData }) {
           id="birthDate"
           name="birthDate"
           label="Doğum Tarihi"
-          value={moment(formik.values.birthDate)}
-          onChange={(value) => formik.setFieldValue('birthDate', value, true) && formik.setStatus(true)}
+          value={dayjs(formik.values.birthDate)}
+          onChange={(value) => formik.setFieldValue('birthDate', dayjs(value).toDate(), true) && formik.setStatus(true)}
           error={Boolean(formik.errors.birthDate)}
           helperText={formik.errors.birthDate}
         />

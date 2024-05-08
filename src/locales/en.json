@@ -1,4 +1,20 @@
 {
-    "welcome": "Welcome2",
-    "hello": "Hello2"
+   "ERRORS":{},
+   "PAGES":{
+    "AUTH":{},
+    "CONFIDENTAL_REPORT":{
+      "TITLE":"Gizli Sicil Fişi"
+    },
+    "DASHBOARD":{
+      "TITLE":""
+    },
+    "INTERN_FORM":{},
+    "INTERNSHIP_PANEL":{},
+    "INTERN_STATUS":{},
+    "INTERVIEW":{},
+    "PROFILE":{},
+    "SURVEY":{},
+    "USER":{}
+   },
+   "COMMON":{}
 }
