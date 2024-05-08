@@ -1,6 +1,6 @@
 import { Box, Button, Container, FormLabel, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomRadioGroup from '../Survey/SurveyComponents/CustomRadioGroup';
 import * as yup from 'yup';
 
@@ -11,10 +11,22 @@ import {
   useCreateNewConfidentalReportMutation,
   useUpdateConfidentalReportMutation,
 } from 'src/store/services/confidentalReport/confidentalReportApiSlice';
+import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
+import { useGetCompanyInfoQuery } from 'src/store/services/survey/surveyApiSlice';
+import { useGetInterviewACQuery } from 'src/app/api/autocompleteSlice';
+import dayjs from 'dayjs';
 
 const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   const [createConfidentalReport, { isLoading }] = useCreateNewConfidentalReportMutation();
   const [updateConfidentalReport, { isLoadingData }] = useUpdateConfidentalReportMutation();
+
+  const [interviewId, setInterviewId] = useState(null);
+  const {
+    data,
+    isLoading: loadingInfo,
+    isSuccess,
+  } = useGetCompanyInfoQuery(interviewId, { skip: !Boolean(interviewId) });
+
   useEffect(() => {
     if (confidentalReport) {
       for (const key in confidentalReport.intern_evaluation) {
@@ -56,6 +68,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   });
   const formik = useFormik({
     initialValues: {
+      interview: null,
       company_name: '',
       address: '',
       start_date: '',
@@ -157,6 +170,19 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     { name: 'Meslek Bilgi Düzeyi', type: 'competence', data: ['Iyi', 'Orta', 'Iyi Degil'] },
   ];
 
+  useEffect(() => {
+    if (formik.values?.interview?.id && !confidentalReport?.id) {
+      setInterviewId(formik.values.interview.id);
+    }
+  }, [formik.values.interview]);
+
+  useEffect(() => {
+    if (data?.data?.form) {
+      formik.setFieldValue('company_name', data.data.form.company_info.name, false);
+      formik.setFieldValue('address', data.data.form.company_info.address, false);
+    }
+  }, [data, isSuccess]);
+
   return (
     <div>
       {' '}
@@ -167,6 +193,19 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
         {' '}
         <Typography className="my-2 text-blue-700 text-3xl"> Staj Sicil Belgesi: </Typography>
         <Container className="lg:w-1/2 sm:w-full flex flex-col">
+          <CustomAutocomplete
+            name="interview"
+            id="interview"
+            disabled={confidentalReport?.id}
+            required
+            // filterId={!isAdvancedComission && userAuth?.userId}
+            useACSlice={useGetInterviewACQuery}
+            label={'İlgili Mülakat & Staj'}
+            value={formik.values.interview}
+            onChange={(value) => formik.setFieldValue('interview', value, true) && formik.setStatus(true)}
+            error={Boolean(formik.errors?.interview)}
+            helperText={formik.errors.interview?.id}
+          />
           <Typography className="my-2 text-red-500"> Kurum Bilgileri: </Typography>
           <Box className="flex items-center justify-between">
             <FormLabel className="font-extrabold">Staj Yapılan Firma Adı: </FormLabel>
@@ -206,8 +245,8 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               name="start_date"
               label="Başlangıç Tarihi"
               shouldDisableDate={(date) => shouldDisableDate(date, [])}
-              value={moment(formik.values.start_date)}
-              onChange={(value) => formik.setFieldValue('start_date', value, true)}
+              value={dayjs(formik.values.start_date)}
+              onChange={(value) => formik.setFieldValue('start_date', dayjs(value).toDate(), true)}
               error={formik.touched.start_date && Boolean(formik.errors.start_date)}
               helperText={formik.touched.start_date && formik.errors.start_date}
             />
@@ -219,8 +258,8 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               name="end_date"
               label="Başlangıç Tarihi"
               shouldDisableDate={(date) => shouldDisableDate(date, [])}
-              value={moment(formik.values.end_date)}
-              onChange={(value) => formik.setFieldValue('end_date', value, true)}
+              value={dayjs(formik.values.end_date)}
+              onChange={(value) => formik.setFieldValue('end_date', dayjs(value).toDate(), true)}
               error={formik.touched.end_date && Boolean(formik.errors.end_date)}
               helperText={formik.touched.end_date && formik.errors.end_date}
             />
