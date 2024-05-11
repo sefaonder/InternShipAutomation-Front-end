@@ -10,14 +10,35 @@ export const userSlice = apiSlice.injectEndpoints({
       query: (internStatusId) => ({ url: `/api/user/get/${internStatusId}` }),
     }),
 
+    addUser: builder.mutation({
+      query: (payload) => ({
+        url: `/api/user/add/`,
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+
     updateUser: builder.mutation({
-      query: ({ payload, internStatusId }) => ({
-        url: `/api/user/update/${internStatusId}`,
+      query: ({ payload, userId }) => ({
+        url: `/api/user/update/${userId}`,
         method: 'PUT',
         body: payload,
+      }),
+    }),
+
+    deleteUser: builder.mutation({
+      query: (userId) => ({
+        url: `/api/user/delete/${userId}`,
+        method: 'DELETE',
       }),
     }),
   }),
 });
 
-export const { useGetUsersQuery, useGetUserDetailQuery, useUpdateUserMutation } = userSlice;
+export const {
+  useGetUsersQuery,
+  useGetUserDetailQuery,
+  useUpdateUserMutation,
+  useAddUserMutation,
+  useDeleteUserMutation,
+} = userSlice;
