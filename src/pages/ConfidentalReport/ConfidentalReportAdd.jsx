@@ -1,4 +1,4 @@
-import { Box, Button, Container, FormLabel, TextField, Typography } from '@mui/material';
+import { Box, Button, Collapse, Container, FormLabel, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import CustomRadioGroup from '../Survey/SurveyComponents/CustomRadioGroup';
@@ -15,8 +15,12 @@ import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 import { useGetCompanyInfoQuery } from 'src/store/services/survey/surveyApiSlice';
 import { useGetInterviewACQuery } from 'src/app/api/autocompleteSlice';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
+import CustomTextInput from 'src/components/inputs/CustomTextInput';
 
 const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
+  const navigate = useNavigate();
+
   const [createConfidentalReport, { isLoading }] = useCreateNewConfidentalReportMutation();
   const [updateConfidentalReport, { isLoadingData }] = useUpdateConfidentalReportMutation();
 
@@ -47,6 +51,9 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   }, [confidentalReport]);
 
   const validationSchema = yup.object({
+    interview: yup.object().shape({
+      id: yup.string().required('Lütfen İlgili Mülakatı seçin'),
+    }),
     company_name: yup.string().required('Bu Alan'),
     address: yup.string().required('Bu Alan'),
     days_of_absence: yup.number().required('Bu Alan'),
@@ -68,7 +75,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   });
   const formik = useFormik({
     initialValues: {
-      interview: null,
+      interview: { id: null },
       company_name: '',
       address: '',
       start_date: '',
@@ -85,6 +92,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
       competence: '',
       auth_position: '',
       auth_name: '',
+      date: '',
       reg_number: '',
       auth_tc_number: '',
       auth_title: '',
@@ -124,21 +132,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             confidentalReportId: confidentalReportId,
           });
         } else {
-          console.log({
-            ...restValues,
-            intern_evaluation: {
-              responsibility,
-              success,
-              interest,
-              behaviour_to_auths,
-              behaviour_to_coworkers,
-              work_safety,
-              competence,
-              score,
-            },
-          });
           await createConfidentalReport({
             ...restValues,
+            interviewId: restValues.interview?.id,
+            is_edu_program: restValues.is_edu_program === 'Evet' ? true : false,
             intern_evaluation: {
               responsibility,
               success,
@@ -151,9 +148,17 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             },
           });
         }
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      } finally {
+        navigate('/confidental-report');
+      }
     },
     validationSchema: validationSchema,
+    enableReinitialize: true,
+    validateOnBlur: true,
+    validateOnChange: false,
+    validateOnMount: true,
   });
   const is_edu_program = {
     name: 'Staj İçerisinde Eğitim Programı Uygulandı mı?',
@@ -180,8 +185,13 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     if (data?.data?.form) {
       formik.setFieldValue('company_name', data.data.form.company_info.name, false);
       formik.setFieldValue('address', data.data.form.company_info.address, false);
+
+      formik.setFieldValue('start_date', data.data.form.start_date, false);
+      formik.setFieldValue('end_date', data.data.form.end_date, false);
     }
   }, [data, isSuccess]);
+
+  console.log(formik.errors);
 
   return (
     <div>
@@ -206,37 +216,58 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             error={Boolean(formik.errors?.interview)}
             helperText={formik.errors.interview?.id}
           />
-          <Typography className="my-2 text-red-500"> Kurum Bilgileri: </Typography>
-          <Box className="flex items-center justify-between">
-            <FormLabel className="font-extrabold">Staj Yapılan Firma Adı: </FormLabel>
-            <TextField
-              className="w-1/2 my-0"
-              id="company_name"
-              name="company_name"
-              label="Firma adı"
-              margin="normal"
-              value={formik.values.company_name}
-              onChange={formik.handleChange}
-              error={formik.touched.company_name && Boolean(formik.errors.company_name)}
-              helperText={formik.touched.company_name && formik.errors.company_name}
-            />
-          </Box>
-          <Box className="flex items-center  justify-between">
-            <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi:</FormLabel>
-            <TextField
-              className="w-1/2 !p-0"
-              id="address"
-              name="address"
-              label="Firma adresi"
-              margin="normal"
-              value={formik.values.address}
-              onChange={formik.handleChange}
-              error={formik.touched.address && Boolean(formik.errors.address)}
-              helperText={formik.touched.address && formik.errors.address}
-            />
+          <Collapse in={data?.data?.form}>
+            {data?.data?.form && (
+              <Box>
+                <Typography className="my-2 text-red-500">Öğrenci Bilgileri: </Typography>
+                <Box className="flex items-center justify-between">
+                  <Typography>{`Öğrenci Adı Soyadı : ${data.data.student.name} ${data.data.student.last_name}`}</Typography>
+                  <Typography>{`Bölümü : ${data.data.form.edu_program}`}</Typography>
+                </Box>
+
+                <Box className="flex items-center justify-between">
+                  <Typography>{`Doğum Yeri / Tarihi : ${data.data.form.student_info.birth_place} ${dayjs(data.data.form.student_info.birth_date).format('DD.MM.YYYY')}`}</Typography>
+                  <Typography>{`Numarası : ${data.data.student?.school_number || ''}`}</Typography>
+                </Box>
+
+                <Box className="flex items-center justify-between">
+                  <Typography>{`TC Kimlik No : ${data.data.student?.tc_number || ''}`}</Typography>
+                </Box>
+              </Box>
+            )}
+          </Collapse>
+
+          <Box className="flex gap-4 flex-col">
+            <Typography className="my-2 text-red-500"> Kurum Bilgileri: </Typography>
+            <Box className="flex items-center justify-between">
+              <FormLabel className="font-extrabold">Staj Yapılan Firma Adı: </FormLabel>
+              <TextField
+                className="w-1/2 my-0"
+                id="company_name"
+                name="company_name"
+                label="Firma adı"
+                value={formik.values.company_name}
+                onChange={formik.handleChange}
+                error={formik.touched.company_name && Boolean(formik.errors.company_name)}
+                helperText={formik.touched.company_name && formik.errors.company_name}
+              />
+            </Box>
+            <Box className="flex items-center  justify-between">
+              <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi:</FormLabel>
+              <TextField
+                className="w-1/2 !p-0"
+                id="address"
+                name="address"
+                label="Firma adresi"
+                value={formik.values.address}
+                onChange={formik.handleChange}
+                error={formik.touched.address && Boolean(formik.errors.address)}
+                helperText={formik.touched.address && formik.errors.address}
+              />
+            </Box>
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full  flex flex-col">
+        <Container className="lg:w-1/2 sm:w-full  flex flex-col gap-4">
           <Typography className="my-2 text-red-500"> Staj Tarihi Ve Çalışma Konuları: </Typography>
           <Box className="flex items-center justify-between">
             <FormLabel className="font-extrabold">Staj Başlama Tarihi: </FormLabel>
@@ -244,7 +275,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="start_date"
               name="start_date"
               label="Başlangıç Tarihi"
-              shouldDisableDate={(date) => shouldDisableDate(date, [])}
               value={dayjs(formik.values.start_date)}
               onChange={(value) => formik.setFieldValue('start_date', dayjs(value).toDate(), true)}
               error={formik.touched.start_date && Boolean(formik.errors.start_date)}
@@ -257,7 +287,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="end_date"
               name="end_date"
               label="Başlangıç Tarihi"
-              shouldDisableDate={(date) => shouldDisableDate(date, [])}
               value={dayjs(formik.values.end_date)}
               onChange={(value) => formik.setFieldValue('end_date', dayjs(value).toDate(), true)}
               error={formik.touched.end_date && Boolean(formik.errors.end_date)}
@@ -272,9 +301,8 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="department"
               name="department"
               label="Departman"
-              margin="normal"
               value={formik.values.department}
-              onChange={formik.handleChange}
+              onChange={(e) => formik.setFieldValue('department', e.target.value, true)}
               error={formik.touched.department && Boolean(formik.errors.department)}
               helperText={formik.touched.department && formik.errors.department}
             />
@@ -286,7 +314,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="days_of_absence"
               name="days_of_absence"
               label="Devamsızlık"
-              margin="normal"
               type="number"
               value={formik.values.days_of_absence}
               onChange={formik.handleChange}
@@ -317,7 +344,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               name="score"
               label="Puan"
               type="number"
-              margin="normal"
               value={formik.values.score}
               onChange={formik.handleChange}
               error={formik.touched.score && Boolean(formik.errors.score)}
@@ -325,7 +351,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             />
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col">
+        <Container className="lg:w-1/2 sm:w-full flex flex-col gap-4">
           <Typography className="my-2 text-red-500">Değerlendirmeyi Yapan Yetkilinin: </Typography>
           <Box className="flex items-center justify-between">
             <FormLabel className="font-extrabold">Adı-Soyadı: </FormLabel>
@@ -334,7 +360,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="auth_name"
               name="auth_name"
               label="Adı-Soyadı"
-              margin="normal"
               value={formik.values.auth_name}
               onChange={formik.handleChange}
               error={formik.touched.auth_name && Boolean(formik.errors.auth_name)}
@@ -348,7 +373,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="auth_position"
               name="auth_position"
               label="Görevi"
-              margin="normal"
               value={formik.values.auth_position}
               onChange={formik.handleChange}
               error={formik.touched.auth_position && Boolean(formik.errors.auth_position)}
@@ -362,7 +386,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="auth_title"
               name="auth_title"
               label="Diploma Ünvanı"
-              margin="normal"
               value={formik.values.auth_title}
               onChange={formik.handleChange}
               error={formik.touched.auth_title && Boolean(formik.errors.auth_title)}
@@ -376,7 +399,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="reg_number"
               name="reg_number"
               label="Sicil No"
-              margin="normal"
               value={formik.values.reg_number}
               onChange={formik.handleChange}
               error={formik.touched.reg_number && Boolean(formik.errors.reg_number)}
@@ -390,25 +412,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               id="auth_tc_number"
               name="auth_tc_number"
               label="TC Kimlik"
-              margin="normal"
               value={formik.values.auth_tc_number}
               onChange={formik.handleChange}
               error={formik.touched.auth_tc_number && Boolean(formik.errors.auth_tc_number)}
               helperText={formik.touched.auth_tc_number && formik.errors.auth_tc_number}
-            />
-          </Box>
-          <Box className="flex items-center  justify-between">
-            <FormLabel className="font-extrabold ">Tarih:</FormLabel>
-            <TextField
-              className="w-1/2 !p-0"
-              id="company_address"
-              name="company_address"
-              label="Tarih"
-              margin="normal"
-              value={formik.values.company_address}
-              onChange={formik.handleChange}
-              error={formik.touched.company_address && Boolean(formik.errors.company_address)}
-              helperText={formik.touched.company_address && formik.errors.company_address}
             />
           </Box>
         </Container>
