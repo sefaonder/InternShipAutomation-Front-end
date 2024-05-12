@@ -1,16 +1,5 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { Field, useFormik } from 'formik';
+import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
+import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import CustomRadioGroup from './SurveyComponents/CustomRadioGroup';
@@ -22,8 +11,6 @@ import {
 } from 'src/store/services/survey/surveyApiSlice';
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 import { useGetInterviewACQuery } from 'src/app/api/autocompleteSlice';
-import CustomDateInput from 'src/components/inputs/CustomDateInput';
-import moment from 'moment';
 
 const SurveyAdd = ({ survey, surveyId }) => {
   const [selectedAnswersSingle, setSelectedAnswersSingle] = useState([]);
@@ -62,7 +49,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
     company_address: yup.string().required('Şirket Adresi Zorunlu'),
     teach_type: yup.string().required('Öğrenim Türü Zorunlu'),
     gano: yup.string().required('Gano Bilgisi Zorunlu'),
-    answers: yup.array().required('Anket Soruları Zorunlu').min(40, 'Bütün Sorular Cevaplanmalı'),
+    answers: yup.array().required('Anket Soruları Zorunlu').min(31, 'Bütün Sorular Cevaplanmalı'),
     date: yup.date().required('Tarih alanı zorunludur'),
   });
   const formik = useFormik({
@@ -71,18 +58,19 @@ const SurveyAdd = ({ survey, surveyId }) => {
       company_name: '',
       company_address: '',
       teach_type: '',
-      intern_group: 'asdasd',
-      intern_type: 'asdasd',
+      intern_group: '',
+      intern_type: '',
       gano: '',
       date: new Date(),
       answers: null,
     },
     onSubmit: async (values) => {
       try {
+        const payload = { ...values, interviewId: values.interview.id };
         if (survey) {
-          await updateSurvey({ payload: values, surveyId: surveyId }).unwrap();
+          await updateSurvey({ payload: payload, surveyId: surveyId }).unwrap();
         } else {
-          await createSurvey(values).unwrap();
+          await createSurvey(payload).unwrap();
         }
       } catch (err) {
         console.log(err);
@@ -110,11 +98,17 @@ const SurveyAdd = ({ survey, surveyId }) => {
   }, [formik]);
 
   const teach_type_data = { name: 'Öğretim Türü', type: 'teach_type', data: ['1. Öğretim', '2. Öğretim'] };
+
+  const intern_group_data = { name: 'Staj Grubu', type: 'intern_group', data: ['I. Grup', 'II. Grup'] };
+  const intern_type_data = { name: 'Staj Türü', type: 'intern_type', data: ['Dönem içi', 'Dönem Dışı'] };
+
   const gano_data = {
     name: 'GANO',
     type: 'gano',
     data: ['0 - 1.79', '1.80 - 1.99', '2.00 - 2.49', '2.50 - 2.99', '3.00 - 3.49', '3.50 - 4.00'],
   };
+
+  console.log(formik.values);
 
   return (
     <div>
@@ -175,12 +169,29 @@ const SurveyAdd = ({ survey, surveyId }) => {
             helperText={formik.touched.gano && formik.errors.gano}
           />
         </Box>
+        <Box className="flex items-center justify-between">
+          <CustomRadioGroup
+            data={intern_group_data}
+            formik={formik}
+            error={Boolean(formik.errors.intern_group)}
+            helperText={formik.errors.intern_group}
+          />
+        </Box>
+        <Box className="flex items-center justify-between">
+          <CustomRadioGroup
+            data={intern_type_data}
+            formik={formik}
+            error={Boolean(formik.errors.intern_type)}
+            helperText={formik.errors.intern_type}
+          />
+        </Box>
         <Box>
           <SurveyQuestions
             selectedAnswersSingle={selectedAnswersSingle}
             setSelectedAnswersSingle={setSelectedAnswersSingle}
             selectedAnswersMulti={selectedAnswersMulti}
             setSelectedAnswersMulti={setSelectedAnswersMulti}
+            isInTerm={formik.values.intern_type === 'Dönem içi'}
           />
           <Typography className="flex justify-end">
             {formik.touched.answers && Boolean(formik.errors.answers) && (
