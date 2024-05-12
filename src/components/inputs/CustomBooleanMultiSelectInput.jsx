@@ -32,7 +32,9 @@ function CustomBooleanMultiSelectInput({
 
   return (
     <FormControl sx={sx}>
-      <InputLabel id={`select-${id}`}>{label}</InputLabel>
+      <InputLabel required={required} id={`select-${id}`}>
+        {label}
+      </InputLabel>
       <Select
         labelId={`select-${id}`}
         id={id}
@@ -42,7 +44,7 @@ function CustomBooleanMultiSelectInput({
         required={required}
         multiple
         onChange={handleChange}
-        input={<OutlinedInput label={label} error={error} />}
+        input={<OutlinedInput label={label} error={error} required={required} />}
         renderValue={(selected) => {
           return options
             .filter((object) => selected.includes(object.id))
@@ -58,7 +60,7 @@ function CustomBooleanMultiSelectInput({
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>{error && helpertext}</FormHelperText>
+      <FormHelperText error={error}>{error && helpertext}</FormHelperText>
     </FormControl>
   );
 }

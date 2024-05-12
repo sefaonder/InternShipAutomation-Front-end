@@ -23,22 +23,23 @@ const IntermQuestions = ({ selectedAnswers, setSelectedAnswers }) => {
                 {index + 1}: {data.question}
               </h2>
               <div className="flex justify-between flex-col lg:flex-row ">
-                {data.answers.map((answer, answerIndex) => {
-                  const isSelected = selectedAnswers[index] === answer.text;
-                  return (
-                    <div
-                      key={answerIndex}
-                      onClick={() => handleClick(answer, index)}
-                      className={
-                        isSelected
-                          ? 'bg-emerald-600 text-left text-white py-0.5 px-4 rounded-md'
-                          : 'text-left py-0.5 px-4 rounded-md'
-                      }
-                    >
-                      {answer.text}
-                    </div>
-                  );
-                })}
+                {selectedAnswers &&
+                  data.answers.map((answer, answerIndex) => {
+                    const isSelected = selectedAnswers[index] === answer.text;
+                    return (
+                      <div
+                        key={answerIndex}
+                        onClick={() => handleClick(answer, index)}
+                        className={
+                          isSelected
+                            ? 'bg-emerald-600 text-left text-white py-0.5 px-4 rounded-md'
+                            : 'text-left py-0.5 px-4 rounded-md'
+                        }
+                      >
+                        {answer.text}
+                      </div>
+                    );
+                  })}
               </div>
             </Box>
           );

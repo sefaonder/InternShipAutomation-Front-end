@@ -33,13 +33,13 @@ const PdfConfidentalReport = ({ data }) => {
   const internEvuluation = {
     titles: ['Başari Olculeri', 'Iyi', 'Orta', 'Iyi Degil'],
     data: [
-      { name: 'Calisma Dikkat ve Sorumluluk', value: data?.intern_evaluation.responsibility },
-      { name: 'İsi Yapmadaki Basarisi', value: data?.intern_evaluation.success },
-      { name: 'Ogrenme ve Arastirma Ilgisi', value: data?.intern_evaluation.interest },
-      { name: 'Ustelerine Karsi Davranisi', value: data?.intern_evaluation.behaviour_to_auths },
-      { name: 'Calisma Arkadaslarina Davranisi', value: data?.intern_evaluation.behaviour_to_coworkers },
-      { name: 'Is Guvenligi Kurallarina Uyumu', value: data?.intern_evaluation.work_safety },
-      { name: 'Meslek Bilgi Duzeyi', value: data?.intern_evaluation.competence },
+      { name: 'Calisma Dikkat ve Sorumluluk', value: data?.intern_evaluation?.responsibility },
+      { name: 'İsi Yapmadaki Basarisi', value: data?.intern_evaluation?.success },
+      { name: 'Ogrenme ve Arastirma Ilgisi', value: data?.intern_evaluation?.interest },
+      { name: 'Ustelerine Karsi Davranisi', value: data?.intern_evaluation?.behaviour_to_auths },
+      { name: 'Calisma Arkadaslarina Davranisi', value: data?.intern_evaluation?.behaviour_to_coworkers },
+      { name: 'Is Guvenligi Kurallarina Uyumu', value: data?.intern_evaluation?.work_safety },
+      { name: 'Meslek Bilgi Duzeyi', value: data?.intern_evaluation?.competence },
     ],
   };
 

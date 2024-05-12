@@ -25,6 +25,13 @@ export const ConfidentalReportSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    deleteConfidentalReport: builder.mutation({
+      query: (confidentalReportId) => ({
+        url: `/api/confidental/delete/${confidentalReportId}`,
+        method: 'DELETE',
+      }),
+    }),
+
     getCompanyConfidentalReport: builder.query({
       query: (confidentalReportToken) => ({ url: `/company/confidential/get/${confidentalReportToken}` }),
     }),
@@ -40,7 +47,11 @@ export const ConfidentalReportSlice = apiSlice.injectEndpoints({
 });
 export const { useGetConfidentalReportsQuery, useGetConfidentalReportQuery } = ConfidentalReportSlice;
 
-export const { useCreateNewConfidentalReportMutation, useUpdateConfidentalReportMutation } = ConfidentalReportSlice;
+export const {
+  useCreateNewConfidentalReportMutation,
+  useUpdateConfidentalReportMutation,
+  useDeleteConfidentalReportMutation,
+} = ConfidentalReportSlice;
 
 export const { useGetCompanyConfidentalReportQuery, useCreateCompanyConfidentalReportMutation } =
   ConfidentalReportSlice;
