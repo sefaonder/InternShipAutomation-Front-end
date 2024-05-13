@@ -33,22 +33,23 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
 
   useEffect(() => {
     if (confidentalReport) {
-      for (const key in confidentalReport.intern_evaluation) {
-        formik.setFieldValue(`${key}`, confidentalReport.intern_evaluation[key]);
+      for (const key in confidentalReport?.data.intern_evaluation) {
+        formik.setFieldValue(`${key}`, confidentalReport?.data.intern_evaluation[key]);
       }
-      formik.setFieldValue('company_name', confidentalReport.company_name, true);
-      formik.setFieldValue('address', confidentalReport.address, true);
-      formik.setFieldValue('start_date', confidentalReport.start_date, false);
-      formik.setFieldValue('end_date', confidentalReport.end_date, false);
-      formik.setFieldValue('days_of_absence', confidentalReport.days_of_absence, false);
-      formik.setFieldValue('department', confidentalReport.department, false);
-      formik.setFieldValue('is_edu_program', confidentalReport.is_edu_program ? 'Evet' : 'Hayır', false);
-      formik.setFieldValue('auth_name', confidentalReport.auth_name, false);
-      formik.setFieldValue('auth_position', confidentalReport.auth_position, false);
-      formik.setFieldValue('reg_number', confidentalReport.reg_number, false);
-      formik.setFieldValue('auth_tc_number', confidentalReport.auth_tc_number, false);
+      formik.setFieldValue('company_name', confidentalReport?.data.company_name, true);
+      formik.setFieldValue('address', confidentalReport?.data.address, true);
+      formik.setFieldValue('start_date', confidentalReport?.data.start_date, false);
+      formik.setFieldValue('end_date', confidentalReport?.data.end_date, false);
+      formik.setFieldValue('days_of_absence', confidentalReport?.data.days_of_absence, false);
+      formik.setFieldValue('department', confidentalReport?.data.department, false);
+      formik.setFieldValue('is_edu_program', confidentalReport?.data.is_edu_program ? 'Evet' : 'Hayır', false);
+      formik.setFieldValue('auth_name', confidentalReport?.data.auth_name, false);
+      formik.setFieldValue('auth_position', confidentalReport?.data.auth_position, false);
+      formik.setFieldValue('reg_number', confidentalReport?.data.reg_number, false);
+      formik.setFieldValue('auth_tc_number', confidentalReport?.data.auth_tc_number, false);
+      formik.setFieldValue('auth_title', confidentalReport?.data.auth_title, false);
     }
-  }, [confidentalReport]);
+  }, [confidentalReport?.data]);
 
   const validationSchema = yup.object({
     interview: yup.object().shape({
@@ -166,13 +167,13 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     data: ['Evet', 'Hayır'],
   };
   const internship_evulation = [
-    { name: 'Çalışmada Dikkat ve Sorumluluk', type: 'responsibility', data: ['İyi', 'Orta', 'Iyi Degil'] },
-    { name: 'İşi Yapmadaki Başarısı', type: 'success', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'Öğrenme ve Araştırma İlgisi', type: 'interest', data: ['Iyi', 'Orta', 'İyi Değil'] },
-    { name: 'Üstelerine Karşı Davranışı', type: 'behaviour_to_auths', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'Çalışma Arkadaşlarına Davranışı', type: 'behaviour_to_coworkers', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'İş Güvenliği Kurallarına Uyumu', type: 'work_safety', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'Meslek Bilgi Düzeyi', type: 'competence', data: ['Iyi', 'Orta', 'Iyi Degil'] },
+    { name: 'Çalışmada Dikkat ve Sorumluluk', type: 'responsibility', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'İşi Yapmadaki Başarısı', type: 'success', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Öğrenme ve Araştırma İlgisi', type: 'interest', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Üstelerine Karşı Davranışı', type: 'behaviour_to_auths', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Çalışma Arkadaşlarına Davranışı', type: 'behaviour_to_coworkers', data: ['Iyi', 'Orta', 'İyi Değil'] },
+    { name: 'İş Güvenliği Kurallarına Uyumu', type: 'work_safety', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Meslek Bilgi Düzeyi', type: 'competence', data: ['İyi', 'Orta', 'İyi Değil'] },
   ];
 
   useEffect(() => {
@@ -182,16 +183,16 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   }, [formik.values.interview]);
 
   useEffect(() => {
+    console.log(data);
     if (data?.data?.form) {
-      formik.setFieldValue('company_name', data.data.form.company_info.name, false);
-      formik.setFieldValue('address', data.data.form.company_info.address, false);
+      console.log(data.data);
+      formik.setFieldValue('company_name', data.data?.form.company_info.name, false);
+      formik.setFieldValue('address', data.data?.form.company_info.address, false);
 
-      formik.setFieldValue('start_date', data.data.form.start_date, false);
-      formik.setFieldValue('end_date', data.data.form.end_date, false);
+      formik.setFieldValue('start_date', data.data?.form.start_date, false);
+      formik.setFieldValue('end_date', data.data?.form.end_date, false);
     }
   }, [data, isSuccess]);
-
-  console.log(formik.errors);
 
   return (
     <div>
@@ -239,10 +240,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
 
           <Box className="flex gap-4 flex-col">
             <Typography className="my-2 text-red-500"> Kurum Bilgileri: </Typography>
-            <Box className="flex items-center justify-between">
+            <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
               <FormLabel className="font-extrabold">Staj Yapılan Firma Adı: </FormLabel>
               <TextField
-                className="w-1/2 my-0"
+                className="w-full lg:w-1/2 my-0"
                 id="company_name"
                 name="company_name"
                 label="Firma adı"
@@ -252,10 +253,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
                 helperText={formik.touched.company_name && formik.errors.company_name}
               />
             </Box>
-            <Box className="flex items-center  justify-between">
+            <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
               <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi:</FormLabel>
               <TextField
-                className="w-1/2 !p-0"
+                className="w-full lg:w-1/2 !p-0"
                 id="address"
                 name="address"
                 label="Firma adresi"
@@ -269,11 +270,12 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
         </Container>
         <Container className="lg:w-1/2 sm:w-full  flex flex-col gap-4">
           <Typography className="my-2 text-red-500"> Staj Tarihi Ve Çalışma Konuları: </Typography>
-          <Box className="flex items-center justify-between">
-            <FormLabel className="font-extrabold">Staj Başlama Tarihi: </FormLabel>
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            <FormLabel className="font-extrabold my-2">Staj Başlama Tarihi: </FormLabel>
             <CustomDateInput
               id="start_date"
               name="start_date"
+              className="w-full lg:w-1/2"
               label="Başlangıç Tarihi"
               value={dayjs(formik.values.start_date)}
               onChange={(value) => formik.setFieldValue('start_date', dayjs(value).toDate(), true)}
@@ -281,10 +283,11 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.start_date && formik.errors.start_date}
             />
           </Box>
-          <Box className="flex items-center  justify-between">
-            <FormLabel className="font-extrabold">Staj Bitiş Tarihi:</FormLabel>
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            <FormLabel className="font-extrabold my-2">Staj Bitiş Tarihi:</FormLabel>
             <CustomDateInput
               id="end_date"
+              className="w-full lg:w-1/2"
               name="end_date"
               label="Başlangıç Tarihi"
               value={dayjs(formik.values.end_date)}
@@ -294,10 +297,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             />
           </Box>
 
-          <Box className="flex items-center  justify-between">
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold">Staj Yapılan Departman:</FormLabel>
             <TextField
-              className="w-1/2"
+              className="w-full lg:w-1/2"
               id="department"
               name="department"
               label="Departman"
@@ -307,10 +310,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.department && formik.errors.department}
             />
           </Box>
-          <Box className="flex items-center justify-between">
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold">Öğrencinin Devamsızlık Sayısı: </FormLabel>
             <TextField
-              className="w-1/2  my-0"
+              className="w-full lg:w-1/2 my-0"
               id="days_of_absence"
               name="days_of_absence"
               label="Devamsızlık"
@@ -336,10 +339,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               formik={formik}
             />
           ))}
-          <Box className="flex items-center justify-between">
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold">Puanlama: </FormLabel>
             <TextField
-              className="w-1/2 my-2"
+              className="w-full lg:w-1/2 my-2"
               id="score"
               name="score"
               label="Puan"
@@ -353,10 +356,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
         </Container>
         <Container className="lg:w-1/2 sm:w-full flex flex-col gap-4">
           <Typography className="my-2 text-red-500">Değerlendirmeyi Yapan Yetkilinin: </Typography>
-          <Box className="flex items-center justify-between">
-            <FormLabel className="font-extrabold">Adı-Soyadı: </FormLabel>
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            <FormLabel className="font-extrabold m-2">Adı-Soyadı: </FormLabel>
             <TextField
-              className="w-1/2 my-0"
+              className="w-full lg:w-1/2 my-0"
               id="auth_name"
               name="auth_name"
               label="Adı-Soyadı"
@@ -366,10 +369,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.auth_name && formik.errors.auth_name}
             />
           </Box>
-          <Box className="flex items-center justify-between">
-            <FormLabel className="font-extrabold">Görevi: </FormLabel>
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            <FormLabel className="font-extrabold m-2">Görevi: </FormLabel>
             <TextField
-              className="w-1/2 !p-0"
+              className="w-full lg:w-1/2 !p-0"
               id="auth_position"
               name="auth_position"
               label="Görevi"
@@ -379,10 +382,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.auth_position && formik.errors.auth_position}
             />
           </Box>
-          <Box className="flex items-center  justify-between">
-            <FormLabel className="font-extrabold">Diploma Ünvanı:</FormLabel>
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            <FormLabel className="font-extrabold  m-2">Diploma Ünvanı:</FormLabel>
             <TextField
-              className="w-1/2 !p-0"
+              className="w-full lg:w-1/2 !p-0"
               id="auth_title"
               name="auth_title"
               label="Diploma Ünvanı"
@@ -392,10 +395,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.auth_title && formik.errors.auth_title}
             />
           </Box>
-          <Box className="flex items-center  justify-between">
-            <FormLabel className="font-extrabold ">Sicil No / İsteğe Bağlı:</FormLabel>
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            <FormLabel className="font-extrabold m-2">Sicil No / İsteğe Bağlı:</FormLabel>
             <TextField
-              className="w-1/2 !p-0"
+              className="w-full lg:w-1/2 !p-0"
               id="reg_number"
               name="reg_number"
               label="Sicil No"
@@ -405,10 +408,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.reg_number && formik.errors.reg_number}
             />
           </Box>
-          <Box className="flex items-center  justify-between">
-            <FormLabel className="font-extrabold">TC Kimlik:</FormLabel>
+          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            <FormLabel className="font-extrabold m-2">TC Kimlik:</FormLabel>
             <TextField
-              className="w-1/2 !p-0"
+              className="w-full lg:w-1/2 !p-0"
               id="auth_tc_number"
               name="auth_tc_number"
               label="TC Kimlik"
@@ -418,10 +421,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.auth_tc_number && formik.errors.auth_tc_number}
             />
           </Box>
+          <Button className="px-4 w-full  flex my-2" type="submit" color="success" variant="outlined">
+            Gönder
+          </Button>
         </Container>
-        <Button className="px-4 w-1/3 flex my-2" type="submit" color="success" variant="outlined">
-          Gönder
-        </Button>
       </form>
     </div>
   );

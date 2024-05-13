@@ -11,11 +11,11 @@ const Signs = () => {
         </View>
         <View style={styles.text}>
           <Text> Adi Soyadi</Text>
-          <Text>:.........</Text>
+          <Text>:.............</Text>
         </View>
         <View style={styles.text}>
           <Text>Tarih</Text>
-          <Text>:.........</Text>
+          <Text>:.............</Text>
         </View>
       </View>
       <View style={styles.box}>
@@ -25,11 +25,11 @@ const Signs = () => {
         </View>
         <View style={styles.text}>
           <Text> Onaylayan</Text>
-          <Text>:.........</Text>
+          <Text>:.............</Text>
         </View>
         <View style={styles.text}>
           <Text>Tarih</Text>
-          <Text>:.........</Text>
+          <Text>:.............</Text>
         </View>
       </View>
       <View style={styles.box}>
@@ -39,12 +39,12 @@ const Signs = () => {
         </View>
         <View style={styles.text}>
           <Text> Onaylayan</Text>
-          <Text>:.........</Text>
+          <Text>:.............</Text>
         </View>
 
         <View style={styles.text}>
           <Text>Tarih</Text>
-          <Text>:.........</Text>
+          <Text>:.............</Text>
         </View>
       </View>
     </View>

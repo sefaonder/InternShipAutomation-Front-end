@@ -56,7 +56,7 @@ const ConfidentalReportDetail = () => {
           onClick={() => navigate('/confidental-report/update/' + confidentalReportId)}
         />
         {data && (
-          <PDFDownloadLink fileName="FORM" document={<PdfConfidentalReport data={data} />}>
+          <PDFDownloadLink fileName="FORM" document={<PdfConfidentalReport data={data.data} />}>
             {({ loading }) =>
               loading ? (
                 <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
@@ -100,73 +100,73 @@ const ConfidentalReportDetail = () => {
               <Typography className="text-red-400">Staj Tarihi ve Çalışma Konuları:</Typography>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Staj Başlama Tarihi:</Typography>
-                <Typography>{data?.start_date}</Typography>
+                <Typography>{data?.data.start_date}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Staj Bitiş Tarihi :</Typography>
-                <Typography>{data?.end_date}</Typography>
+                <Typography>{data?.data.end_date}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Öğrencinin Devamsızlık Günleri:</Typography>
-                <Typography>{data?.days_of_absence}</Typography>
+                <Typography>{data?.data.days_of_absence}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Staj Yapılan Departman:</Typography>
-                <Typography>{data?.department}</Typography>
+                <Typography>{data?.data.department}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Staj İçerisinde Eğitim Programı Uygulandı mı?</Typography>
-                <Typography>{data?.is_edu_program ? 'Evet' : 'Hayır'}</Typography>
+                <Typography>{data?.data.is_edu_program ? 'Evet' : 'Hayır'}</Typography>
               </Box>
             </Container>
             <Container>
               <Typography className="text-red-400">Staj Çalışma Değerlendirmesi:</Typography>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Çalışmada Dikkat ve Sorumluluk:</Typography>
-                <Typography>{data?.intern_evaluation?.responsibility}</Typography>
+                <Typography>{data?.data.intern_evaluation?.responsibility}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">İşi Yapmadakı Başarısı:</Typography>
-                <Typography>{data?.intern_evaluation?.success}</Typography>
+                <Typography>{data?.data.intern_evaluation?.success}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Üstlerine Karşı Davranış:</Typography>
-                <Typography>{data?.intern_evaluation?.behaviour_to_auths}</Typography>
+                <Typography>{data?.data.intern_evaluation?.behaviour_to_auths}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Çalışma Arkadaşlarına Karşı Davranışı:</Typography>
-                <Typography>{data?.intern_evaluation?.behaviour_to_coworkers}</Typography>
+                <Typography>{data?.data.intern_evaluation?.behaviour_to_coworkers}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">İş Güvenliği Kurallarına Uyumu: </Typography>
-                <Typography> {data?.intern_evaluation?.work_safety}</Typography>
+                <Typography> {data?.data.intern_evaluation?.work_safety}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Meslek Bilgi Düzeyi:</Typography>
-                <Typography>{data?.intern_evaluation?.competence}</Typography>
+                <Typography>{data?.data.intern_evaluation?.competence}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Puanlama:</Typography>
-                <Typography> {data?.intern_evaluation?.score}</Typography>
+                <Typography> {data?.data.intern_evaluation?.score}</Typography>
               </Box>
             </Container>
             <Container>
               <Typography className="text-red-400">Değerlendirmeyi Yapan Yetkilinin (Mühendis):</Typography>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Adı Soyadı:</Typography>
-                <Typography>{data?.auth_name}</Typography>
+                <Typography>{data?.data.auth_name}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Diploma Ünvanı:</Typography>
-                <Typography>{data?.auth_position}</Typography>
+                <Typography>{data?.data.auth_position}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Sicil No (isteğe bağlı):</Typography>
-                <Typography>{data?.reg_number}</Typography>
+                <Typography>{data?.data.reg_number}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">TC Kimlik No:</Typography>
-                <Typography>{data?.auth_tc_number}</Typography>
+                <Typography>{data?.data.auth_tc_number}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Taril: </Typography>

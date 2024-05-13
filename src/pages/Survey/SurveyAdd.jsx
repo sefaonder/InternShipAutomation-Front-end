@@ -26,23 +26,28 @@ const SurveyAdd = ({ survey, surveyId }) => {
     isLoading: loadingInfo,
     isSuccess,
   } = useGetCompanyInfoQuery(interviewId, { skip: !Boolean(interviewId) });
-
-  useEffect(() => {
-    if (survey) {
-      formik.setFieldValue('company_name', survey.company_name, true);
-      formik.setFieldValue('company_address', survey.company_address, true);
-      formik.setFieldValue('teach_type', survey.teach_type, false);
-      formik.setFieldValue('gano', survey.gano, false);
-      if (survey?.answers?.length != 0) {
-        setSelectedAnswersSingle([...survey?.answers?.slice(0, 27)]);
-        const res = survey?.answers?.slice(27, 31);
+  const setFormikValuesss = () => {
+    console.log(survey?.data?.company_name);
+    if (survey?.data) {
+      formik.setFieldValue('company_name', survey?.data?.company_name);
+      formik.setFieldValue('company_address', survey?.data?.company_address);
+      formik.setFieldValue('teach_type', survey?.data?.teach_type);
+      formik.setFieldValue('gano', survey?.data?.gano);
+      formik.setFieldValue('intern_type', survey?.data?.intern_type);
+      if (survey?.data?.answers?.length > 0) {
+        setSelectedAnswersSingle([...survey?.data?.answers?.slice(0, 27)]);
+        const res = survey?.data.answers?.slice(27, 31);
         const newArray = [, ...res];
         setSelectedAnswersMulti(newArray);
-        const resInterm = survey?.answers.slice(31);
+        const resInterm = survey?.data?.answers.slice(31);
         setSelectedAnswersInterm(resInterm);
       }
     }
-  }, [survey]);
+  };
+
+  useEffect(() => {
+    setFormikValuesss();
+  }, [survey?.data]);
 
   const validationSchema = yup.object({
     company_name: yup.string().required('E-mail Zorunlu'),
@@ -87,13 +92,6 @@ const SurveyAdd = ({ survey, surveyId }) => {
   }, [formik.values.interview]);
 
   useEffect(() => {
-    if (data?.data?.form) {
-      formik.setFieldValue('company_name', data.data.form.company_info.name, false);
-      formik.setFieldValue('company_address', data.data.form.company_info.address, false);
-    }
-  }, [data, isSuccess]);
-
-  useEffect(() => {
     formik.values.answers = [...selectedAnswersSingle, ...selectedAnswersMulti.slice(1), ...selectedAnswersInterm];
   }, [formik]);
 
@@ -107,8 +105,6 @@ const SurveyAdd = ({ survey, surveyId }) => {
     type: 'gano',
     data: ['0 - 1.79', '1.80 - 1.99', '2.00 - 2.49', '2.50 - 2.99', '3.00 - 3.49', '3.50 - 4.00'],
   };
-
-  console.log(formik.values);
 
   return (
     <div>
@@ -126,22 +122,24 @@ const SurveyAdd = ({ survey, surveyId }) => {
           error={Boolean(formik.errors?.interview)}
           helperText={formik.errors.interview?.id}
         />
-
-        <TextField
-          id="company_name"
-          name="company_name"
-          label="Firma adı"
-          margin="normal"
-          value={formik.values.company_name}
-          onChange={formik.handleChange}
-          error={formik.touched.company_name && Boolean(formik.errors.company_name)}
-          helperText={formik.touched.company_name && formik.errors.company_name}
-        />
-
-        <Box className="flex items-center  justify-between">
+        <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+          <FormLabel className="font-extrabold">Staj Yapılan Firma Adı:</FormLabel>
+          <TextField
+            className="w-full lg:w-1/2"
+            id="company_name"
+            name="company_name"
+            label="Firma adı"
+            margin="normal"
+            value={formik.values.company_name}
+            onChange={formik.handleChange}
+            error={formik.touched.company_name && Boolean(formik.errors.company_name)}
+            helperText={formik.touched.company_name && formik.errors.company_name}
+          />
+        </Box>
+        <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
           <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi:</FormLabel>
           <TextField
-            className="w-1/2"
+            className="w-full lg:w-1/2"
             id="company_address"
             name="company_address"
             label="Firma adresi"
@@ -191,6 +189,8 @@ const SurveyAdd = ({ survey, surveyId }) => {
             setSelectedAnswersSingle={setSelectedAnswersSingle}
             selectedAnswersMulti={selectedAnswersMulti}
             setSelectedAnswersMulti={setSelectedAnswersMulti}
+            selectedAnswersInterm={selectedAnswersInterm}
+            setSelectedAnswersInterm={setSelectedAnswersInterm}
             isInTerm={formik.values.intern_type === 'Dönem içi'}
           />
           <Typography className="flex justify-end">

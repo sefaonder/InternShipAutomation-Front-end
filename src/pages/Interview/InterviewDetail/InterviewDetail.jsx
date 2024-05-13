@@ -1,11 +1,12 @@
-import { Box, Button, CircularProgress, Paper, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Paper, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import { useGetInterviewDetailQuery } from 'src/store/services/interview/interviewApiSlice';
 import { setInterviewData } from 'src/store/services/interview/interviewSlice';
+import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
 
 function InterviewDetail() {
   const dispatch = useDispatch();
@@ -76,6 +77,14 @@ function InterviewDetail() {
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
+          <Container className="my-2 px-6 gap-2 flex">
+            {data?.data.internStatus && (
+              <Link to={`/intern-status/${data.data?.internStatus.id}`}>
+                <span className="underline">InternStatus</span>
+                <CallMadeSharpIcon className="text-sm text-black" />
+              </Link>
+            )}
+          </Container>
           <CustomDetailPageBox data={accordionData} />
         </Paper>
         <RecordTraceCard record={interviewData} />

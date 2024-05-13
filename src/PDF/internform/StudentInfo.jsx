@@ -10,34 +10,62 @@ const StudentInfo = ({ data }) => {
       { name: 'Baba Adı', value: data?.student_info.fathers_name },
       { name: 'Anne Adı', value: data?.student_info.mothers_name },
       { name: 'Doğum Yeri', value: data?.student_info.birth_place },
-      { name: 'Doğum Tarihi', value: data?.student_info.birth_date },
-      { name: 'İkametgah Adresi', value: data?.student_info.address },
+      { name: 'Doğum Tarihi', value: new Date(data?.student_info.birth_date).toLocaleDateString('pt-PT') },
     ],
     right: [
       { name: 'Öğrenci No', value: data?.student.school_number },
       { name: 'Programı', value: data?.edu_program },
       { name: 'Gün Sayısı', value: data?.total_work_day },
-      { name: 'Başlangıç Tarihi', value: data?.start_date },
-      { name: 'Bitiş Tarihi', value: data?.end_date },
+      { name: 'Başlangıç Tarihi', value: new Date(data?.start_date).toLocaleDateString('pt-PT') },
+      { name: 'Bitiş Tarihi', value: new Date(data?.end_date).toLocaleDateString('pt-PT') },
       { name: 'Eğitim-Öğretim Yılı', value: data?.edu_year.name },
     ],
   };
+
+  const address = {
+    name: 'İkametgah Adresi:',
+    value: data?.company_info?.address,
+  };
   return (
     <View style={styles.container}>
-      <View>
-        <PdfTable data={studentInfo.left}></PdfTable>
+      <View style={styles.inner}>
+        <View>
+          <PdfTable data={studentInfo.left}></PdfTable>
+        </View>
+        <View>
+          <PdfTable data={studentInfo.right}></PdfTable>
+        </View>
       </View>
-      <View>
-        <PdfTable data={studentInfo.right}></PdfTable>
+
+      <View style={styles.address}>
+        <View style={{ width: '25%', border: '1px solid black', padding: 4 }}>
+          <Text> {address.name} </Text>
+        </View>
+        <View style={{ width: '75%', border: '1px solid black', padding: 4 }}>
+          <Text> {address.value} </Text>
+        </View>
       </View>
     </View>
   );
 };
 const styles = {
   container: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '10px',
+  },
+  inner: {
     width: '80%',
     display: 'flex',
     flexDirection: 'row',
+  },
+  address: {
+    width: '80%',
+    fontSize: '9px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 };
 export default StudentInfo;

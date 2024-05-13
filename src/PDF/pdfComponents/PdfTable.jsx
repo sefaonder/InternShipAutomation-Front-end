@@ -4,7 +4,6 @@ import { Document, Font, Page, Text, View } from '@react-pdf/renderer';
 const PdfTable = ({ data }) => {
   const styles = {
     table: {
-      marginBottom: 10,
       display: 'table',
       width: 'auto',
       borderStyle: 'solid',
@@ -16,16 +15,23 @@ const PdfTable = ({ data }) => {
       margin: 'auto',
       flexDirection: 'row',
     },
-    tableCol: {
-      width: '50%',
+    tableCol1: {
+      width: '35%',
+      borderStyle: 'solid',
+      borderWidth: 1,
+      borderLeftWidth: 0,
+      borderTopWidth: 0,
+    },
+    tableCol2: {
+      width: '65%',
       borderStyle: 'solid',
       borderWidth: 1,
       borderLeftWidth: 0,
       borderTopWidth: 0,
     },
     tableCell: {
-      padding: 5,
-      fontSize: 10,
+      padding: 4,
+      fontSize: 9,
     },
   };
   return (
@@ -33,11 +39,13 @@ const PdfTable = ({ data }) => {
       {data.map((item, index) => (
         <View style={styles.tableRow} key={index}>
           {' '}
-          <View style={styles.tableCol}>
+          <View style={styles.tableCol1}>
             <Text style={styles.tableCell}>{item.name}</Text>
           </View>
-          <View style={styles.tableCol}>
-            <Text style={styles.tableCell}>{item.value}</Text>
+          <View style={styles.tableCol2}>
+            <Text style={styles.tableCell}>
+              {item.value} {item.value2 && ' / '} {item.value2 && item.value2}
+            </Text>
           </View>
         </View>
       ))}

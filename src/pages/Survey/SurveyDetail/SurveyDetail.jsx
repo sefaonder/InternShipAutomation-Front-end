@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSurveyQuery } from 'src/store/services/survey/surveyApiSlice';
 import moment from 'moment';
 import { dataSingle } from '../SurveyComponents/SurveyQs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setSurvey } from 'src/store/services/survey/surveySlice';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import DownloadButton from 'src/components/inputs/DownloadButton';
@@ -14,6 +14,7 @@ import PdfSurvey from 'src/PDF/survey/PdfSurvey';
 const SurveyDetail = () => {
   const { surveyId } = useParams();
   const { data, isLoading, isSuccess, isError, error } = useGetSurveyQuery(surveyId);
+
   const [mixedSingleQuestions, setMixedSingleQuestions] = useState();
   const [mixedMultiQuestions, setMixedMultiQuestions] = useState();
   const [mixedIntermQuestions, setIntermMultiQuestions] = useState();
@@ -24,17 +25,16 @@ const SurveyDetail = () => {
   let mixedInterm;
 
   useEffect(() => {
-    if (data) {
-      console.log('---', data);
-      mixedSingle = data?.answers.slice(0, 27).map((eleman1, index) => ({
+    if (data?.data) {
+      mixedSingle = data?.data.answers?.slice(0, 27).map((eleman1, index) => ({
         answer: eleman1,
         question: dataSingle[index]?.question,
       }));
-      mixedMulti = data?.answers.slice(27, 31).map((eleman1, index) => ({
+      mixedMulti = data?.data.answers?.slice(27, 31).map((eleman1, index) => ({
         answer: eleman1,
         question: dataSingle[index]?.question,
       }));
-      mixedInterm = data?.answers.slice(31).map((eleman1, index) => ({
+      mixedInterm = data?.data.answers?.slice(31).map((eleman1, index) => ({
         answer: eleman1,
         question: dataSingle[index]?.question,
       }));
@@ -44,7 +44,7 @@ const SurveyDetail = () => {
       dispatch(setSurvey(data));
     }
   }, [isSuccess]);
-  console.log(data);
+
   return (
     <div>
       <Paper
@@ -78,7 +78,10 @@ const SurveyDetail = () => {
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
           <Box className="flex flex-col gap-3">
-            <Typography className="font-extrabold flex justify-center text-2xl items-center">
+            <Typography
+              style={{ fontFamily: 'Times New Roman' }}
+              className="font-extrabold flex justify-center text-2xl items-center"
+            >
               STAJ DEĞERLENDİRME ANKET FORMU
             </Typography>
             <Typography className="my-2">
@@ -94,21 +97,21 @@ const SurveyDetail = () => {
           <Box className=" w-full gap-2 flex flex-col ">
             <Box className="flex items-center justify-between">
               <Typography className="font-extrabold">Staj Yapılan Firma Adı: </Typography>
-              <Typography> {data?.company_name} </Typography>
+              <Typography> {data?.data.company_name} </Typography>
             </Box>
 
             <Box className="flex items-center  justify-between">
               <Typography className="font-extrabold">Staj Yapılan Firma Adresi:</Typography>
-              <Typography>{data?.company_address}</Typography>
+              <Typography>{data?.data.company_address}</Typography>
             </Box>
 
             <Box className="flex items-center  justify-between">
               <Typography className="font-extrabold">Öğretim Türü:</Typography>
-              <Typography>{data?.teach_type}</Typography>
+              <Typography>{data?.data.teach_type}</Typography>
             </Box>
             <Box className="flex items-center  justify-between">
               <Typography className="font-extrabold">GANO:</Typography>
-              <Typography>{data?.gano}</Typography>
+              <Typography>{data?.data.gano}</Typography>
             </Box>
           </Box>
 
@@ -162,7 +165,7 @@ const SurveyDetail = () => {
             </Box>
             <Box className="flex flex-col gap-2">
               <Typography variant="h5">Kaydı oluşturan kişi</Typography>
-              <Typography>{data?.createdBy.name + ' ' + data?.createdBy.last_name}</Typography>
+              <Typography>{data?.createdBy?.name + ' ' + data?.createdBy?.last_name}</Typography>
             </Box>
 
             <Box className="flex flex-col gap-2">

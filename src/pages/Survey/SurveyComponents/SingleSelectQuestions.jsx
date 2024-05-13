@@ -18,7 +18,7 @@ const SingleSelectQuestions = ({ selectedAnswers, setSelectedAnswers }) => {
         questions?.map((data, index) => {
           return (
             <Box className="sm:py-4">
-              <h2>
+              <h2 className="font-bold">
                 {' '}
                 {index + 1}: {data.question}
               </h2>
@@ -31,11 +31,11 @@ const SingleSelectQuestions = ({ selectedAnswers, setSelectedAnswers }) => {
                       onClick={() => handleClick(answer, index)}
                       className={
                         isSelected
-                          ? 'bg-emerald-600 text-left text-white py-0.5 px-4 rounded-md'
-                          : 'text-left py-0.5 px-4 rounded-md'
+                          ? 'bg-emerald-500 text-left text-white cursor-pointer py-0.5 px-4 rounded-md m-1'
+                          : 'text-left py-0.5 px-4 rounded-md hover:bg-emerald-100 hover:cursor-pointer transition ease-in-out delay-150 m-1'
                       }
                     >
-                      {answer.text}
+                      <div>-{answer.text}</div>
                     </div>
                   );
                 })}

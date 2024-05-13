@@ -3,7 +3,7 @@ import { Document, Font, Image, Page, Text, View } from '@react-pdf/renderer';
 import PdfTable from '../pdfComponents/PdfTable';
 import PdfTableMultiOptions from '../pdfComponents/PdfTableMultiOptions';
 import PdfHeader from '../pdfComponents/PdfHeader';
-import turkish from '../pdfComponents/turkish2.ttf';
+import turkish from '../pdfComponents/turkish1.ttf';
 
 const PdfConfidentalReport = ({ data }) => {
   console.log(data);
@@ -18,7 +18,11 @@ const PdfConfidentalReport = ({ data }) => {
     { name: 'Adresi', value: data?.address },
   ];
   const internshipInfo = [
-    { name: 'Staja Başlama ve Bitiş Tarihleri', value: data?.start_date },
+    {
+      name: 'Staja Başlama ve Bitiş Tarihleri',
+      value: new Date(data?.start_date).toLocaleDateString('pt-PT'),
+      value2: new Date(data?.end_date).toLocaleDateString('pt-PT'),
+    },
     { name: 'Öğrencinin Devamsızlık Günleri ve Sayısı', value: data?.days_of_absence },
     { name: 'Staj Yapilan Departman', value: data?.department },
     { name: 'Staj Icerisinde Egitim Programi Uygulandı mı?', value: data?.is_edu_program ? 'Evet' : 'Hayır' },
@@ -31,7 +35,7 @@ const PdfConfidentalReport = ({ data }) => {
   ];
 
   const internEvuluation = {
-    titles: ['Başari Olculeri', 'Iyi', 'Orta', 'Iyi Degil'],
+    titles: ['Başari Ölçüleri', 'İyi', 'Orta', 'İyi Değil'],
     data: [
       { name: 'Calisma Dikkat ve Sorumluluk', value: data?.intern_evaluation?.responsibility },
       { name: 'İsi Yapmadaki Basarisi', value: data?.intern_evaluation?.success },
@@ -66,7 +70,14 @@ const PdfConfidentalReport = ({ data }) => {
 
             <Text style={styles.subTitle}> Degerlendirmeyi Yapan Yetkilinin (Muhendis):</Text>
 
-            <PdfTable data={authInfo} />
+            <View style={styles.authContainer}>
+              <PdfTable data={authInfo} />
+              <View style={styles.sign}>
+                <Text>Onay</Text>
+                <Text>Mühür Kaşe</Text>
+                <Text>Kurum Yetkilisi</Text>
+              </View>
+            </View>
           </View>
           <View style={styles.footer}>
             <Text style={{ fontSize: '12px' }}>
@@ -105,6 +116,20 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+  },
+  sign: {
+    width: '200px',
+    border: '1px solid black',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    fontSize: '10px',
+    fontWeight: '200',
+  },
+  authContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
   },
 };
 

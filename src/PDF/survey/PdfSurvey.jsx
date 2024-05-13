@@ -33,7 +33,7 @@ const PdfSurvey = ({ data }) => {
               (Öğrenci tarafından staj sonunda doldurulacak ve staj defteri ile beraber teslim edilecektir.)
             </Text>
             <View style={styles.description}>
-              <Text>Sevgili Öğrenciler,</Text>
+              <Text style={{ textColor: 'black', fontWeight: 600 }}>Sevgili Öğrenciler,</Text>
               <Text>
                 Bu anketin amacı eğitimin niteliğini sürekli ve sistemli bir biçimde geliştirmek için görüşlerinizden
                 yararlanmaktır. Yaptığınız stajı aşağıdaki ölçütlere göre değerlendirmeniz istenmektedir.

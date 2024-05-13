@@ -7,13 +7,13 @@ import StudentInfo from './StudentInfo';
 import Company from './Company';
 import WorkDays from './WorkDays';
 import Signs from './Signs';
-import turkish from '../pdfComponents/turkish2.ttf';
+import turkish from '../pdfComponents/turkish1.ttf';
 
 const PdfInternform = ({ data }) => {
   console.log(data);
 
   Font.register({ family: 'Turkish', src: turkish });
-
+  console.log(data);
   return (
     <Document>
       <Page style={{ fontFamily: 'Turkish' }} size="A4"></Page>
@@ -21,11 +21,17 @@ const PdfInternform = ({ data }) => {
         <Header></Header>
         <Description></Description>
         <View style={styles.internOption}>
-          <Text>Yapmak İstediğiniz Uygulamalı Eğitim Seçeneği</Text>
+          <Text style={{ border: '1px solid black', width: '100%', padding: '2px' }}>
+            Yapmak İstediğiniz Uygulamalı Eğitim Seçeneği
+          </Text>
           <View style={styles.options}>
-            {['Zorunlu Staj', 'Dönem İçi Staj'].map((item) => (
-              <PdfCheckbox text={item} checked={true} />
-            ))}
+            {['Zorunlu Staj', 'İsteğe Bağlı Staj', 'Dönem İçi Staj', 'iş Yerindeki Meslek Eğitimi'].map(
+              (item, index) => (
+                <View style={styles.checkboxItem}>
+                  <PdfCheckbox text={item} checked={data.isInTerm & (item === 'Dönem İçi Staj')} />
+                </View>
+              ),
+            )}
           </View>
         </View>
         <View style={{ width: '80%', fontSize: '12px' }}>
@@ -77,16 +83,23 @@ const styles = {
     fontFamily: 'Turkish',
   },
   internOption: {
-    margin: '5px 0',
     width: '80%',
     fontSize: '10px',
+    marginTop: '5px',
   },
   options: {
-    padding: '5px',
-    width: '50%',
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  checkboxItem: {
+    display: 'flex',
+    border: '1px solid black',
+    width: 'auto',
+    padding: '5px 12px',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 };
 export default PdfInternform;
