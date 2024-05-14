@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSurveyQuery } from 'src/store/services/survey/surveyApiSlice';
 import moment from 'moment';
-import { dataSingle } from '../SurveyComponents/SurveyQs';
+import { dataInterm, dataMulti, dataSingle } from '../SurveyComponents/SurveyQs';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSurvey } from 'src/store/services/survey/surveySlice';
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -32,11 +32,11 @@ const SurveyDetail = () => {
       }));
       mixedMulti = data?.data.answers?.slice(27, 31).map((eleman1, index) => ({
         answer: eleman1,
-        question: dataSingle[index]?.question,
+        question: dataMulti[index]?.question,
       }));
       mixedInterm = data?.data.answers?.slice(31).map((eleman1, index) => ({
         answer: eleman1,
-        question: dataSingle[index]?.question,
+        question: dataInterm[index]?.question,
       }));
       setMixedMultiQuestions(mixedMulti);
       setMixedSingleQuestions(mixedSingle);
@@ -124,7 +124,7 @@ const SurveyDetail = () => {
                     {' '}
                     {index + 1}: {item.question}{' '}
                   </Typography>
-                  <Typography className=""> {item.answer} </Typography>
+                  <Typography className=""> -{item.answer} </Typography>
                 </Box>
               ))}
               <Typography className="font-extrabold text-red-400">Çok Cevaplı Soruları</Typography>
@@ -135,15 +135,16 @@ const SurveyDetail = () => {
                     {' '}
                     {index + 1}: {item.question}{' '}
                   </Typography>
-                  <Typography className="flex gap-2">
-                    {' '}
+                  <Box className="flex gap-2 flex-col">
                     {item?.answer?.map((item) => (
-                      <Typography className=""> {item} </Typography>
-                    ))}{' '}
-                  </Typography>
+                      <Typography className=""> -{item} </Typography>
+                    ))}
+                  </Box>
                 </Box>
               ))}
-              <Typography className="font-extrabold text-red-400">Dönem İçi Staj Yapanlar için Sorular</Typography>
+              {mixedIntermQuestions?.length > 0 && (
+                <Typography className="font-extrabold text-red-400">Dönem İçi Staj Yapanlar için Sorular</Typography>
+              )}
 
               {mixedIntermQuestions?.map((item, index) => (
                 <Box>
@@ -151,7 +152,7 @@ const SurveyDetail = () => {
                     {' '}
                     {index + 1}: {item.question}{' '}
                   </Typography>
-                  <Typography className=""> {item.answer} </Typography>
+                  <Typography className=""> -{item.answer} </Typography>
                 </Box>
               ))}
             </Box>

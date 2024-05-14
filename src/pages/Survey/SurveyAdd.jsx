@@ -16,7 +16,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
   const [selectedAnswersSingle, setSelectedAnswersSingle] = useState([]);
   const [selectedAnswersMulti, setSelectedAnswersMulti] = useState([]);
   const [selectedAnswersInterm, setSelectedAnswersInterm] = useState([]);
-
+  const [arrayCheck, setArrayCheck] = useState(31);
   const [createSurvey, { isLoading }] = useCreateNewSurveyMutation();
   const [updateSurvey, { isLoadingUpdate }] = useUpdateSurveyMutation();
 
@@ -54,8 +54,16 @@ const SurveyAdd = ({ survey, surveyId }) => {
     company_address: yup.string().required('Şirket Adresi Zorunlu'),
     teach_type: yup.string().required('Öğrenim Türü Zorunlu'),
     gano: yup.string().required('Gano Bilgisi Zorunlu'),
-    answers: yup.array().required('Anket Soruları Zorunlu').min(31, 'Bütün Sorular Cevaplanmalı'),
     date: yup.date().required('Tarih alanı zorunludur'),
+    answers: yup.array().test('hasValidElements', 'Dizi Elemanları Geçerli Değil', function (value) {
+      if (!Array.isArray(value)) return false;
+      if (value.length < arrayCheck) return false;
+      const arrayElements = value.slice(27, 31);
+      const invalidLength = arrayElements.some((item) => !Array.isArray(item) || item.length < 1);
+      if (invalidLength) return false;
+      const nonArrayElements = value.filter((item) => item == undefined);
+      return nonArrayElements.length > 0 ? false : true;
+    }),
   });
   const formik = useFormik({
     initialValues: {
@@ -73,6 +81,9 @@ const SurveyAdd = ({ survey, surveyId }) => {
       try {
         const payload = { ...values, interviewId: values.interview.id };
         if (survey) {
+          if (!(values.intern_type === 'Dönem içi')) {
+            payload.answers = payload.answers.slice(0, 31);
+          }
           await updateSurvey({ payload: payload, surveyId: surveyId }).unwrap();
         } else {
           await createSurvey(payload).unwrap();
@@ -93,6 +104,11 @@ const SurveyAdd = ({ survey, surveyId }) => {
 
   useEffect(() => {
     formik.values.answers = [...selectedAnswersSingle, ...selectedAnswersMulti.slice(1), ...selectedAnswersInterm];
+    if (formik?.values.intern_type === 'Dönem içi') {
+      setArrayCheck(40);
+    } else {
+      setArrayCheck(31);
+    }
   }, [formik]);
 
   const teach_type_data = { name: 'Öğretim Türü', type: 'teach_type', data: ['1. Öğretim', '2. Öğretim'] };
