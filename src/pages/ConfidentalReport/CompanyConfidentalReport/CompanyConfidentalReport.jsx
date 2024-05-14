@@ -23,7 +23,7 @@ function CompanyConfidentalReport() {
   const navigate = useNavigate();
 
   const { token } = useParams(); // URL'den token parametresini alıyoruz
-  const { data, isLoading, isSuccess, isError, error } = useGetCompanyConfidentalReportQuery(token, {
+  const { data, isLoading, isSuccess, isError, error, refetch } = useGetCompanyConfidentalReportQuery(token, {
     skip: !Boolean(token),
   });
 
@@ -176,6 +176,7 @@ function CompanyConfidentalReport() {
         });
 
         enqueueSnackbar(response.data.message, { variant: 'success' });
+        refetch();
       }
     } catch (error) {
       enqueueSnackbar(error, { variant: 'error' });
