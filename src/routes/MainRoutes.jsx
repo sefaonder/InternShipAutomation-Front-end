@@ -42,8 +42,6 @@ const UserUpdate = Loadable(lazy(() => import('src/pages/User/UserAdd')));
 
 const InterShipPanel = Loadable(lazy(() => import('src/pages/InternshipPanel/InternShipPanel')));
 
-// ==============================|| MAIN ROUTING ||============================== //
-
 const MainRoutes = {
   path: '/',
   element: <MainLayout />,
@@ -129,7 +127,6 @@ const MainRoutes = {
       children: [{ path: '/internship-panel/', element: <InterShipPanel /> }],
     },
   ],
-  // errorElement: <p>Hello something bad is happended</p>,
 };
 
 export default MainRoutes;

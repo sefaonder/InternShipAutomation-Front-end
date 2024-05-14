@@ -12,6 +12,10 @@ const PasswordChange = Loadable(lazy(() => import('src/pages/Auth/PasswordChange
 const CompanyConfidentalReport = Loadable(
   lazy(() => import('src/pages/ConfidentalReport/CompanyConfidentalReport/CompanyConfidentalReport')),
 );
+
+const NotValidToken = Loadable(lazy(() => import('src/pages/Error/NotValidToken')));
+const ErrorPage = Loadable(lazy(() => import('src/pages/Error/ErrorPage')));
+
 const AuthRoutes = {
   path: '/',
   element: <MinimalLayout />,
@@ -36,6 +40,14 @@ const AuthRoutes = {
     {
       path: 'company/confidential-report/:token?',
       element: <CompanyConfidentalReport />,
+    },
+    {
+      path: 'notvalid',
+      element: <NotValidToken />,
+    },
+    {
+      path: '/*',
+      element: <ErrorPage />,
     },
   ],
 };
