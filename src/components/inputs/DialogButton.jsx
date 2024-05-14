@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useState } from 'react';
 
-const DialogButton = ({ message, button, type, className, disabled }) => {
+const DialogButton = ({ message, button, type, className, disabled, onSubmit }) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -11,8 +11,9 @@ const DialogButton = ({ message, button, type, className, disabled }) => {
     setOpen(false);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setOpen(false);
+    onSubmit();
   };
 
   return (

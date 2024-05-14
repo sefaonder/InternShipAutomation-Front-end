@@ -37,8 +37,8 @@ export const ConfidentalReportSlice = apiSlice.injectEndpoints({
     }),
 
     createCompanyConfidentalReport: builder.mutation({
-      query: ({ payload, confidentalReportId }) => ({
-        url: `/company/confidential/create/${confidentalReportId}`,
+      query: (payload) => ({
+        url: `/company/confidential/create`,
         method: 'PUT',
         body: payload,
       }),

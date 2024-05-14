@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Collapse, Container, FormLabel, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Collapse, Container, FormLabel, TextField, Tooltip, Typography } from '@mui/material';
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 
 import CustomDateInput from 'src/components/inputs/CustomDateInput';
@@ -17,6 +17,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import DialogButton from 'src/components/inputs/DialogButton';
+import { enqueueSnackbar } from 'notistack';
 
 function CompanyConfidentalReport() {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ function CompanyConfidentalReport() {
   const { data, isLoading, isSuccess, isError, error } = useGetCompanyConfidentalReportQuery(token, {
     skip: !Boolean(token),
   });
+
+  const isAlreadySubmitted = data?.data?.interview?.confidentalReport?.id;
 
   const [createCompanyConfidentalReport, { isLoading: isLoadingCreate }] = useCreateCompanyConfidentalReportMutation();
 
@@ -46,12 +49,34 @@ function CompanyConfidentalReport() {
 
   useEffect(() => {
     if (data?.data) {
-      formik.setFieldValue('company_name', data.data.form.company_info.name, false);
-      formik.setFieldValue('address', data.data.form.company_info.address, false);
+      if (isAlreadySubmitted) {
+        const confidentalInfo = data?.data?.interview?.confidentalReport;
+        for (const key in confidentalInfo.intern_evaluation) {
+          formik.setFieldValue(`${key}`, confidentalInfo.intern_evaluation[key], false);
+        }
+        formik.setFieldValue('company_name', confidentalInfo.company_name, false);
+        formik.setFieldValue('address', confidentalInfo.address, false);
+        formik.setFieldValue('start_date', confidentalInfo.start_date, false);
+        formik.setFieldValue('end_date', confidentalInfo.end_date, false);
+        formik.setFieldValue('days_of_absence', confidentalInfo.days_of_absence, false);
+        formik.setFieldValue('department', confidentalInfo.department, false);
+        formik.setFieldValue('is_edu_program', confidentalInfo.is_edu_program ? 'Evet' : 'Hayır', false);
+        formik.setFieldValue('auth_name', confidentalInfo.auth_name, false);
+        formik.setFieldValue('auth_position', confidentalInfo.auth_position, false);
 
-      formik.setFieldValue('start_date', data.data.form.start_date, false);
-      formik.setFieldValue('end_date', data.data.form.end_date, false);
-      formik.setFieldValue('interview', { id: data.data.interview.id }, false);
+        formik.setFieldValue('auth_tc_number', confidentalInfo.auth_tc_number, false);
+        formik.setFieldValue('auth_title', confidentalInfo.auth_title, false);
+        formik.setFieldValue('reg_number', confidentalInfo.reg_number, false);
+
+        formik.setFieldValue('desc', confidentalInfo.desc, false);
+        formik.setFieldValue('interview', { id: data.data.interview.id }, false);
+      } else {
+        formik.setFieldValue('company_name', data.data.form.company_info.name, false);
+        formik.setFieldValue('address', data.data.form.company_info.address, false);
+        formik.setFieldValue('start_date', data.data.form.start_date, false);
+        formik.setFieldValue('end_date', data.data.form.end_date, false);
+        formik.setFieldValue('interview', { id: data.data.interview.id }, false);
+      }
     }
   }, [data, isSuccess]);
 
@@ -121,7 +146,39 @@ function CompanyConfidentalReport() {
   const handleSubmit = async (values) => {
     try {
       console.log('values', values);
+      const {
+        responsibility,
+        success,
+        interest,
+        behaviour_to_auths,
+        behaviour_to_coworkers,
+        work_safety,
+        competence,
+        score,
+        ...restValues
+      } = values;
+
+      if (token) {
+        const response = await createCompanyConfidentalReport({
+          ...restValues,
+          confidentalReportToken: token,
+          is_edu_program: restValues.is_edu_program === 'Evet' ? true : false,
+          intern_evaluation: {
+            responsibility,
+            success,
+            interest,
+            behaviour_to_auths,
+            behaviour_to_coworkers,
+            work_safety,
+            competence,
+            score,
+          },
+        });
+
+        enqueueSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
+      enqueueSnackbar(error, { variant: 'error' });
       console.log(error);
     }
   };
@@ -142,7 +199,17 @@ function CompanyConfidentalReport() {
       className="p-8 flex items-center gap-6 justify-center flex-col lg:w-full mt-auto"
     >
       {' '}
-      <Typography className="my-2 text-blue-700 text-3xl">Staj Sicil Belgesi: </Typography>
+      <Typography className="my-2 text-blue-700 text-3xl">Staj Sicil Belgesi</Typography>
+      {isAlreadySubmitted && (
+        <Alert severity="warning" className="my-4 flex items-center">
+          <Typography variant="h5">
+            Dikkat Bu form daha önce doldurulmuştur Herhangi bir düzenleme yapılamaz.Sadece bilgi amaçlıdır.
+          </Typography>
+          <Typography variant="h6">
+            Bir yanlışlık olduğunu düşünüyorsanız lütfen staj komisyonu ile iletişime geçiniz staj@otomasyon.com
+          </Typography>
+        </Alert>
+      )}
       <Container className="lg:w-1/2 sm:w-full flex flex-col">
         <CustomAutocomplete
           name="interview"
@@ -157,6 +224,7 @@ function CompanyConfidentalReport() {
           error={Boolean(formik.errors?.interview)}
           helperText={formik.errors.interview?.id}
         />
+
         <Collapse in={data?.data?.form}>
           {data?.data?.form && (
             <Box>
@@ -384,15 +452,19 @@ function CompanyConfidentalReport() {
         <DialogButton
           className="px-4 flex"
           type="submit"
+          onSubmit={formik.submitForm}
           color="success"
           variant="outlined"
-          disabled={!formik.isValid}
+          disabled={!formik.isValid || isAlreadySubmitted}
           button="Gönder"
           message={'Bu form bir kez oluşturulduktan sonra değiştirilemez'}
         />
 
-        {data && (
-          <PDFDownloadLink fileName="FORM" document={<PdfConfidentalReport data={data} />}>
+        {data?.data && (
+          <PDFDownloadLink
+            fileName="FORM"
+            document={<PdfConfidentalReport data={data?.data?.interview?.confidentalReport} />}
+          >
             {({ loading }) =>
               loading ? (
                 <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
