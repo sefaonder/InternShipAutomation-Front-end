@@ -3,7 +3,7 @@ import { Document, Font, Image, Page, Text, View } from '@react-pdf/renderer';
 import PdfTable from '../pdfComponents/PdfTable';
 import PdfTableMultiOptions from '../pdfComponents/PdfTableMultiOptions';
 import PdfHeader from '../pdfComponents/PdfHeader';
-import turkish from '../pdfComponents/turkish1.ttf';
+import turkish from '../pdfComponents/turkish2.ttf';
 
 const PdfConfidentalReport = ({ data }) => {
   console.log(data);
