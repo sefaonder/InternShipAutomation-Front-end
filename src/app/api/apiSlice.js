@@ -5,7 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 import parseJWT from '../handlers/jwtHandler';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:3001',
+  baseUrl: 'http://localhost:8080',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
