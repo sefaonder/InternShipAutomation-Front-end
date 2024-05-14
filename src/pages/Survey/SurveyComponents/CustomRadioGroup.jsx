@@ -3,14 +3,14 @@ import React from 'react';
 
 const CustomRadioGroup = ({ data, formik, error, helperText }) => {
   return (
-    <FormControl error={error} className="w-full flex flex-row items-center">
+    <FormControl error={error} className="w-full flex lg:flex-row items-center">
       <FormLabel
-        className="font-extrabold w-1/2 flex flex-row !text-[rgba(0,0,0,0.6)]"
+        className="font-extrabold w-full flex flex-row !text-[rgba(0,0,0,0.6)]"
         id="demo-radio-buttons-group-label"
       >
         {data.name}
       </FormLabel>
-      <Box className="w-1/2">
+      <Box className="w-full">
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           name="radio-buttons-group"

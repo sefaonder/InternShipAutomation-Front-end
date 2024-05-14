@@ -45,6 +45,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Öğrenci',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value?.name}</p>,
     },
     {
@@ -53,6 +54,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Form Yetkilisi',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value?.follow_up.name}</p>,
     },
     {
@@ -61,6 +63,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Mülakat Yetkilisi',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value?.comission?.name}</p>,
     },
     {
@@ -69,6 +72,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Staj Durumu',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{InternStatusEnum[value].label}</p>,
     },
   ];
@@ -95,6 +99,7 @@ function InternStatusList() {
       <EnhancedTable
         columns={headers}
         data={currentData?.data || []}
+        dataLength={currentData?.dataLength}
         isLoading={isFetching || isLoading}
         isSuccess={isSuccess}
         filter={filter}

@@ -1,4 +1,5 @@
 import { Paper } from '@mui/material';
+import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -19,7 +20,6 @@ function InterviewList() {
   const [filter, setFilter] = useState({});
   const { data, isLoading, isSuccess, isError, error, refetch, currentData, isFetching } =
     useGetInterviewsQuery(filter);
-  console.log('data', data);
 
   const handleFilterChange = (values) => {
     const filterPayload = {
@@ -50,7 +50,8 @@ function InterviewList() {
       disablePadding: true,
       label: 'Öğrenci',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value.name}</p>,
+      notSortable: true,
+      cellComponent: (value) => <p className="">{value?.name}</p>,
     },
     {
       id: 'comission',
@@ -58,7 +59,8 @@ function InterviewList() {
       disablePadding: true,
       label: 'Mülakat Yetkilisi',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value.name}</p>,
+      notSortable: true,
+      cellComponent: (value) => <p className="">{value?.name}</p>,
     },
     {
       id: 'date',
@@ -66,7 +68,9 @@ function InterviewList() {
       disablePadding: true,
       label: 'Mülakat Tarihi',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{moment(value?.date).format('DD.MM.YYYY')}</p>,
+      cellComponent: (value) => {
+        return <p className="">{dayjs(value).format('DD.MM.YYYY - HH:mm')}</p>;
+      },
     },
     {
       id: 'internStatus',
@@ -74,7 +78,8 @@ function InterviewList() {
       disablePadding: true,
       label: 'Staj Durumu',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{InternStatusEnum[value.status].label}</p>,
+      notSortable: true,
+      cellComponent: (value) => <p className="">{InternStatusEnum[value?.status]?.label}</p>,
     },
   ];
 
@@ -100,6 +105,7 @@ function InterviewList() {
       <EnhancedTable
         columns={headers}
         data={currentData?.data || []}
+        dataLength={currentData?.dataLength}
         isLoading={isFetching || isLoading}
         isSuccess={isSuccess}
         filter={filter}

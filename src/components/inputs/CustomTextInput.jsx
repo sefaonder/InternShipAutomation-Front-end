@@ -17,10 +17,12 @@ function CustomTextInput({
   variant = 'outlined',
   multiline,
   rows,
+  required,
 }) {
   return (
     <TextField
       id={id}
+      required={required}
       name={name}
       sx={style}
       value={value || ''}

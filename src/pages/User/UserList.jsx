@@ -105,6 +105,7 @@ function UserList() {
           isLoading={isFetching || isLoading}
           isSuccess={isSuccess}
           filter={filter}
+          dataLength={currentData?.dataLength}
           setFilter={(values) => setFilter({ ...filter, ...values })}
         />
 

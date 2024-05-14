@@ -68,7 +68,7 @@ const CustomAutocomplete = ({
       getOptionDisabled={(option) => option.disabled}
       freeSolo
       renderOption={(props, option) => (
-        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        <List key={option.id} sx={{ width: '100%', bgcolor: 'background.paper' }}>
           <ListItemButton key={option.id} {...props} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
             <ListItemText
               primary={option?.label}

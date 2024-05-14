@@ -5,7 +5,7 @@ const Description = () => {
   return (
     <View style={styles.container}>
       <View style={styles.desc}>
-        <Text style={styles.text}>İlgili Makama</Text>
+        <Text style={styles.text}>İlgili Makama,</Text>
         <Text style={styles.text}>
           Bilgisayar Mühendisliği Bölümü öğrencilerinin öğrenim süresi sonuna kadar kurum ve/veya kuruluşlarda zorunlu
           ya da isteğe bağlı staj ve işyerinde mesleki eğitim olmak üzere farklı şekillerde Uygulamalı Eğitim yapmaları
@@ -40,15 +40,15 @@ const styles = {
     justifyContent: 'center',
   },
   text: {
-    fontSize: '10px',
+    fontSize: '9px',
   },
 
   desc: {
     display: 'flex',
-    width: '70%',
+    width: '80%',
   },
   textBox: {
-    fontSize: '10px',
+    fontSize: '12px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

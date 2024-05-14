@@ -1,4 +1,5 @@
-import { Box, CircularProgress, Paper, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, CircularProgress, Paper, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +8,7 @@ import DeleteButton from 'src/components/inputs/DeleteButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import usePermission from 'src/hooks/usePermission';
-import { useGetUserDetailQuery } from 'src/store/services/user/userApiSlice';
+import { useDeleteUserMutation, useGetUserDetailQuery } from 'src/store/services/user/userApiSlice';
 import { setUserData } from 'src/store/services/user/userSlice';
 
 function UserDetail() {
@@ -18,15 +19,15 @@ function UserDetail() {
   const location = useLocation();
 
   const { data, isLoading, isSuccess, isError, error, refetch } = useGetUserDetailQuery(userId);
-  //   const [
-  //     deleteUser,
-  //     {
-  //       isLoading: isLoadingDeleteUser,
-  //       isSuccess: isSuccesDeleteForm,
-  //       isError: isErrorDeleteForm,
-  //       error: errorDeleteForm,
-  //     },
-  //   ] = useDeleteUse();
+  const [
+    deleteUser,
+    {
+      isLoading: isLoadingDeleteUser,
+      isSuccess: isSuccesDeleteForm,
+      isError: isErrorDeleteForm,
+      error: errorDeleteForm,
+    },
+  ] = useDeleteUserMutation();
 
   const userAuth = useSelector((state) => state.auth);
   const checkPermission = usePermission();
@@ -54,9 +55,9 @@ function UserDetail() {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteForm(internFormId).unwrap();
+      const response = await deleteUser(userId).unwrap();
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
     }
     navigate('/user');
   };
@@ -87,8 +88,8 @@ function UserDetail() {
             <DeleteButton
               onClick={handleDelete}
               variant="outlined"
-              //   loading={isLoadingDeleteForm}
-              //   disabled={isLoadingDeleteForm}
+              loading={isLoadingDeleteUser}
+              disabled={isLoadingDeleteUser}
             />
           )}
           <UpdateButton
@@ -110,8 +111,17 @@ function UserDetail() {
               </Box>
             </Box>
           </Paper>
-          <Box className="flex flex-1 flex-col">
+          <Box className="flex flex-1 flex-col gap-4">
             <RecordTraceCard record={userData} />
+            {userData.user_type === UserRolesEnum.STUDENT.id && userData.isGraduate && (
+              <Paper sx={{ padding: '0.5rem', marginBottom: '1rem' }}>
+                <Alert variant="outlined" severity="success" color="success">
+                  <Typography>
+                    Bu Öğrenci <b>Mezundur</b> Öğrenci Staj işlemlerini tamamlamıştır.
+                  </Typography>
+                </Alert>
+              </Paper>
+            )}
           </Box>
         </Box>
       </div>

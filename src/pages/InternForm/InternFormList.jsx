@@ -46,6 +46,7 @@ function InternFormList() {
       disablePadding: true,
       label: 'Öğrenci',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value.name}</p>,
     },
     {
@@ -54,6 +55,7 @@ function InternFormList() {
       disablePadding: true,
       label: 'Yetkili',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value.name}</p>,
     },
     {
@@ -103,6 +105,7 @@ function InternFormList() {
       <EnhancedTable
         columns={headers}
         data={currentData?.data || []}
+        dataLength={currentData?.dataLength}
         isLoading={isFetching || isLoading}
         isSuccess={isSuccess}
         filter={filter}

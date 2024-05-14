@@ -7,8 +7,8 @@ import { useGetProfileQuery } from 'src/store/services/profile/ProfileApiSlice';
 import { setProfile } from 'src/store/services/profile/ProfileSlice';
 function Dashboard() {
   const { data, isLoading, isSuccess, isError, error } = useGetProfileQuery();
-  const res = useSelector((state) => state.survey);
-  console.log('+++', res);
+  const internform = useSelector((state) => state.internForm);
+  console.log(internform);
 
   const dispatch = useDispatch();
 

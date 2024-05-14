@@ -19,20 +19,23 @@ const Company = ({ data }) => {
         <PdfTable data={company} />
         <View style={styles.auth}>
           <View style={styles.text}>
-            <Text>Adı</Text>
-            <Text>.................</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: '10px' }}>İŞVEREN VEYA İŞVEREN YETKİLİNİN:</Text>
           </View>
           <View style={styles.text}>
-            <Text>Görevi ve Ünvanı</Text>
-            <Text>.................</Text>
+            <Text>Adı:</Text>
+            <Text>...........................</Text>
           </View>
           <View style={styles.text}>
-            <Text>Tarih</Text>
-            <Text>.................</Text>
+            <Text>Görevi ve Ünvanı:</Text>
+            <Text>...........................</Text>
           </View>
           <View style={styles.text}>
-            <Text>İmza / Kaşe</Text>
-            <Text>.................</Text>
+            <Text>Tarih:</Text>
+            <Text>...........................</Text>
+          </View>
+          <View style={styles.text}>
+            <Text>İmza / Kaşe:</Text>
+            <Text>...........................</Text>
           </View>
         </View>
       </View>

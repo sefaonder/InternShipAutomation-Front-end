@@ -57,17 +57,17 @@ const PdfTableMultiOptions = ({ data }) => {
           </View>
           <View style={styles.otherCols}>
             <Text style={styles.tableCell}>
-              {item?.value?.toLowerCase() === 'iyi' && <Image style={styles.image} src={icon}></Image>}
-            </Text>{' '}
+              {item?.value === 'İyi' && <Image style={styles.image} src={icon}></Image>}
+            </Text>
           </View>
           <View style={styles.otherCols}>
             <Text style={styles.tableCell}>
-              {item?.value?.toLowerCase() === 'orta' && <Image style={styles.image} src={icon}></Image>}
-            </Text>{' '}
+              {item?.value === 'Orta' && <Image style={styles.image} src={icon}></Image>}
+            </Text>
           </View>
           <View style={styles.otherCols}>
             <Text style={styles.tableCell}>
-              {item?.value?.toLowerCase() === 'iyi degil' && <Image style={styles.image} src={icon}></Image>}
+              {item?.value === 'İyi Değil' && <Image style={styles.image} src={icon}></Image>}
             </Text>
           </View>
         </View>

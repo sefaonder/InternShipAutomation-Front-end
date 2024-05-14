@@ -1,4 +1,34 @@
 {
-    "welcome": "Hoş geldiniz",
-    "hello": "Merhaba"
-}
+    "ERRORS":{},
+    "PAGES":{
+     "AUTH":{},
+     "CONFIDENTAL_REPORT":{
+       "TITLE":"Gizli Sicil Fişi"
+     },
+     "DASHBOARD":{
+       "TITLE":"Ana Sayfa"
+     },
+     "INTERN_FORM":{
+        "TITLE":"Staj Formu"
+     },
+     "INTERNSHIP_PANEL":{
+        "TITLE":"Staj Paneli"
+     },
+     "INTERN_STATUS":{
+        "TITLE":"Staj Durumu"
+     },
+     "INTERVIEW":{
+        "TITLE":"Mülakat"
+     },
+     "PROFILE":{
+        "TITLE":"Profil"
+     },
+     "SURVEY":{
+        "TITLE":"Öğrenci Değerlendirme Anketi"
+     },
+     "USER":{
+        "TITLE":"Kullanıcı"
+     }
+    },
+    "COMMON":{}
+ }

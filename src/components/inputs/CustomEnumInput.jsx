@@ -1,18 +1,21 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import React from 'react';
 
-function CustomEnumInput({ id, value, label, onChange, enumObject, name, sx, required }) {
+function CustomEnumInput({ id, value, label, onChange, enumObject, name, sx, required, error, helperText }) {
   console.log('inside value', value);
   return (
     <FormControl sx={sx}>
-      <InputLabel id={`select-${id}`}>{label}</InputLabel>
+      <InputLabel required={required} id={`select-${id}`}>
+        {label}
+      </InputLabel>
       <Select
         labelId={`select-${id}`}
         id={id}
         value={value}
         label={label}
+        error={error}
+        input={<OutlinedInput label={label} error={error} />}
         onChange={onChange}
-        required={required}
         name={name}
         defaultValue=""
       >
@@ -25,6 +28,7 @@ function CustomEnumInput({ id, value, label, onChange, enumObject, name, sx, req
           </MenuItem>
         ))}
       </Select>
+      <FormHelperText error={error}>{error && helperText}</FormHelperText>
     </FormControl>
   );
 }

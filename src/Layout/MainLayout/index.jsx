@@ -48,7 +48,7 @@ const MainLayout = () => {
       <Drawer open={open} handleDrawerToggle={handleDrawerToggle} navigations={NavBarItems} />
       <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar />
-        <CustomMUIBreadcrumbs />
+        {/* <CustomMUIBreadcrumbs /> */}
         <Outlet />
       </Box>
     </Box>

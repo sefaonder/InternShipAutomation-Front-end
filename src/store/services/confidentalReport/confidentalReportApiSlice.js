@@ -24,8 +24,34 @@ export const ConfidentalReportSlice = apiSlice.injectEndpoints({
         body: payload,
       }),
     }),
+
+    deleteConfidentalReport: builder.mutation({
+      query: (confidentalReportId) => ({
+        url: `/api/confidental/delete/${confidentalReportId}`,
+        method: 'DELETE',
+      }),
+    }),
+
+    getCompanyConfidentalReport: builder.query({
+      query: (confidentalReportToken) => ({ url: `/company/confidential/get/${confidentalReportToken}` }),
+    }),
+
+    createCompanyConfidentalReport: builder.mutation({
+      query: ({ payload, confidentalReportId }) => ({
+        url: `/company/confidential/create/${confidentalReportId}`,
+        method: 'PUT',
+        body: payload,
+      }),
+    }),
   }),
 });
 export const { useGetConfidentalReportsQuery, useGetConfidentalReportQuery } = ConfidentalReportSlice;
 
-export const { useCreateNewConfidentalReportMutation, useUpdateConfidentalReportMutation } = ConfidentalReportSlice;
+export const {
+  useCreateNewConfidentalReportMutation,
+  useUpdateConfidentalReportMutation,
+  useDeleteConfidentalReportMutation,
+} = ConfidentalReportSlice;
+
+export const { useGetCompanyConfidentalReportQuery, useCreateCompanyConfidentalReportMutation } =
+  ConfidentalReportSlice;

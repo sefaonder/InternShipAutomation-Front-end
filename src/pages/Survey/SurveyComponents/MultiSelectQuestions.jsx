@@ -21,20 +21,20 @@ const MultiSelectQuestions = ({ responses, setResponses }) => {
     <Container className="w-full">
       {data.map((question) => (
         <Box className="sm:py-4" key={question.id}>
-          <p>
+          <h2 className="font-bold">
             {question.id}: {question.question}
-          </p>
+          </h2>
           <div className="flex justify-between flex-col lg:flex-row ">
             {question.answers.map((answer) => (
               <div
                 className={
                   responses[question.id]?.includes(answer.text)
-                    ? 'bg-emerald-600 text-left text-white py-0.5 px-4 rounded-md'
-                    : 'text-left py-0.5 px-4 rounded-md'
+                    ? 'bg-emerald-500 text-left text-white cursor-pointer py-0.5 px-4 rounded-md m-1'
+                    : 'text-left py-0.5 px-4 rounded-md hover:bg-emerald-100 hover:cursor-pointer transition ease-in-out delay-150 m-1'
                 }
                 onClick={() => handleResponseChange(question.id, answer.text)}
               >
-                {answer.text}
+                -{answer.text}
               </div>
             ))}
           </div>

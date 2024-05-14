@@ -24,8 +24,11 @@ export const SurveyApiSlice = apiSlice.injectEndpoints({
         body: payload,
       }),
     }),
+    getCompanyInfo: builder.query({
+      query: (interviewId) => ({ url: `/api/survey/getCompanyInfo/${interviewId}` }),
+    }),
   }),
 });
-export const { useGetSurveysQuery, useGetSurveyQuery } = SurveyApiSlice;
+export const { useGetSurveysQuery, useGetSurveyQuery, useGetCompanyInfoQuery } = SurveyApiSlice;
 
 export const { useCreateNewSurveyMutation, useUpdateSurveyMutation } = SurveyApiSlice;
