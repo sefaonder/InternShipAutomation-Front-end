@@ -7,13 +7,16 @@ import { useAddUserMutation, useUpdateUserMutation } from 'src/store/services/us
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import CustomEnumInput from 'src/components/inputs/CustomEnumInput';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomBooleanInput from 'src/components/inputs/CustomBooleanInput';
 import CustomDateInput from 'src/components/inputs/CustomDateInput';
 import dayjs from 'dayjs';
 
+import { clearUserData } from 'src/store/services/user/userSlice';
+
 function UserAdd() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [addUser, { isLoading }] = useAddUserMutation();
   const [updateUser, { isLoadingUpdate }] = useUpdateUserMutation();
@@ -28,7 +31,7 @@ function UserAdd() {
     }
 
     if (!userId) {
-      dispatch(clearInternFormData());
+      dispatch(clearUserData());
     }
   }, []);
 
@@ -42,6 +45,9 @@ function UserAdd() {
 
       formik.setFieldValue('schoolNumber', userData.school_number, false);
       formik.setFieldValue('tcNumber', userData.tc_number, false);
+
+      formik.setFieldValue('graduationDate', userData.graduationDate, false);
+      formik.setFieldValue('isGraduate', userData.isGraduate, false);
     }
   }, [userData]);
 
@@ -52,8 +58,6 @@ function UserAdd() {
     lastName: '',
     schoolNumber: '',
     tcNumber: '',
-    graduationDate: null,
-    isGraduate: false,
   };
 
   const validationSchema = yup.object({
@@ -62,10 +66,11 @@ function UserAdd() {
     email: yup.string().email().required('Lütfen geçerli üniversite mail hesabını girin'),
     userType: yup.string().required('Lütfen kullanıcının yetkisini girin'),
 
-    schoolNumber: yup.string().optional(''),
-    tcNumber: yup.string().optional(''),
+    schoolNumber: yup.string().optional('').nullable(),
+    tcNumber: yup.string().optional('').nullable(),
 
-    // graduationDate: yup.optional(''),
+    isGraduate: yup.boolean().optional('').nullable(),
+    graduationDate: yup.date().optional('').nullable(),
   });
 
   async function handleSubmit(values) {
@@ -98,6 +103,12 @@ function UserAdd() {
     validationSchema: validationSchema,
   });
 
+  useEffect(() => {
+    if (formik.values.schoolNumber && formik.values.userType === UserRolesEnum.STUDENT.id) {
+      formik.setFieldValue('email', formik.values.schoolNumber + '@ogr.uludag.edu.tr', false);
+    }
+  }, [formik.values.schoolNumber]);
+
   console.log('formik', formik.values);
 
   return (
@@ -124,6 +135,18 @@ function UserAdd() {
           onChange={(value) => formik.setFieldValue('lastName', value.target.value, true) && formik.setStatus(true)}
           error={Boolean(formik.errors.lastName)}
           helperText={formik.errors.lastName}
+        />
+
+        <CustomEnumInput
+          id="userType"
+          name="userType"
+          required
+          label={'Kullanıcının Yetkisi'}
+          value={formik.values.userType}
+          onChange={(value) => formik.setFieldValue('userType', value.target.value, true) && formik.setStatus(true)}
+          enumObject={UserRolesEnum}
+          error={Boolean(formik.errors.userType)}
+          helperText={formik.errors.userType}
         />
 
         <CustomTextInput
@@ -158,19 +181,7 @@ function UserAdd() {
           helperText={formik.errors.email}
         />
 
-        <CustomEnumInput
-          id="userType"
-          name="userType"
-          required
-          label={'Kullanıcının Yetkisi'}
-          value={formik.values.userType}
-          onChange={(value) => formik.setFieldValue('userType', value.target.value, true) && formik.setStatus(true)}
-          enumObject={UserRolesEnum}
-          error={Boolean(formik.errors.userType)}
-          helperText={formik.errors.userType}
-        />
-
-        {userData.id && (
+        {userData.id && formik.values.userType === UserRolesEnum.STUDENT.id && (
           <Box className="flex flex-row justify-evenly">
             <CustomBooleanInput
               name="isGraduate"
