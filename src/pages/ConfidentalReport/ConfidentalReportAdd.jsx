@@ -425,6 +425,15 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             Gönder
           </Button>
         </Container>
+        <Button
+          className="px-4 w-1/3 flex my-2"
+          type="submit"
+          color="success"
+          variant="outlined"
+          disabled={!formik.isValid}
+        >
+          Gönder
+        </Button>
       </form>
     </div>
   );

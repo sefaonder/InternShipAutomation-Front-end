@@ -7,7 +7,7 @@ import StudentInfo from './StudentInfo';
 import Company from './Company';
 import WorkDays from './WorkDays';
 import Signs from './Signs';
-import turkish from '../pdfComponents/turkish1.ttf';
+import turkish from '../pdfComponents/turkish2.ttf';
 
 const PdfInternform = ({ data }) => {
   console.log(data);

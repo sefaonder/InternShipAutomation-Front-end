@@ -17,15 +17,11 @@ import { Avatar, Typography } from '@mui/material';
 
 function Profile() {
   const profile = useSelector((state) => state.profile);
-  const [user, setUser] = useState();
   const [updateProfile, setUpdateProfile] = useState(false);
   const [update, { isLoading }] = useUpdateProfileMutation();
+  const { data, isLoading: isLoadingData, isSuccess } = useGetProfileQuery();
 
-  useEffect(() => {
-    setUser(JSON.parse(profile.user));
-    console.log(JSON.par);
-    console.log(profile.user);
-  }, [profile]);
+  console.log('data', data);
 
   useEffect(() => {
     formik.setValues({
@@ -42,8 +38,8 @@ function Profile() {
   const validationSchema = yup.object({
     name: yup.string().required('Name is required'),
     lastName: yup.string().required('Last Name is required'),
-    tcNumber: yup.string().required('TC is required').min(11, 'TC 11 karakterden oluşmalıdır.').max(11),
-    schoolNumber: yup.string().required('School Number is required'),
+    tcNumber: yup.string().optional('TC is required').min(11, 'TC 11 karakterden oluşmalıdır.').max(11),
+    schoolNumber: yup.string().optional('School Number is required'),
   });
   const formik = useFormik({
     initialValues: {
@@ -55,7 +51,9 @@ function Profile() {
     onSubmit: async (values) => {
       try {
         await update(values).unwrap();
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     },
     validationSchema: validationSchema,
   });

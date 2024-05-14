@@ -1,10 +1,16 @@
-import { Box, Button, CircularProgress, Container, Paper, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Paper, Tooltip, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
+import DeleteButton from 'src/components/inputs/DeleteButton';
+import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
-import { useGetInterviewDetailQuery } from 'src/store/services/interview/interviewApiSlice';
+import {
+  useDeleteInterviewMutation,
+  useGetInterviewDetailQuery,
+  useSendCompanyConfidentalMutation,
+} from 'src/store/services/interview/interviewApiSlice';
 import { setInterviewData } from 'src/store/services/interview/interviewSlice';
 import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
 
@@ -17,6 +23,8 @@ function InterviewDetail() {
   const location = useLocation();
 
   const { data, isLoading, isSuccess, isError, error, refetch } = useGetInterviewDetailQuery(interviewId);
+  const [deleteInterview, { isLoading: isLoadingDelete }] = useDeleteInterviewMutation();
+  const [sendCompanyConfidental, { isLoading: isLoadingSend }] = useSendCompanyConfidentalMutation();
   let interviewData = {};
 
   useEffect(() => {
@@ -35,6 +43,25 @@ function InterviewDetail() {
   useEffect(() => {
     refetch();
   }, [location, navigate]);
+
+  const handleDelete = async () => {
+    // TODO: snackbar
+    try {
+      const response = await deleteInterview(interviewId).unwrap();
+    } catch (error) {
+      console.log('error', error);
+    }
+    navigate('/interview');
+  };
+
+  const handleSendCompanyConfidental = async () => {
+    // TODO: snackbar
+    try {
+      const response = await sendCompanyConfidental({ interviewId: interviewId }).unwrap();
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
   console.log('data', data);
   if (isLoading) {
@@ -71,9 +98,21 @@ function InterviewDetail() {
           flexDirection: 'row-reverse',
           padding: '1rem',
           marginBottom: '1rem',
+          gap: '1rem',
         }}
       >
-        <Button onClick={() => navigate('/interview/update/' + interviewId)}>Güncelle</Button>
+        <DeleteButton variant="outlined" onClick={handleDelete} />
+        <UpdateButton
+          loading={isLoading}
+          variant="outlined"
+          onClick={() => navigate('/interview/update/' + interviewId)}
+        />
+
+        <Tooltip title="Firmaya Doldurup imzalaması için Sicil Fişini ilet">
+          <Button variant="outlined" onClick={handleSendCompanyConfidental}>
+            Sicil fişini ilet
+          </Button>
+        </Tooltip>
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>

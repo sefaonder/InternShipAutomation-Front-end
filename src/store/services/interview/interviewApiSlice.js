@@ -25,6 +25,13 @@ export const interviewSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    deleteInterview: builder.mutation({
+      query: (interviewId) => ({
+        url: `/api/interview/delete/${interviewId}`,
+        method: 'DELETE',
+      }),
+    }),
+
     sendCompanyConfidental: builder.mutation({
       query: (interviewId) => ({
         url: `/api/interview/sendCompanyConfidental`,
@@ -37,6 +44,6 @@ export const interviewSlice = apiSlice.injectEndpoints({
 
 export const { useGetInterviewsQuery, useGetInterviewDetailQuery } = interviewSlice;
 
-export const { useUpdateInterviewMutation, useCreateNewInterviewMutation } = interviewSlice;
+export const { useUpdateInterviewMutation, useCreateNewInterviewMutation, useDeleteInterviewMutation } = interviewSlice;
 
 export const { useSendCompanyConfidentalMutation } = interviewSlice;
