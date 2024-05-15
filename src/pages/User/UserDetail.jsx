@@ -200,27 +200,31 @@ function UserDetail() {
               <Box>
                 <CustomDetailPageBox data={accordionData} />
               </Box>
-              <Typography variant="h3" className="my-2">
-                Staj Bilgileri
-              </Typography>
-              <Box>
-                <EnhancedTable
-                  columns={headers}
-                  filter={[]}
-                  data={currentData?.data.InternStatus || []}
-                  isLoading={isFetching || isLoading}
-                  isSuccess={isSuccess}
-                  dataLength={currentData?.dataLength}
-                  setFilter={(values) => console.log(values)}
-                  navigateTo="intern-status"
-                />
-              </Box>
-              <Alert severity="success">
-                <Typography>
-                  Toplam Onaylanmış Staj Günü:
-                  <b>{calculateTotalWorkDay(currentData?.data.InternStatus)}</b>
-                </Typography>
-              </Alert>
+              {data?.data?.user_type === UserRolesEnum.STUDENT.id && (
+                <Box>
+                  <Typography variant="h3" className="my-2">
+                    Staj Bilgileri
+                  </Typography>
+                  <Box>
+                    <EnhancedTable
+                      columns={headers}
+                      filter={[]}
+                      data={currentData?.data.InternStatus || []}
+                      isLoading={isFetching || isLoading}
+                      isSuccess={isSuccess}
+                      dataLength={currentData?.dataLength}
+                      setFilter={(values) => console.log(values)}
+                      navigateTo="intern-status"
+                    />
+                  </Box>
+                  <Alert severity="success">
+                    <Typography>
+                      Toplam Onaylanmış Staj Günü:
+                      <b>{calculateTotalWorkDay(currentData?.data.InternStatus)}</b>
+                    </Typography>
+                  </Alert>
+                </Box>
+              )}
             </Box>
           </Paper>
           <Box className="flex flex-1 flex-col gap-4">
