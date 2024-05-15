@@ -1,9 +1,9 @@
-import { Alert, AlertTitle, Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, CircularProgress, Container, Paper, Stack, Typography } from '@mui/material';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import moment from 'moment';
 import React, { useEffect, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfInternform from 'src/PDF/internform/PdfInternform';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import { permissionControll } from 'src/app/permissions/permissionController';
@@ -15,6 +15,7 @@ import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import { useDeleteFormMutation, useGetFormDetailQuery } from 'src/store/services/internForm/internFormApiSlice';
 import { setInternFormData } from 'src/store/services/internForm/internFormSlice';
+import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
 
 function InternFormDetail() {
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ function InternFormDetail() {
   const location = useLocation();
 
   const { data, isLoading, isSuccess, isError, error, refetch } = useGetFormDetailQuery(internFormId);
-  console.log(data);
   const [
     deleteForm,
     {
@@ -152,6 +152,13 @@ function InternFormDetail() {
         </Paper>
         <Box className="flex flex-col sm:flex-row gap-4">
           <Paper sx={{ flex: 2 }}>
+            <Container className="my-2 px-6 gap-2 flex">
+              {data?.data && (
+                <Link to={`/intern-status/${data.data.internStatus.id}`}>
+                  <span className="underline">Intern Status</span> <CallMadeSharpIcon className="text-sm text-black" />
+                </Link>
+              )}
+            </Container>
             <CustomDetailPageBox data={accordionData} />
           </Paper>
           <Box className="flex flex-1 flex-col">

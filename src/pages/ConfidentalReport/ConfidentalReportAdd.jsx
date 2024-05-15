@@ -36,8 +36,8 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
       for (const key in confidentalReport?.data.intern_evaluation) {
         formik.setFieldValue(`${key}`, confidentalReport?.data.intern_evaluation[key]);
       }
-      formik.setFieldValue('company_name', confidentalReport?.data.company_name, true);
-      formik.setFieldValue('address', confidentalReport?.data.address, true);
+      formik.setFieldValue('company_name', confidentalReport?.data.company_name, false);
+      formik.setFieldValue('address', confidentalReport?.data.address, false);
       formik.setFieldValue('start_date', confidentalReport?.data.start_date, false);
       formik.setFieldValue('end_date', confidentalReport?.data.end_date, false);
       formik.setFieldValue('days_of_absence', confidentalReport?.data.days_of_absence, false);
@@ -70,7 +70,11 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     auth_name: yup.string().required('Bu Alan'),
     auth_position: yup.string().required('Bu Alan'),
     reg_number: yup.string().required('Bu Alan'),
-    auth_tc_number: yup.string().required('Bu Alan').min(11, 'En az 11 karakter').max(11, 'En fazla 11 karakter'),
+    auth_tc_number: yup
+      .string()
+      .required('Bu Alan')
+      .matches(/^[0-9]+$/, 'Sadece rakamlar içermelidir')
+      .length(11, 'Tam olarak 11 karakter olmalıdır'),
     auth_title: yup.string().required('Bu Alan'),
     score: yup.number().required('Bu Alan').min(0, 'en az 0 puan olabilir').max(100, 'en fazla 100 puan olabilir'),
   });
@@ -100,7 +104,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
       score: '',
     },
     onSubmit: async (values) => {
-      console.log('asdsad');
       try {
         const {
           responsibility,
@@ -114,8 +117,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           ...restValues
         } = values;
         if (confidentalReport) {
-          console.log('+++++++++');
-          //payload: values, surveyId: surveyId
           await updateConfidentalReport({
             payload: {
               ...restValues,
@@ -129,6 +130,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
                 competence,
                 score,
               },
+              is_edu_program: values.is_edu_program === 'Evet' ? true : false,
             },
             confidentalReportId: confidentalReportId,
           });
@@ -181,18 +183,9 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
       setInterviewId(formik.values.interview.id);
     }
   }, [formik.values.interview]);
-
   useEffect(() => {
-    console.log(data);
-    if (data?.data?.form) {
-      console.log(data.data);
-      formik.setFieldValue('company_name', data.data?.form.company_info.name, false);
-      formik.setFieldValue('address', data.data?.form.company_info.address, false);
-
-      formik.setFieldValue('start_date', data.data?.form.start_date, false);
-      formik.setFieldValue('end_date', data.data?.form.end_date, false);
-    }
-  }, [data, isSuccess]);
+    console.log(formik.values);
+  }, [formik.values]);
 
   return (
     <div>
@@ -425,15 +418,6 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             Gönder
           </Button>
         </Container>
-        <Button
-          className="px-4 w-1/3 flex my-2"
-          type="submit"
-          color="success"
-          variant="outlined"
-          disabled={!formik.isValid}
-        >
-          Gönder
-        </Button>
       </form>
     </div>
   );

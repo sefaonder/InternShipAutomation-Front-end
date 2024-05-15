@@ -24,6 +24,7 @@ const ConfidentalReportDetail = () => {
   const [deleteConfidentalReport, { isLoading: isLoadingDelete }] = useDeleteConfidentalReportMutation();
 
   useEffect(() => {
+    console.log(data);
     if (data) {
       dispatch(setConfidentalReport(data));
     }

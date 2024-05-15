@@ -75,27 +75,29 @@ const CollectiveQuestions = ({ data }) => {
         ))}
       </View>
 
-      <View style={{ fontSize: '12px', margin: 2 }}>
-        <Text style={{ margin: 12 }}>Dönem İçi Staj Yapanlar İçin:</Text>
-        {dataInterm.map((item, index) => (
-          <View>
-            <Text>
-              {' '}
-              {index + 1} - {item.question}{' '}
-            </Text>{' '}
-            <View style={styles.options}>
-              {item.answers.map((answer) =>
-                answer.text.toLocaleLowerCase('tr-TR') ==
-                data?.data.answers.slice(31, 40)[index].toLocaleLowerCase('tr-TR') ? (
-                  <PdfCheckbox checked={true} text={answer.text} />
-                ) : (
-                  <PdfCheckbox checked={false} text={answer.text} />
-                ),
-              )}
+      {data?.data.answers?.length > 35 && (
+        <View style={{ fontSize: '12px', margin: 2 }}>
+          <Text style={{ margin: 12 }}>Dönem İçi Staj Yapanlar İçin:</Text>
+          {dataInterm.map((item, index) => (
+            <View>
+              <Text>
+                {' '}
+                {index + 1} - {item.question}{' '}
+              </Text>{' '}
+              <View style={styles.options}>
+                {item.answers.map((answer) =>
+                  answer.text.toLocaleLowerCase('tr-TR') ==
+                  data?.data.answers.slice(31, 40)[index].toLocaleLowerCase('tr-TR') ? (
+                    <PdfCheckbox checked={true} text={answer.text} />
+                  ) : (
+                    <PdfCheckbox checked={false} text={answer.text} />
+                  ),
+                )}
+              </View>
             </View>
-          </View>
-        ))}
-      </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 };

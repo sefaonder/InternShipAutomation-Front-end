@@ -12,7 +12,6 @@ const IntermQuestions = ({ selectedAnswers, setSelectedAnswers }) => {
     setSelectedAnswers(updatedAnswers);
   };
 
-  console.log(questions);
   return (
     <Container className="lg:w-full sm:w-full">
       {questions?.map((data, index) => {
