@@ -76,13 +76,13 @@ function InternFormDetail() {
 
     const accordionData = [
       [
-        { text: 'Fakülte Adı: ', value: data?.data.edu_faculty },
-        { text: 'Bölüm Adı: ', value: data?.data.edu_program },
-        { text: 'Eğitim Yılı: ', value: data?.data.edu_year.name },
-        { text: 'Staj Başlangıcı: ', value: data?.data.start_date },
-        { text: 'Staj Bitiş: ', value: data?.data.end_date },
-        { text: 'Staj Dönemi: ', value: data?.data.isInterm ? 'Dönem İçi' : 'Dönem Dışı' },
-        { text: 'Staj Staj Gün Sayısı: ', value: data?.data.total_work_day },
+        { text: 'Fakülte Adı: ', value: data?.data?.edu_faculty },
+        { text: 'Bölüm Adı: ', value: data?.data?.edu_program },
+        { text: 'Eğitim Yılı: ', value: data?.data?.edu_year.name },
+        { text: 'Staj Başlangıcı: ', value: data?.data?.start_date },
+        { text: 'Staj Bitiş: ', value: data?.data?.end_date },
+        { text: 'Staj Dönemi: ', value: data?.data?.isInterm ? 'Dönem İçi' : 'Dönem Dışı' },
+        { text: 'Staj Staj Gün Sayısı: ', value: data?.data?.total_work_day },
         {
           text: 'Çalışma Günleri: ',
           value: ['Pazartesi ', 'Salı ', 'Çarşamba ', 'Perşembe ', 'Cuma ', 'Cumartesi '].map((item, index) =>
@@ -91,19 +91,19 @@ function InternFormDetail() {
         },
       ],
       [
-        { text: 'Staj Sorumlu Adı: ', value: data?.data.follow_up.name },
-        { text: 'Staj Sorumlu Soyadı: ', value: data?.data.follow_up.last_name },
+        { text: 'Staj Sorumlu Adı: ', value: data?.data?.follow_up?.name },
+        { text: 'Staj Sorumlu Soyadı: ', value: data?.data?.follow_up?.last_name },
       ],
       [
-        { text: 'Öğrenci Adı: ', value: data?.data.student.name },
-        { text: 'Öğrenci Soyadı: ', value: data?.data.student.last_name },
-        { text: 'Okul Numarası: ', value: data?.data.student.school_number },
-        { text: 'Tc Kimlik No: ', value: data?.data.student.tc_number },
-        { text: 'Adresi: ', value: data?.data.student_info.address },
-        { text: 'Doğum Tarihi: ', value: data?.data.student_info.birth_date },
-        { text: 'Doğum Yeri: ', value: data?.data.student_info.birth_place },
-        { text: 'Baba: Adı', value: data?.data.student_info.fathers_name },
-        { text: 'Anne Adı: ', value: data?.data.student_info.mothers_name },
+        { text: 'Öğrenci Adı: ', value: data?.data?.student?.name },
+        { text: 'Öğrenci Soyadı: ', value: data?.data?.student?.last_name },
+        { text: 'Okul Numarası: ', value: data?.data?.student?.school_number },
+        { text: 'Tc Kimlik No: ', value: data?.data?.student?.tc_number },
+        { text: 'Adresi: ', value: data?.data?.student_info?.address },
+        { text: 'Doğum Tarihi: ', value: data?.data?.student_info?.birth_date },
+        { text: 'Doğum Yeri: ', value: data?.data?.student_info?.birth_place },
+        { text: 'Baba: Adı', value: data?.data?.student_info?.fathers_name },
+        { text: 'Anne Adı: ', value: data?.data?.student_info?.mothers_name },
       ],
     ];
 
@@ -153,7 +153,7 @@ function InternFormDetail() {
         <Box className="flex flex-col sm:flex-row gap-4">
           <Paper sx={{ flex: 2 }}>
             <Container className="my-2 px-6 gap-2 flex">
-              {data?.data && (
+              {data?.data?.internStatus?.id && (
                 <Link to={`/intern-status/${data.data.internStatus.id}`}>
                   <span className="underline">Intern Status</span> <CallMadeSharpIcon className="text-sm text-black" />
                 </Link>

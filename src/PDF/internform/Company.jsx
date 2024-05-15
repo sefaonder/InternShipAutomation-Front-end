@@ -5,12 +5,12 @@ import PdfTable from '../pdfComponents/PdfTable';
 const Company = ({ data }) => {
   console.log(data);
   const company = [
-    { name: 'Adı', value: data?.company_info.name },
-    { name: 'Adresi', value: data?.company_info.address },
-    { name: 'Telefon No', value: data?.company_info.phone },
-    { name: 'Faks No', value: data?.company_info.fax },
-    { name: 'E-Posta Adresi', value: data?.company_info.email },
-    { name: 'Hizmet Alanı', value: data?.company_info.service_area },
+    { name: 'Adı', value: data?.company_info?.name },
+    { name: 'Adresi', value: data?.company_info?.address },
+    { name: 'Telefon No', value: data?.company_info?.phone },
+    { name: 'Faks No', value: data?.company_info?.fax },
+    { name: 'E-Posta Adresi', value: data?.company_info?.email },
+    { name: 'Hizmet Alanı', value: data?.company_info?.service_area },
   ];
 
   return (

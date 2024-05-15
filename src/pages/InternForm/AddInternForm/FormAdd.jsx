@@ -17,8 +17,10 @@ import { permissionControll } from 'src/app/permissions/permissionController';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import usePermission from 'src/hooks/usePermission';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
+  const navigate = useNavigate();
   const [createNewForm, { isLoading }] = useCreateNewFormMutation();
   const [updateForm, { isLoadingUpdate }] = useUpdateFormMutation();
 
@@ -106,12 +108,13 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
           }),
         );
       }
+      setIsLoading(false);
+      handleNext();
       console.log('oops something bad req');
     } catch (error) {
       console.log(error);
-    } finally {
       setIsLoading(false);
-      handleNext();
+      navigate('/intern-form');
     }
   }
 
