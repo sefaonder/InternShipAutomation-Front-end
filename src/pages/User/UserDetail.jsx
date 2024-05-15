@@ -211,7 +211,7 @@ function UserDetail() {
                       data={currentData?.data.InternStatus || []}
                       isLoading={isFetching || isLoading}
                       isSuccess={isSuccess}
-                      dataLength={currentData?.dataLength}
+                      dataLength={currentData?.data?.length}
                       setFilter={(values) => console.log(values)}
                       navigateTo="intern-status"
                     />
