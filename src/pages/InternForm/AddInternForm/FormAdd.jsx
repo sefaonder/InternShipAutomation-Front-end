@@ -18,7 +18,7 @@ import { UserRolesEnum } from 'src/app/enums/roleList';
 import usePermission from 'src/hooks/usePermission';
 import dayjs from 'dayjs';
 
-function FormAdd({ prevStep, nextStep, internFormData }) {
+function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
   const [createNewForm, { isLoading }] = useCreateNewFormMutation();
   const [updateForm, { isLoadingUpdate }] = useUpdateFormMutation();
 
@@ -83,6 +83,7 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
   });
 
   async function handleSubmit(values) {
+    setIsLoading(true);
     try {
       const payload = { ...values, studentId: values.student.id, eduYearId: values.eduYear.id };
       let response = null;
@@ -109,6 +110,7 @@ function FormAdd({ prevStep, nextStep, internFormData }) {
     } catch (error) {
       console.log(error);
     } finally {
+      setIsLoading(false);
       handleNext();
     }
   }

@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
+function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   const navigate = useNavigate();
 
   const [createNewCompanyInfo, { isLoading }] = useCreateNewCompanyInfoMutation();
@@ -52,6 +52,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
   });
 
   async function handleSubmit(values) {
+    setIsLoading(true);
     try {
       const payload = { ...values, internFormId: internFormId };
       let response = null;
@@ -64,9 +65,11 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData }) {
       }
       console.log(response);
 
+      setIsLoading(false);
       navigate('/intern-form/' + internFormId);
     } catch (error) {
       console.log('err', error);
+      setIsLoading(false);
     }
   }
 

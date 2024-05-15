@@ -12,7 +12,7 @@ import {
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 
-function StudentInfoAdd({ nextStep, prevStep, internFormData }) {
+function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   const [createNewStudentInfo, { isLoading }] = useCreateNewStudentInfoMutation();
   const [updateStudentInfo, { isLoadingUpdate }] = useUpdateStudentInfoMutation();
 
@@ -56,6 +56,7 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData }) {
   });
 
   async function handleSubmit(values) {
+    setIsLoading(true);
     try {
       const payload = { ...values, internFormId: internFormId };
       let response = null;
@@ -66,9 +67,11 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData }) {
       } else {
         response = await createNewStudentInfo(payload).unwrap();
       }
+      setIsLoading(false);
       handleNext();
       console.log(response);
     } catch (error) {
+      setIsLoading(false);
       console.log('err', error);
     }
   }

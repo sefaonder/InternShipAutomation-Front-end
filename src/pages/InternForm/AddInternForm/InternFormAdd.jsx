@@ -1,4 +1,4 @@
-import { CircularProgress, Container, Step, StepLabel, Stepper } from '@mui/material';
+import { Backdrop, CircularProgress, Container, Step, StepLabel, Stepper } from '@mui/material';
 import CompanyInfoAdd from './CompanyInfoAdd';
 import StudentInfoAdd from './StudentInfoAdd';
 import FormAdd from './FormAdd';
@@ -50,7 +50,11 @@ function InternFormAdd() {
           <StepLabel>Şirket Bilgileri</StepLabel>
         </Step>
       </Stepper>
-      {isLoading && <CircularProgress />}
+      {isLoading && (
+        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 999 }} open={isLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       {step === 1 && <FormAdd internFormData={internForm} nextStep={nextStep} setIsLoading={(e) => setIsLoading(e)} />}
       {step === 2 && (
         <StudentInfoAdd
