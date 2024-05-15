@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,10 +87,12 @@ function AddInternStatus() {
           enumObject={InternStatusEnum}
         />
 
-        <Typography>
-          Dikkat Açıklama alanı girilirse yapılacak staj durumu güncellemesi kayda ait staj durumu listesine
-          eklenecektir
-        </Typography>
+        <Alert severity="warning">
+          <Typography>
+            Dikkat! , Açıklama alanı girilirse yapılacak staj durumu güncellemesi kayda ait staj durumu listesine
+            eklenecektir
+          </Typography>
+        </Alert>
         <CustomTextInput
           id="desc"
           name="desc"

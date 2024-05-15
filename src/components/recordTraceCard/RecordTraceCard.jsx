@@ -4,7 +4,7 @@ import React from 'react';
 
 function RecordTraceCard({ record }) {
   return (
-    <Paper sx={{ flex: 1, padding: '1rem' }}>
+    <Paper sx={{ flex: 1, padding: '1rem', maxHeight: '20rem' }}>
       <Stack spacing={2}>
         <Box className="flex flex-col gap-2">
           <Typography variant="h5">Kayıt Oluşturulma Tarihi</Typography>

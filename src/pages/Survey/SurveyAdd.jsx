@@ -26,6 +26,14 @@ const SurveyAdd = ({ survey, surveyId }) => {
     isLoading: loadingInfo,
     isSuccess,
   } = useGetCompanyInfoQuery(interviewId, { skip: !Boolean(interviewId) });
+
+  useEffect(() => {
+    if (data?.data?.form) {
+      formik.setFieldValue('company_name', data.data.form.company_info.name, false);
+      formik.setFieldValue('company_address', data.data.form.company_info.address, false);
+    }
+  }, [isSuccess]);
+
   const setFormikValuesss = () => {
     console.log(survey?.data?.company_name);
     if (survey?.data) {

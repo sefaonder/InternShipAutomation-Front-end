@@ -91,7 +91,7 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function EnhancedTable(props) {
-  const { data, columns, isLoading, isSucces, filter, setFilter, dataLength } = props;
+  const { data, columns, isLoading, isSucces, filter, setFilter, dataLength, navigateTo } = props;
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
 
@@ -152,7 +152,9 @@ export default function EnhancedTable(props) {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => navigate(`${location.pathname}/${row.id}`)}
+                    onClick={(event) =>
+                      navigateTo ? navigate(`/${navigateTo}/${row.id}`) : navigate(`${location.pathname}/${row.id}`)
+                    }
                     role="link"
                     tabIndex={-1}
                     key={row.id}

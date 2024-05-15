@@ -5,7 +5,9 @@ import { useTheme } from '@mui/material/styles';
 import {
   AppBar,
   Avatar,
+  Backdrop,
   Box,
+  CircularProgress,
   IconButton,
   Menu,
   MenuItem,
@@ -37,6 +39,7 @@ import { useTranslation } from 'react-i18next';
 const Header = ({ open, handleDrawerToggle }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [logout, { isLoading }] = useLogoutMutation();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -56,7 +59,7 @@ const Header = ({ open, handleDrawerToggle }) => {
     }
   }, [isSuccess]);
 
-  const settings = ['profile'];
+  const settings = [{ label: 'Profilim', navigate: 'profile' }];
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -128,9 +131,9 @@ const Header = ({ open, handleDrawerToggle }) => {
           onClose={handleCloseUserMenu}
         >
           {settings.map((setting) => (
-            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+            <MenuItem key={setting.navigate} onClick={handleCloseUserMenu}>
               <Typography textAlign="center">
-                <Link to={'/' + setting}> {setting} </Link>
+                <Link to={'/' + setting.navigate}> {setting.label} </Link>
               </Typography>
             </MenuItem>
           ))}
@@ -157,6 +160,9 @@ const Header = ({ open, handleDrawerToggle }) => {
 
   return (
     <>
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 999 }} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {!matchDownMD ? (
         <AppBarStyled open={open} {...appBar}>
           {mainHeader}
