@@ -13,24 +13,31 @@ import PersonIcon from '@mui/icons-material/Person';
 import CloseIcon from '@mui/icons-material/Close';
 import Container from '@mui/material/Container';
 import { useGetProfileQuery, useUpdateProfileMutation } from 'src/store/services/profile/ProfileApiSlice';
-import { Avatar, Typography } from '@mui/material';
+import { Avatar, CircularProgress, Typography } from '@mui/material';
+import { UserRolesEnum } from 'src/app/enums/roleList';
+import usePermission from 'src/hooks/usePermission';
 
 function Profile() {
-  const profile = useSelector((state) => state.profile);
   const [updateProfile, setUpdateProfile] = useState(false);
+
   const [update, { isLoading }] = useUpdateProfileMutation();
-  const { data, isLoading: isLoadingData, isSuccess } = useGetProfileQuery();
+  const { data, isLoading: isLoadingData, isSuccess, refetch } = useGetProfileQuery();
+
+  const checkPermission = usePermission();
+
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
 
   console.log('data', data);
 
   useEffect(() => {
-    formik.setValues({
-      name: profile?.name || '',
-      lastName: profile?.last_name || '',
-      tcNumber: profile?.tc_number || '',
-      schoolNumber: profile?.school_number || '',
-    });
-  }, [profile]);
+    if (data?.data) {
+      console.log('data22', data.data);
+      formik.setFieldValue('name', data.data.name, false);
+      formik.setFieldValue('lastName', data.data.last_name, false);
+      formik.setFieldValue('tcNumber', data.data.tc_number, false);
+      formik.setFieldValue('schoolNumber', data.data.school_number, false);
+    }
+  }, [isSuccess]);
 
   const handleClick = () => {
     setUpdateProfile((prev) => !prev);
@@ -39,7 +46,7 @@ function Profile() {
     name: yup.string().required('Name is required'),
     lastName: yup.string().required('Last Name is required'),
     tcNumber: yup.string().optional('TC is required').min(11, 'TC 11 karakterden oluşmalıdır.').max(11),
-    schoolNumber: yup.string().optional('School Number is required'),
+    schoolNumber: yup.string().optional('School Number is optional string'),
   });
   const formik = useFormik({
     initialValues: {
@@ -51,12 +58,18 @@ function Profile() {
     onSubmit: async (values) => {
       try {
         await update(values).unwrap();
+        setUpdateProfile(false);
+        refetch();
       } catch (err) {
         console.log(err);
       }
     },
     validationSchema: validationSchema,
   });
+
+  if (isLoadingData) {
+    return <CircularProgress />;
+  }
 
   return (
     <Container className="flex items-center justify-center" maxWidth="sm">
@@ -72,6 +85,7 @@ function Profile() {
               id="name"
               name="name"
               label="İsim"
+              disabled={!isAdvancedComission}
               margin="normal"
               value={formik.values.name}
               onChange={formik.handleChange}
@@ -82,23 +96,27 @@ function Profile() {
               id="lastName"
               name="lastName"
               label="Soyisim"
+              disabled={!isAdvancedComission}
               margin="normal"
               value={formik.values.lastName}
               onChange={formik.handleChange}
               error={formik.touched.lastName && Boolean(formik.errors.lastName)}
               helperText={formik.touched.lastName && formik.errors.lastName}
             />
-            <TextField
-              id="schoolNumber"
-              name="schoolNumber"
-              label="Okul Numarası"
-              margin="normal"
-              inputProps={{ maxLength: 15 }}
-              value={formik.values.schoolNumber}
-              onChange={formik.handleChange}
-              error={formik.touched.schoolNumber && Boolean(formik.errors.schoolNumber)}
-              helperText={formik.touched.schoolNumber && formik.errors.schoolNumber}
-            />
+            {!isAdvancedComission && (
+              <TextField
+                id="schoolNumber"
+                name="schoolNumber"
+                label="Okul Numarası"
+                margin="normal"
+                disabled
+                inputProps={{ maxLength: 15 }}
+                value={formik.values.schoolNumber}
+                onChange={formik.handleChange}
+                error={formik.touched.schoolNumber && Boolean(formik.errors.schoolNumber)}
+                helperText={formik.touched.schoolNumber && formik.errors.schoolNumber}
+              />
+            )}
             <TextField
               id="tcNumber"
               name="tcNumber"
@@ -117,24 +135,26 @@ function Profile() {
           </form>
         ) : (
           <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {profile && (
+            {data?.data && (
               <List>
                 <ListItem className="flex justify-between border-b-2">
                   <ListItemText> Adı: </ListItemText>
-                  <ListItemText className="flex justify-end"> {profile?.name} </ListItemText>
+                  <ListItemText className="flex justify-end"> {data?.data?.name} </ListItemText>
                 </ListItem>
                 <ListItem className="flex justify-between  border-b-2">
                   <ListItemText> Soyadı: </ListItemText>
-                  <ListItemText className="flex justify-end"> {profile?.last_name} </ListItemText>
+                  <ListItemText className="flex justify-end"> {data?.data?.last_name} </ListItemText>
                 </ListItem>
 
-                <ListItem className="flex justify-between  border-b-2">
-                  <ListItemText> Okul Numarası </ListItemText>
-                  <ListItemText className="flex justify-end"> {profile?.school_number} </ListItemText>
-                </ListItem>
+                {!isAdvancedComission && (
+                  <ListItem className="flex justify-between  border-b-2">
+                    <ListItemText> Okul Numarası </ListItemText>
+                    <ListItemText className="flex justify-end"> {data?.data?.school_number} </ListItemText>
+                  </ListItem>
+                )}
                 <ListItem className="flex justify-between  border-b-2">
                   <ListItemText> Tc Kimlik Numarası: </ListItemText>
-                  <ListItemText className="flex justify-end"> {profile?.tc_number} </ListItemText>
+                  <ListItemText className="flex justify-end"> {data?.data?.tc_number} </ListItemText>
                 </ListItem>
               </List>
             )}
