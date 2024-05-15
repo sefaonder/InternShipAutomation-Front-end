@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const confidentalReportSlice = createSlice({
   name: 'confidentalReport',
   initialState: {
+    id: null,
     interview: null,
     company_name: '',
     address: '',
@@ -35,6 +36,7 @@ const confidentalReportSlice = createSlice({
         auth_tc_number,
         auth_title,
         interview,
+        id,
       } = action.payload;
       state.company_name = company_name;
       state.address = address;
@@ -50,6 +52,7 @@ const confidentalReportSlice = createSlice({
       state.auth_tc_number = auth_tc_number;
       state.auth_title = auth_title;
       state.interview = interview;
+      state.id = id;
     },
     resetConfidentalReport: (state, action) => {
       state.company_name = null;
@@ -66,6 +69,7 @@ const confidentalReportSlice = createSlice({
       state.auth_tc_number = null;
       state.auth_title = null;
       state.interview = null;
+      state.id = null;
     },
   },
 });

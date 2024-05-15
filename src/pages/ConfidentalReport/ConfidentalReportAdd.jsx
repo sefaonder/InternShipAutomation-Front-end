@@ -16,13 +16,27 @@ import { useGetCompanyInfoQuery } from 'src/store/services/survey/surveyApiSlice
 import { useGetInterviewACQuery } from 'src/app/api/autocompleteSlice';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import CustomTextInput from 'src/components/inputs/CustomTextInput';
+
+import { resetConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
+import { useDispatch } from 'react-redux';
 
 const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [createConfidentalReport, { isLoading }] = useCreateNewConfidentalReportMutation();
   const [updateConfidentalReport, { isLoadingData }] = useUpdateConfidentalReportMutation();
+
+  useEffect(() => {
+    if (confidentalReportId && !Boolean(confidentalReport?.data?.id)) {
+      // navigate back detail page
+      navigate('/confidental-report/' + confidentalReportId);
+    }
+
+    if (!confidentalReportId) {
+      dispatch(resetConfidentalReport());
+    }
+  }, []);
 
   const [interviewId, setInterviewId] = useState(null);
   const {
@@ -36,6 +50,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
       for (const key in confidentalReport?.data.intern_evaluation) {
         formik.setFieldValue(`${key}`, confidentalReport?.data.intern_evaluation[key]);
       }
+      formik.setFieldValue('interview', { id: confidentalReport?.data?.interview?.id }, false);
       formik.setFieldValue('company_name', confidentalReport?.data.company_name, false);
       formik.setFieldValue('address', confidentalReport?.data.address, false);
       formik.setFieldValue('start_date', confidentalReport?.data.start_date, false);
@@ -69,7 +84,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     competence: yup.string().required('Bu Alan'),
     auth_name: yup.string().required('Bu Alan'),
     auth_position: yup.string().required('Bu Alan'),
-    reg_number: yup.string().required('Bu Alan'),
+    reg_number: yup.string().optional('Bu Alan').nullable(),
     auth_tc_number: yup
       .string()
       .required('Bu Alan')
@@ -134,6 +149,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             },
             confidentalReportId: confidentalReportId,
           });
+          navigate('/confidental-report/' + confidentalReportId);
         } else {
           await createConfidentalReport({
             ...restValues,
@@ -150,18 +166,15 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               score,
             },
           });
+          navigate('/confidental-report');
         }
       } catch (err) {
         console.log(err);
-      } finally {
         navigate('/confidental-report');
       }
     },
     validationSchema: validationSchema,
     enableReinitialize: true,
-    validateOnBlur: true,
-    validateOnChange: false,
-    validateOnMount: true,
   });
   const is_edu_program = {
     name: 'Staj İçerisinde Eğitim Programı Uygulandı mı?',
@@ -179,13 +192,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   ];
 
   useEffect(() => {
-    if (formik.values?.interview?.id && !confidentalReport?.id) {
+    if (formik.values?.interview?.id && !confidentalReport?.data?.id) {
       setInterviewId(formik.values.interview.id);
     }
   }, [formik.values.interview]);
-  useEffect(() => {
-    console.log(formik.values);
-  }, [formik.values]);
 
   return (
     <div>
@@ -200,7 +210,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           <CustomAutocomplete
             name="interview"
             id="interview"
-            disabled={confidentalReport?.id}
+            disabled={confidentalReport?.data?.id}
             required
             // filterId={!isAdvancedComission && userAuth?.userId}
             useACSlice={useGetInterviewACQuery}

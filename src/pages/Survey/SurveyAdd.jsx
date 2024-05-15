@@ -11,14 +11,33 @@ import {
 } from 'src/store/services/survey/surveyApiSlice';
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 import { useGetInterviewACQuery } from 'src/app/api/autocompleteSlice';
+import { useNavigate } from 'react-router-dom';
+import { resetSurvey } from 'src/store/services/survey/surveySlice';
+import { useDispatch } from 'react-redux';
 
 const SurveyAdd = ({ survey, surveyId }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [selectedAnswersSingle, setSelectedAnswersSingle] = useState([]);
   const [selectedAnswersMulti, setSelectedAnswersMulti] = useState([]);
   const [selectedAnswersInterm, setSelectedAnswersInterm] = useState([]);
+
   const [arrayCheck, setArrayCheck] = useState(31);
+
   const [createSurvey, { isLoading }] = useCreateNewSurveyMutation();
   const [updateSurvey, { isLoadingUpdate }] = useUpdateSurveyMutation();
+
+  useEffect(() => {
+    if (surveyId && !Boolean(survey?.data?.id)) {
+      // navigate back detail page
+      navigate('/survey/' + surveyId);
+    }
+
+    if (!surveyId) {
+      dispatch(resetSurvey());
+    }
+  }, []);
 
   const [interviewId, setInterviewId] = useState(null);
   const {
@@ -28,7 +47,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
   } = useGetCompanyInfoQuery(interviewId, { skip: !Boolean(interviewId) });
 
   useEffect(() => {
-    if (data?.data?.form) {
+    if (!survey?.data && data?.data?.form) {
       formik.setFieldValue('company_name', data.data.form.company_info.name, false);
       formik.setFieldValue('company_address', data.data.form.company_info.address, false);
     }
@@ -37,6 +56,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
   const setFormikValuesss = () => {
     console.log(survey?.data?.company_name);
     if (survey?.data) {
+      formik.setFieldValue('interview', { id: survey?.data?.interview?.id }, false);
       formik.setFieldValue('company_name', survey?.data?.company_name);
       formik.setFieldValue('company_address', survey?.data?.company_address);
       formik.setFieldValue('teach_type', survey?.data?.teach_type);
@@ -93,11 +113,14 @@ const SurveyAdd = ({ survey, surveyId }) => {
             payload.answers = payload.answers.slice(0, 31);
           }
           await updateSurvey({ payload: payload, surveyId: surveyId }).unwrap();
+          navigate('/survey/' + surveyId);
         } else {
           await createSurvey(payload).unwrap();
+          navigate('/survey');
         }
       } catch (err) {
         console.log(err);
+        navigate('/survey');
       }
     },
     validationSchema: validationSchema,
@@ -136,9 +159,9 @@ const SurveyAdd = ({ survey, surveyId }) => {
         <CustomAutocomplete
           name="interview"
           id="interview"
-          disabled={survey?.id}
+          disabled={survey?.data?.id}
           required
-          // filterId={!isAdvancedComission && userAuth?.userId}
+          // filterId={!isAdvancedComission && survey?.data?.userId}
           useACSlice={useGetInterviewACQuery}
           label={'İlgili Mülakat & Staj'}
           value={formik.values.interview}

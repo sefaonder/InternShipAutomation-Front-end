@@ -150,7 +150,6 @@ function UserDetail() {
     }
 
     const sumWithInitial = data.reduce((accumulator, currentValue) => {
-      console.log('hihi', currentValue, accumulator);
       if (currentValue.status === InternStatusEnum.STJ00.id) {
         return accumulator + currentValue.form.total_work_day;
       } else {

@@ -4,7 +4,7 @@ import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
 import DeleteButton from 'src/components/inputs/DeleteButton';
 import DownloadButton from 'src/components/inputs/DownloadButton';
@@ -18,17 +18,22 @@ import { setConfidentalReport } from 'src/store/services/confidentalReport/confi
 const ConfidentalReportDetail = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const { confidentalReportId } = useParams();
-  const { data, isLoading, isSuccess, isError, error } = useGetConfidentalReportQuery(confidentalReportId);
+  const { data, isLoading, isSuccess, isError, error, refetch, currentData } =
+    useGetConfidentalReportQuery(confidentalReportId);
   const [deleteConfidentalReport, { isLoading: isLoadingDelete }] = useDeleteConfidentalReportMutation();
 
   useEffect(() => {
-    console.log(data);
-    if (data) {
-      dispatch(setConfidentalReport(data));
+    refetch();
+  }, [location, navigate]);
+
+  useEffect(() => {
+    if (data?.data) {
+      dispatch(setConfidentalReport(data.data));
     }
-  }, [data]);
+  }, [isSuccess]);
 
   const handleDelete = async () => {
     try {

@@ -1,6 +1,6 @@
-import { Box, Button, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useGetSurveyQuery } from 'src/store/services/survey/surveyApiSlice';
 import moment from 'moment';
 import { dataInterm, dataMulti, dataSingle } from '../SurveyComponents/SurveyQs';
@@ -13,13 +13,16 @@ import PdfSurvey from 'src/PDF/survey/PdfSurvey';
 
 const SurveyDetail = () => {
   const { surveyId } = useParams();
-  const { data, isLoading, isSuccess, isError, error } = useGetSurveyQuery(surveyId);
+  const { data, isLoading, isSuccess, isError, error, refetch, currentData } = useGetSurveyQuery(surveyId);
 
   const [mixedSingleQuestions, setMixedSingleQuestions] = useState();
   const [mixedMultiQuestions, setMixedMultiQuestions] = useState();
   const [mixedIntermQuestions, setIntermMultiQuestions] = useState();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
   let mixedSingle;
   let mixedMulti;
   let mixedInterm;
@@ -41,9 +44,34 @@ const SurveyDetail = () => {
       setMixedMultiQuestions(mixedMulti);
       setMixedSingleQuestions(mixedSingle);
       setIntermMultiQuestions(mixedInterm);
-      dispatch(setSurvey(data));
+      dispatch(setSurvey(currentData.data));
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (error) {
+      //TODO:  error snackbar
+      navigate('/survey');
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    refetch();
+  }, [location, navigate]);
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteForm(internFormId).unwrap();
+    } catch (error) {
+      console.log('error', error);
+    }
+    navigate('/intern-form');
+  };
+
+  console.log('data', data);
+  if (isLoading) {
+    return <CircularProgress />;
+  }
 
   return (
     <div>
