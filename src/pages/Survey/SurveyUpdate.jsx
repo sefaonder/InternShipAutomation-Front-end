@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useGetSurveyQuery } from 'src/store/services/survey/surveyApiSlice';
 
 const SurveyUpdate = () => {
   const { surveyId } = useParams();
