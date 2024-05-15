@@ -13,7 +13,7 @@ const Diagram = () => {
   ];
   const status = 4;
   return (
-    <Box className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+    <Box className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] justify-items-center gap-2">
       {diagramData.map((item, index) => (
         <DiagramBox index={index + 1} text={item.text} success={status > index ? true : false} />
       ))}

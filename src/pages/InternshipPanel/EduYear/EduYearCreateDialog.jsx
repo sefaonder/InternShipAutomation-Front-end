@@ -1,4 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
 import React from 'react';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useAddEduYearMutation } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
@@ -19,7 +20,7 @@ function EduYearCreateDialog({ open, handleClose, onSucces }) {
           console.log(eduYear);
 
           try {
-            const response = await addEduYear({ eduYear: eduYear }).unwrap();
+            const response = await addEduYear({ name: eduYear }).unwrap();
 
             enqueueSnackbar(response.message, { variant: 'success' });
           } catch (error) {
@@ -35,7 +36,7 @@ function EduYearCreateDialog({ open, handleClose, onSucces }) {
         <DialogContentText maxWidth="20rem">
           Öğrencilerin staj tarihlerini belirlemesi için lütfen geçerli staj dönemi / dönemlerini ekleyin.
         </DialogContentText>
-        <CustomTextInput id="eduYear" name="eduYear" required label="Tatil Günü" />
+        <CustomTextInput id="eduYear" name="eduYear" required label="Staj Dönemi" />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} disabled={isLoading}>
