@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 const NavItem = ({ item, id }) => {
   return (
     <ListItem key={id} disablePadding>
-      <Link to={item.path}>
+      <Link to={item.path} style={{ width: 'inherit' }}>
         <ListItemButton>
           <ListItemIcon>{item.Icon}</ListItemIcon>
           <ListItemText primary={item.title} />
