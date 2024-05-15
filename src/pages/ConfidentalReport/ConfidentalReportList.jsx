@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
@@ -9,6 +9,7 @@ import { resetConfidentalReport } from 'src/store/services/confidentalReport/con
 import { useDispatch } from 'react-redux';
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 import { useGetComissionACQuery, useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
+import ListPageHeader from 'src/components/details/ListPageHeader';
 
 const ConfidentalReportList = () => {
   const location = useLocation();
@@ -157,7 +158,8 @@ const ConfidentalReportList = () => {
   ];
 
   return (
-    <div>
+    <Box>
+      <ListPageHeader header={'Gizli Sicil Fişi Listesi'} location={location.pathname} />
       <Paper>
         <CustomTableFilter
           filterOptions={confidentalReportFilters}
@@ -174,10 +176,8 @@ const ConfidentalReportList = () => {
           filter={filter}
           setFilter={(values) => setFilter({ ...filter, ...values })}
         />
-
-        <AddButton onClick={() => navigate(location.pathname + '/add')} />
       </Paper>
-    </div>
+    </Box>
   );
 };
 

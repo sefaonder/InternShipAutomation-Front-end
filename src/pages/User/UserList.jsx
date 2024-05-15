@@ -1,10 +1,11 @@
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
+import ListPageHeader from 'src/components/details/ListPageHeader';
 import AddButton from 'src/components/inputs/AddButton';
 import { useGetUsersQuery } from 'src/store/services/user/userApiSlice';
 import { clearUserData } from 'src/store/services/user/userSlice';
@@ -91,7 +92,8 @@ function UserList() {
   ];
 
   return (
-    <div>
+    <Box>
+      <ListPageHeader header={'Kullanıcı Listesi'} location={location.pathname} />
       <Paper>
         <CustomTableFilter
           filterOptions={userFilters}
@@ -108,10 +110,8 @@ function UserList() {
           dataLength={currentData?.dataLength}
           setFilter={(values) => setFilter({ ...filter, ...values })}
         />
-
-        <AddButton onClick={() => navigate(location.pathname + '/add')} />
       </Paper>
-    </div>
+    </Box>
   );
 }
 

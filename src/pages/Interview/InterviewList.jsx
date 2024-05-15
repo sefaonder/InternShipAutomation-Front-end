@@ -1,6 +1,5 @@
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import dayjs from 'dayjs';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -8,6 +7,7 @@ import { useGetComissionACQuery, useGetStudentACQuery } from 'src/app/api/autoco
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
+import ListPageHeader from 'src/components/details/ListPageHeader';
 import AddButton from 'src/components/inputs/AddButton';
 import { useGetInterviewsQuery } from 'src/store/services/interview/interviewApiSlice';
 import { clearInterviewData } from 'src/store/services/interview/interviewSlice';
@@ -95,24 +95,26 @@ function InterviewList() {
   ];
 
   return (
-    <Paper>
-      <CustomTableFilter
-        filterOptions={interviewFilters}
-        filterValues={filter}
-        onChangeFilterValues={handleFilterChange}
-        setRefresh={() => refetch()}
-      />
-      <EnhancedTable
-        columns={headers}
-        data={currentData?.data || []}
-        dataLength={currentData?.dataLength}
-        isLoading={isFetching || isLoading}
-        isSuccess={isSuccess}
-        filter={filter}
-        setFilter={(values) => setFilter({ ...filter, ...values })}
-      />
-      <AddButton onClick={() => navigate(location.pathname + '/add')} />
-    </Paper>
+    <Box>
+      <ListPageHeader header={'Mülakat Listesi'} location={location.pathname} />
+      <Paper>
+        <CustomTableFilter
+          filterOptions={interviewFilters}
+          filterValues={filter}
+          onChangeFilterValues={handleFilterChange}
+          setRefresh={() => refetch()}
+        />
+        <EnhancedTable
+          columns={headers}
+          data={currentData?.data || []}
+          dataLength={currentData?.dataLength}
+          isLoading={isFetching || isLoading}
+          isSuccess={isSuccess}
+          filter={filter}
+          setFilter={(values) => setFilter({ ...filter, ...values })}
+        />
+      </Paper>
+    </Box>
   );
 }
 

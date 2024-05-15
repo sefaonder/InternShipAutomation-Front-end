@@ -14,6 +14,7 @@ import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import CustomCircularProgress from '../loader/CustomCircularProgress';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -91,7 +92,7 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function EnhancedTable(props) {
-  const { data, columns, isLoading, isSucces, filter, setFilter, dataLength, navigateTo } = props;
+  const { data, columns, isLoading, isSucces, filter, setFilter, dataLength, navigateTo, infoOnly } = props;
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
 
@@ -131,7 +132,7 @@ export default function EnhancedTable(props) {
   console.log('visibleRow', visibleRows);
 
   if (isLoading) {
-    return <CircularProgress />;
+    return <CustomCircularProgress />;
   }
 
   return (
@@ -152,13 +153,18 @@ export default function EnhancedTable(props) {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) =>
-                      navigateTo ? navigate(`/${navigateTo}/${row.id}`) : navigate(`${location.pathname}/${row.id}`)
-                    }
-                    role="link"
+                    onClick={(event) => {
+                      if (infoOnly) {
+                        return event.preventDefault();
+                      }
+                      return navigateTo
+                        ? navigate(`/${navigateTo}/${row.id}`)
+                        : navigate(`${location.pathname}/${row.id}`);
+                    }}
+                    role={infoOnly ? 'listitem' : 'link'}
                     tabIndex={-1}
                     key={row.id}
-                    sx={{ cursor: 'pointer', bgcolor: index % 2 === 0 ? '#ececec' : 'white' }}
+                    sx={{ cursor: infoOnly ? 'default' : 'pointer', bgcolor: index % 2 === 0 ? '#ececec' : 'white' }}
                   >
                     {columns.map((header) => {
                       return (
@@ -186,7 +192,9 @@ export default function EnhancedTable(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
+          labelRowsPerPage="Sayfa Başına"
           count={dataLength || 0}
+          labelDisplayedRows={({ from, to, count }) => `${from}–${to} ile ${count !== -1 ? count : `${to}'den fazla`}`}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

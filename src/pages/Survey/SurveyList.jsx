@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { useGetComissionACQuery, useGetEduYearACQuery, useGetStudentACQuery } fr
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
+import ListPageHeader from 'src/components/details/ListPageHeader';
 import AddButton from 'src/components/inputs/AddButton';
 import { useGetSurveysQuery } from 'src/store/services/survey/surveyApiSlice';
 import { resetSurvey } from 'src/store/services/survey/surveySlice';
@@ -113,25 +114,26 @@ const SurveyList = () => {
   ];
 
   return (
-    <Paper>
-      <CustomTableFilter
-        filterOptions={surveyFilters}
-        filterValues={filter}
-        onChangeFilterValues={handleFilterChange}
-        setRefresh={() => refetch()}
-      />
-      <EnhancedTable
-        columns={headers}
-        data={currentData?.data || []}
-        dataLength={currentData?.dataLength}
-        isLoading={isFetching || isLoading}
-        isSuccess={isSuccess}
-        filter={filter}
-        setFilter={(values) => setFilter({ ...filter, ...values })}
-      />
-
-      <AddButton onClick={() => navigate(location.pathname + '/add')} />
-    </Paper>
+    <Box>
+      <ListPageHeader header={'Öğrenci Değerlendirme Anketi Listesi'} location={location.pathname} />
+      <Paper>
+        <CustomTableFilter
+          filterOptions={surveyFilters}
+          filterValues={filter}
+          onChangeFilterValues={handleFilterChange}
+          setRefresh={() => refetch()}
+        />
+        <EnhancedTable
+          columns={headers}
+          data={currentData?.data || []}
+          dataLength={currentData?.dataLength}
+          isLoading={isFetching || isLoading}
+          isSuccess={isSuccess}
+          filter={filter}
+          setFilter={(values) => setFilter({ ...filter, ...values })}
+        />
+      </Paper>
+    </Box>
   );
 };
 

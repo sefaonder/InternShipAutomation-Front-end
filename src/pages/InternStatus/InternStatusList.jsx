@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { useGetComissionACQuery, useGetEduYearACQuery, useGetStudentACQuery } fr
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
+import ListPageHeader from 'src/components/details/ListPageHeader';
 import { useGetStatusesQuery } from 'src/store/services/internStatus/internStatusApiSlice';
 import { clearInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
 
@@ -89,23 +90,26 @@ function InternStatusList() {
   ];
 
   return (
-    <Paper>
-      <CustomTableFilter
-        filterOptions={internStatusFilters}
-        filterValues={filter}
-        onChangeFilterValues={handleFilterChange}
-        setRefresh={() => refetch()}
-      />
-      <EnhancedTable
-        columns={headers}
-        data={currentData?.data || []}
-        dataLength={currentData?.dataLength}
-        isLoading={isFetching || isLoading}
-        isSuccess={isSuccess}
-        filter={filter}
-        setFilter={(values) => setFilter({ ...filter, ...values })}
-      />
-    </Paper>
+    <Box>
+      <ListPageHeader header={'Mülakat Listesi'} />
+      <Paper>
+        <CustomTableFilter
+          filterOptions={internStatusFilters}
+          filterValues={filter}
+          onChangeFilterValues={handleFilterChange}
+          setRefresh={() => refetch()}
+        />
+        <EnhancedTable
+          columns={headers}
+          data={currentData?.data || []}
+          dataLength={currentData?.dataLength}
+          isLoading={isFetching || isLoading}
+          isSuccess={isSuccess}
+          filter={filter}
+          setFilter={(values) => setFilter({ ...filter, ...values })}
+        />
+      </Paper>
+    </Box>
   );
 }
 

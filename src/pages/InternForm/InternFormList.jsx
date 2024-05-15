@@ -6,9 +6,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
-import AddButton from 'src/components/inputs/AddButton';
+import ListPageHeader from 'src/components/details/ListPageHeader';
 import { useGetFormsQuery } from 'src/store/services/internForm/internFormApiSlice';
-import { clearInternFormData } from 'src/store/services/internForm/internFormSlice';
 
 function InternFormList() {
   const location = useLocation();
@@ -36,7 +35,6 @@ function InternFormList() {
 
   useEffect(() => {
     refetch();
-    dispatch(clearInternFormData());
   }, [location, navigate]);
 
   const headers = [
@@ -95,24 +93,26 @@ function InternFormList() {
   ];
 
   return (
-    <Paper>
-      <CustomTableFilter
-        filterOptions={internFormFilters}
-        filterValues={filter}
-        onChangeFilterValues={handleFilterChange}
-        setRefresh={() => refetch()}
-      />
-      <EnhancedTable
-        columns={headers}
-        data={currentData?.data || []}
-        dataLength={currentData?.dataLength}
-        isLoading={isFetching || isLoading}
-        isSuccess={isSuccess}
-        filter={filter}
-        setFilter={(values) => setFilter({ ...filter, ...values })}
-      />
-      <AddButton onClick={() => navigate(location.pathname + '/add')} />
-    </Paper>
+    <Box>
+      <ListPageHeader header={'Staj Formu Listesi'} location={location.pathname} />
+      <Paper>
+        <CustomTableFilter
+          filterOptions={internFormFilters}
+          filterValues={filter}
+          onChangeFilterValues={handleFilterChange}
+          setRefresh={() => refetch()}
+        />
+        <EnhancedTable
+          columns={headers}
+          data={currentData?.data || []}
+          dataLength={currentData?.dataLength}
+          isLoading={isFetching || isLoading}
+          isSuccess={isSuccess}
+          filter={filter}
+          setFilter={(values) => setFilter({ ...filter, ...values })}
+        />
+      </Paper>
+    </Box>
   );
 }
 
