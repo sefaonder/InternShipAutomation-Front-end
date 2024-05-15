@@ -8,6 +8,10 @@ import { setInternStatusData } from 'src/store/services/internStatus/internStatu
 import { Link } from 'react-router-dom';
 import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
 import { useEffect } from 'react';
+import EnhancedTable from 'src/components/data/CustomMUITable';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
+import dayjs from 'dayjs';
+import { InternStatusEnum } from 'src/app/enums/internStatus';
 function InternStatusDetail() {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -15,7 +19,8 @@ function InternStatusDetail() {
 
   const { internStatusId } = useParams();
 
-  const { data, isLoading, isSuccess, isError, error, refetch } = useGetStatusDetailQuery(internStatusId);
+  const { data, isLoading, isSuccess, isError, error, refetch, isFetching, currentData } =
+    useGetStatusDetailQuery(internStatusId);
 
   let internStatusData = {};
   const internStatusTracks = data?.data.internStatusTracks;
@@ -32,7 +37,7 @@ function InternStatusDetail() {
   console.log('data', data);
 
   if (isLoading) {
-    return <CircularProgress />;
+    return <CustomCircularProgress />;
   }
 
   if (isSuccess) {
@@ -58,6 +63,45 @@ function InternStatusDetail() {
     ],
   ];
 
+  const headers = [
+    {
+      id: 'createdAt',
+      numeric: false,
+      disablePadding: true,
+      label: 'Tarih',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{dayjs(value).format('DD.MM.YYYY')}</p>,
+      notSortable: true,
+    },
+    {
+      id: 'createdBy',
+      numeric: false,
+      disablePadding: true,
+      label: 'Değişimi Yapan',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{value?.name ? value?.name + ' ' + value?.last_name : ''}</p>,
+      notSortable: true,
+    },
+    {
+      id: 'prevStatus',
+      numeric: false,
+      disablePadding: true,
+      label: 'Önceki Durum',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{InternStatusEnum[value]?.label}</p>,
+      notSortable: true,
+    },
+    {
+      id: 'nextStatus',
+      numeric: false,
+      disablePadding: true,
+      label: 'Sonraki Durum',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{InternStatusEnum[value]?.label}</p>,
+      notSortable: true,
+    },
+  ];
+
   return (
     <div>
       <Paper
@@ -70,17 +114,17 @@ function InternStatusDetail() {
       >
         <Button onClick={() => navigate('/intern-status/update/' + internStatusId)}>Güncelle</Button>
       </Paper>
-      <Box className="flex flex-col sm:flex-row gap-4">
+      <Box className="flex flex-col xl:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
           <Container className="my-2 px-6 gap-2 flex">
-            {data?.data.form_id && (
+            {data?.data.interview_id && (
               <Link to={`/interview/${data.data.interview_id}`}>
-                <span className="underline">Interview</span> <CallMadeSharpIcon className="text-sm text-black" />
+                <span className="underline">İlgili Mülakat</span> <CallMadeSharpIcon className="text-sm text-black" />
               </Link>
             )}
             {data?.data.form_id && (
               <Link to={`/intern-form/${data.data.form_id}`}>
-                <span className="underline">Internform</span>
+                <span className="underline">İlgili Staj Formu</span>
                 <CallMadeSharpIcon className="text-sm text-black" />
               </Link>
             )}
@@ -88,24 +132,16 @@ function InternStatusDetail() {
           <CustomDetailPageBox data={accordionData} />
           {internStatusTracks.length > 0 && (
             <Container>
-              <Box className="flex flex-col  justify-between border-2 my-2 border-gray-200 p-2 rounded-lg ">
-                {internStatusTracks?.map((item) => (
-                  <Box className="border-b-2">
-                    <Box className="flex flex-col justify-between w-full">
-                      <Typography className="font-semibold"> Açıklama: </Typography>
-                      <Typography>{item.desc}</Typography>
-                    </Box>
-                    <Box className="flex flex-col justify-between w-full">
-                      <Typography className="font-semibold"> Önceki Adım: </Typography>
-                      <Typography>{item.prevStatus}</Typography>
-                    </Box>
-                    <Box className="flex flex-col justify-between w-full">
-                      <Typography className="font-semibold"> Sonraki Adım: </Typography>
-                      <Typography>{item.nextStatus}</Typography>
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
+              <EnhancedTable
+                columns={headers}
+                filter={[]}
+                data={currentData?.data.internStatusTracks || []}
+                isLoading={isFetching || isLoading}
+                isSuccess={isSuccess}
+                dataLength={currentData?.data?.internStatusTracks.length}
+                setFilter={(values) => console.log(values)}
+                infoOnly
+              />
             </Container>
           )}
         </Paper>
