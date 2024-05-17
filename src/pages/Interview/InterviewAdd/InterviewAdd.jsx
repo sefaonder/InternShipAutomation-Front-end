@@ -10,9 +10,7 @@ import {
   useCreateNewInterviewMutation,
   useUpdateInterviewMutation,
 } from 'src/store/services/interview/interviewApiSlice';
-import CustomDateInput from 'src/components/inputs/CustomDateInput';
-import moment from 'moment';
-import { shouldDisableDate } from 'src/app/handlers/dateHandlers';
+
 import CustomDateTimeInput from 'src/components/inputs/CustomDateTimeInput';
 import dayjs from 'dayjs';
 

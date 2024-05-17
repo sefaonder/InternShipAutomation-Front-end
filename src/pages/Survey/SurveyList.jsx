@@ -1,4 +1,5 @@
 import { Box, Paper } from '@mui/material';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -42,42 +43,48 @@ const SurveyList = () => {
 
   const headers = [
     {
-      id: 'company_name',
+      id: 'createdAt',
       numeric: false,
       disablePadding: true,
-      label: 'company_name',
+      label: 'Oluşturulma Zamanı',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
     },
     {
-      id: 'company_address',
+      id: 'interview',
       numeric: false,
       disablePadding: true,
-      label: 'company_address',
+      label: 'Öğrenci',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
+      notSortable: true,
+      cellComponent: (value) => (
+        <p className="">{value.student ? value.student?.name + ' ' + value.student?.last_name : ''}</p>
+      ),
     },
     {
-      id: 'teach_type',
+      id: 'interview',
       numeric: false,
       disablePadding: true,
-      label: 'teach_type',
+      label: 'Mülakatı Yapan',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
+      notSortable: true,
+      cellComponent: (value) => (
+        <p className="">{value.comission ? value.comission?.name + ' ' + value.comission?.last_name : ''}</p>
+      ),
+    },
+    {
+      id: 'date',
+      numeric: false,
+      disablePadding: true,
+      label: 'Anketi Doldurma Zamanı',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
     },
     {
       id: 'gano',
       numeric: false,
       disablePadding: true,
-      label: 'gano',
-      style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
-    },
-    {
-      id: 'intern_group',
-      numeric: false,
-      disablePadding: true,
-      label: 'intern_group',
+      label: 'Gano',
       style: 'text-left',
       cellComponent: (value) => <p className=""> {value} </p>,
     },
@@ -85,17 +92,17 @@ const SurveyList = () => {
       id: 'intern_type',
       numeric: false,
       disablePadding: true,
-      label: 'intern_type',
+      label: 'Staj Türü',
       style: 'text-left',
       cellComponent: (value) => <p className="">{value}</p>,
     },
     {
-      id: 'date',
+      id: 'isSealed',
       numeric: false,
       disablePadding: true,
-      label: 'date',
+      label: 'Kayıt Mühür Durumu',
       style: 'text-left',
-      cellComponent: (value) => <p className="">blablabla</p>,
+      cellComponent: (value) => <p className="">{value ? 'Mühürlü' : 'Mühürlü Değil'}</p>,
     },
   ];
 
@@ -107,10 +114,10 @@ const SurveyList = () => {
       type: 'autocomplete',
       componentProps: { useACSlice: useGetComissionACQuery, label: 'Mülakat yapan' },
     },
-    { id: 'companyName', type: 'text', componentProps: { label: 'Firma adı' } },
-    { id: 'date', type: 'date', componentProps: { label: 'Anket Doldurma Tarihi' } },
+    { id: 'date_gte', type: 'date', componentProps: { label: 'Anket Doldurma Tarihi (En Erken)' } },
+    { id: 'date_lte', type: 'date', componentProps: { label: 'Anket Doldurma Tarihi (En Geç)' } },
     { id: 'status', type: 'enum', componentProps: { enumObject: InternStatusEnum, label: 'Staj durumu' } },
-    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
+    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürlü Kayıtlar' } },
   ];
 
   return (

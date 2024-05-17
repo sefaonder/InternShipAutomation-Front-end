@@ -33,6 +33,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from 'src/store/services/auth/authApiSlice';
 import { useGetProfileQuery } from 'src/store/services/profile/ProfileApiSlice';
 import { useTranslation } from 'react-i18next';
+import { UserRolesEnum } from 'src/app/enums/roleList';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
@@ -105,8 +106,8 @@ const Header = ({ open, handleDrawerToggle }) => {
         {!open ? <MenuOpenOutlinedIcon /> : <MenuOutlinedIcon />}
       </IconButton>
 
-      <Typography>{userAuth?.roles}</Typography>
-      <Typography>{`${userProfile?.name} ${userProfile?.last_name}`}</Typography>
+      <Typography>{UserRolesEnum[userAuth?.roles]?.label}</Typography>
+      <Typography>{userProfile ? `${userProfile.name} ${userProfile.last_name}` : ''}</Typography>
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

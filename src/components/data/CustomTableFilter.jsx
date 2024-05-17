@@ -77,7 +77,7 @@ function CustomTableFilter({ filterOptions, filterValues, onChangeFilterValues, 
           >
             {filterOptions.map((filterOption) => {
               return (
-                <Box sx={{ display: 'inline-block', flexShrink: 0 }}>
+                <Box key={filterOption.id} sx={{ display: 'inline-block', flexShrink: 0 }}>
                   {filterOption.type === 'autocomplete' && (
                     <CustomAutocomplete
                       name={filterOption.id}
@@ -96,7 +96,7 @@ function CustomTableFilter({ filterOptions, filterValues, onChangeFilterValues, 
                       id={filterOption.id}
                       value={formik.values?.[filterOption?.id] ? dayjs(formik.values?.[filterOption?.id]) : null}
                       onChange={(value) =>
-                        formik.setFieldValue(filterOption.id, dayjs(value).format('DD.MM.YYYY'), true)
+                        formik.setFieldValue(filterOption.id, dayjs(value).format('MM.DD.YYYY'), true)
                       }
                     />
                   )}
@@ -133,16 +133,21 @@ function CustomTableFilter({ filterOptions, filterValues, onChangeFilterValues, 
               );
             })}
           </Box>
-          <Button onClick={() => onChangeFilterValues(formik.values)}>Seçili Filtreleri uygula</Button>
-          <Button
-            onClick={() => {
-              onChangeFilterValues({});
-              formik.resetForm();
-            }}
-            color="secondary"
-          >
-            Bütün filtreleri temizle
-          </Button>
+          <Box className="flex gap-4">
+            <Button variant="outlined" onClick={() => onChangeFilterValues(formik.values)}>
+              Seçili Filtreleri uygula
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                onChangeFilterValues({});
+                formik.resetForm();
+              }}
+              color="secondary"
+            >
+              Bütün filtreleri temizle
+            </Button>
+          </Box>
         </Collapse>
       </Box>
     </Toolbar>

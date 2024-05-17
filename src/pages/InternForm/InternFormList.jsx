@@ -39,13 +39,21 @@ function InternFormList() {
 
   const headers = [
     {
+      id: 'createdAt',
+      numeric: false,
+      disablePadding: true,
+      label: 'Oluşturulma Zamanı',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
+    },
+    {
       id: 'student',
       numeric: false,
       disablePadding: true,
       label: 'Öğrenci',
       style: 'text-left',
       notSortable: true,
-      cellComponent: (value) => <p className="">{value.name}</p>,
+      cellComponent: (value) => <p className="">{value.name + ' ' + value.last_name}</p>,
     },
     {
       id: 'follow_up',
@@ -54,7 +62,7 @@ function InternFormList() {
       label: 'Yetkili',
       style: 'text-left',
       notSortable: true,
-      cellComponent: (value) => <p className="">{value.name}</p>,
+      cellComponent: (value) => <p className="">{value.name + ' ' + value.last_name}</p>,
     },
     {
       id: 'start_date',
@@ -73,6 +81,14 @@ function InternFormList() {
       cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
     },
     {
+      id: 'edu_year',
+      numeric: false,
+      disablePadding: true,
+      label: 'Staj Dönemi',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{value?.name || ''}</p>,
+    },
+    {
       id: 'total_work_day',
       numeric: false,
       disablePadding: true,
@@ -85,11 +101,16 @@ function InternFormList() {
   const internFormFilters = [
     { id: 'student', type: 'autocomplete', componentProps: { useACSlice: useGetStudentACQuery, label: 'Öğrenci' } },
     { id: 'eduYear', type: 'autocomplete', componentProps: { useACSlice: useGetEduYearACQuery, label: 'Staj Dönemi' } },
-    { id: 'startDate', type: 'date', componentProps: { label: 'Başlangıç Tarihi' } },
-    { id: 'endDate', type: 'date', componentProps: { label: 'Bitiş Tarihi' } },
+
+    { id: 'startDate_gte', type: 'date', componentProps: { label: 'Başlangıç Tarihi (En Erken)' } },
+    { id: 'startDate_lte', type: 'date', componentProps: { label: 'Başlangıç Tarihi (En Geç)' } },
+
+    { id: 'endDate_gte', type: 'date', componentProps: { label: 'Bitiş Tarihi (En Erken)' } },
+    { id: 'endDate_lte', type: 'date', componentProps: { label: 'Bitiş Tarihi (En Geç)' } },
+
     { id: 'name', type: 'text', componentProps: { label: 'Öğrenci ismi' } },
     { id: 'schoolNumber', type: 'text', componentProps: { label: 'Okul Numarası' } },
-    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
+    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürlü Kayıtlar' } },
   ];
 
   return (

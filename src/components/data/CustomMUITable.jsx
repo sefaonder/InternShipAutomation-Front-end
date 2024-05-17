@@ -93,7 +93,7 @@ EnhancedTableHead.propTypes = {
 
 export default function EnhancedTable(props) {
   const { data, columns, isLoading, isSucces, filter, setFilter, dataLength, navigateTo, infoOnly } = props;
-  const [order, setOrder] = React.useState('asc');
+  const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('createdAt');
 
   const [page, setPage] = React.useState(0);
@@ -163,7 +163,7 @@ export default function EnhancedTable(props) {
                     }}
                     role={infoOnly ? 'listitem' : 'link'}
                     tabIndex={-1}
-                    key={row.id}
+                    key={row.id + '-' + index}
                     sx={{ cursor: infoOnly ? 'default' : 'pointer', bgcolor: index % 2 === 0 ? '#ececec' : 'white' }}
                   >
                     {columns.map((header) => {

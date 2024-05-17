@@ -78,18 +78,22 @@ function InternFormDetail() {
     const accordionData = [
       [
         { header: 'Form Bilgileri' },
-        { text: 'Fakülte Adı: ', value: data?.data?.edu_faculty },
-        { text: 'Bölüm Adı: ', value: data?.data?.edu_program },
-        { text: 'Eğitim Yılı: ', value: data?.data?.edu_year.name },
-        { text: 'Staj Başlangıcı: ', value: dayjs(data?.data?.start_date).format('DD.MM.YYYY') },
-        { text: 'Staj Bitiş: ', value: dayjs(data?.data?.end_date).format('DD.MM.YYYY') },
-        { text: 'Staj Dönemi: ', value: data?.data?.isInterm ? 'Dönem İçi' : 'Dönem Dışı' },
-        { text: 'Staj Staj Gün Sayısı: ', value: data?.data?.total_work_day },
+        { text: 'Fakülte Adı', value: data?.data?.edu_faculty },
+        { text: 'Bölüm Adı ', value: data?.data?.edu_program },
+        { text: 'Eğitim Yılı', value: data?.data?.edu_year?.name },
+        { text: 'Staj Başlangıç Tarihi', value: dayjs(data?.data?.start_date).format('DD.MM.YYYY') },
+        { text: 'Staj Bitiş Tarihi', value: dayjs(data?.data?.end_date).format('DD.MM.YYYY') },
+        { text: 'Staj Dönemi', value: data?.data?.isInTerm ? 'Dönem İçi' : 'Dönem Dışı' },
+        { text: 'Staj Gün Sayısı', value: data?.data?.total_work_day },
         {
-          text: 'Çalışma Günleri: ',
+          text: 'Çalışma Günleri',
           value: ['Pazartesi ', 'Salı ', 'Çarşamba ', 'Perşembe ', 'Cuma ', 'Cumartesi '].map((item, index) =>
             data?.data.weekDayWork.includes(index + 1) ? item : '',
           ),
+        },
+        {
+          text: 'Cumartesi Çalışır',
+          value: data?.data?.workOnSaturday ? 'Evet' : 'Hayır',
         },
       ],
       [

@@ -1,4 +1,5 @@
 import { Box, Paper } from '@mui/material';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -76,11 +77,38 @@ function InternStatusList() {
       notSortable: true,
       cellComponent: (value) => <p className="">{InternStatusEnum[value].label}</p>,
     },
+    {
+      id: 'form',
+      numeric: false,
+      disablePadding: true,
+      label: 'Staj Başlangıç Tarihi',
+      style: 'text-left',
+      cellComponent: (value) => (
+        <p className="">{value.start_date ? moment(value.start_date).format('DD.MM.YYYY') : ''}</p>
+      ),
+    },
+    {
+      id: 'form',
+      numeric: false,
+      disablePadding: true,
+      label: 'Staj Bitiş Tarihi',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{value.end_date ? moment(value.end_date).format('DD.MM.YYYY') : ''}</p>,
+    },
+    {
+      id: 'form',
+      numeric: false,
+      disablePadding: true,
+      label: 'Staj Dönemi',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{value?.edu_year?.name || ''}</p>,
+    },
   ];
 
   const internStatusFilters = [
     { id: 'student', type: 'autocomplete', componentProps: { useACSlice: useGetStudentACQuery, label: 'Öğrenci' } },
     { id: 'eduYear', type: 'autocomplete', componentProps: { useACSlice: useGetEduYearACQuery, label: 'Staj Dönemi' } },
+
     {
       id: 'comission',
       type: 'autocomplete',
@@ -91,7 +119,7 @@ function InternStatusList() {
 
   return (
     <Box>
-      <ListPageHeader header={'Mülakat Listesi'} />
+      <ListPageHeader header={'Staj Durumu Listesi'} />
       <Paper>
         <CustomTableFilter
           filterOptions={internStatusFilters}

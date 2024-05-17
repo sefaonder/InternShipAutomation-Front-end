@@ -4,6 +4,7 @@ import React from 'react';
 import InterviewReadyList from './Interview/InterviewReadyList';
 import HolidayList from './Holiday/HolidayList';
 import EduYearList from './EduYear/EduYearList';
+import ListPageHeader from 'src/components/details/ListPageHeader';
 
 function internshipPanel() {
   const [expanded, setExpanded] = React.useState('panel1');
@@ -13,6 +14,7 @@ function internshipPanel() {
   };
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <ListPageHeader header={'Staj Paneli'} />
       <Paper>
         <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">

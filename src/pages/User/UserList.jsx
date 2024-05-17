@@ -1,4 +1,5 @@
 import { Box, Paper } from '@mui/material';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -41,6 +42,14 @@ function UserList() {
   }, [location, navigate]);
 
   const headers = [
+    {
+      id: 'createdAt',
+      numeric: false,
+      disablePadding: true,
+      label: 'Oluşturulma Zamanı',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
+    },
     {
       id: 'name',
       numeric: false,

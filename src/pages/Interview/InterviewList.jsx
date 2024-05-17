@@ -1,5 +1,6 @@
 import { Box, Paper } from '@mui/material';
 import dayjs from 'dayjs';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -45,13 +46,21 @@ function InterviewList() {
 
   const headers = [
     {
+      id: 'createdAt',
+      numeric: false,
+      disablePadding: true,
+      label: 'Oluşturulma Zamanı',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
+    },
+    {
       id: 'student',
       numeric: false,
       disablePadding: true,
       label: 'Öğrenci',
       style: 'text-left',
       notSortable: true,
-      cellComponent: (value) => <p className="">{value?.name}</p>,
+      cellComponent: (value) => <p className="">{value?.name ? value.name + ' ' + value.last_name : ''}</p>,
     },
     {
       id: 'comission',
@@ -60,7 +69,7 @@ function InterviewList() {
       label: 'Mülakat Yetkilisi',
       style: 'text-left',
       notSortable: true,
-      cellComponent: (value) => <p className="">{value?.name}</p>,
+      cellComponent: (value) => <p className="">{value?.name ? value.name + ' ' + value.last_name : ''}</p>,
     },
     {
       id: 'date',
@@ -90,6 +99,9 @@ function InterviewList() {
       type: 'autocomplete',
       componentProps: { useACSlice: useGetComissionACQuery, label: 'Mülakat yapan' },
     },
+    { id: 'date_gte', type: 'date', componentProps: { label: 'Mülakat Tarihi (En Erken)' } },
+    { id: 'date_lte', type: 'date', componentProps: { label: 'Mülakat Tarihi (En Geç)' } },
+
     { id: 'status', type: 'enum', componentProps: { enumObject: InternStatusEnum, label: 'Staj durumu' } },
     { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
   ];

@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 import { useGetComissionACQuery, useGetEduYearACQuery, useGetStudentACQuery } from 'src/app/api/autocompleteSlice';
 import ListPageHeader from 'src/components/details/ListPageHeader';
+import moment from 'moment';
 
 const ConfidentalReportList = () => {
   const location = useLocation();
@@ -44,18 +45,40 @@ const ConfidentalReportList = () => {
 
   const headers = [
     {
+      id: 'createdAt',
+      numeric: false,
+      disablePadding: true,
+      label: 'Oluşturulma Zamanı',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
+    },
+    {
+      id: 'interview',
+      numeric: false,
+      disablePadding: true,
+      label: 'Öğrenci',
+      style: 'text-left',
+      notSortable: true,
+      cellComponent: (value) => (
+        <p className="">{value.student ? value.student?.name + ' ' + value.student?.last_name : ''}</p>
+      ),
+    },
+    {
+      id: 'interview',
+      numeric: false,
+      disablePadding: true,
+      label: 'Mülakatı Yapan',
+      style: 'text-left',
+      notSortable: true,
+      cellComponent: (value) => (
+        <p className="">{value.comission ? value.comission?.name + ' ' + value.comission?.last_name : ''}</p>
+      ),
+    },
+    {
       id: 'company_name',
       numeric: false,
       disablePadding: true,
-      label: 'company_name',
-      style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
-    },
-    {
-      id: 'address',
-      numeric: false,
-      disablePadding: true,
-      label: 'address',
+      label: 'Firma Adı',
       style: 'text-left',
       cellComponent: (value) => <p className="">{value}</p>,
     },
@@ -63,39 +86,23 @@ const ConfidentalReportList = () => {
       id: 'start_date',
       numeric: false,
       disablePadding: true,
-      label: 'start_date',
+      label: 'Başlangıç Tarihi',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
     },
     {
       id: 'end_date',
       numeric: false,
       disablePadding: true,
-      label: 'end_date',
+      label: 'Bitiş Tarihi',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
-    },
-    {
-      id: 'days_of_absence',
-      numeric: false,
-      disablePadding: true,
-      label: 'days_of_absence',
-      style: 'text-left',
-      cellComponent: (value) => <p className=""> {value} </p>,
+      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
     },
     {
       id: 'department',
       numeric: false,
       disablePadding: true,
-      label: 'department',
-      style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
-    },
-    {
-      id: 'is_edu_program',
-      numeric: false,
-      disablePadding: true,
-      label: 'is_edu_program',
+      label: 'Departman',
       style: 'text-left',
       cellComponent: (value) => <p className="">{value}</p>,
     },
@@ -103,39 +110,7 @@ const ConfidentalReportList = () => {
       id: 'auth_name',
       numeric: false,
       disablePadding: true,
-      label: 'auth_name',
-      style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
-    },
-    {
-      id: 'auth_position',
-      numeric: false,
-      disablePadding: true,
-      label: 'auth_position',
-      style: 'text-left',
-      cellComponent: (value) => <p className=""> {value} </p>,
-    },
-    {
-      id: 'reg_number',
-      numeric: false,
-      disablePadding: true,
-      label: 'reg_number',
-      style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
-    },
-    {
-      id: 'auth_tc_number',
-      numeric: false,
-      disablePadding: true,
-      label: 'auth_tc_number',
-      style: 'text-left',
-      cellComponent: (value) => <p className="">{value}</p>,
-    },
-    {
-      id: 'auth_title',
-      numeric: false,
-      disablePadding: true,
-      label: 'auth_title',
+      label: 'Firma Yetkilisi',
       style: 'text-left',
       cellComponent: (value) => <p className="">{value}</p>,
     },
@@ -150,11 +125,7 @@ const ConfidentalReportList = () => {
       componentProps: { useACSlice: useGetComissionACQuery, label: 'Mülakat yapan' },
     },
     { id: 'companyName', type: 'text', componentProps: { label: 'Firma adı' } },
-    { id: 'startDate', type: 'date', componentProps: { label: 'Başlangıç Tarihi' } },
-    { id: 'endDate', type: 'date', componentProps: { label: 'Bitiş Tarihi' } },
-    { id: 'status', type: 'enum', componentProps: { enumObject: InternStatusEnum, label: 'Staj durumu' } },
-    { id: 'isMailSended', type: 'boolean', componentProps: { label: 'Mail Gönderilenler' } },
-    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
+    { id: 'authName', type: 'text', componentProps: { label: 'Firma Yetkilisi' } },
   ];
 
   return (

@@ -18,7 +18,7 @@ const StudentInfo = ({ data }) => {
       { name: 'Gün Sayısı', value: data?.total_work_day },
       { name: 'Başlangıç Tarihi', value: new Date(data?.start_date).toLocaleDateString('pt-PT') },
       { name: 'Bitiş Tarihi', value: new Date(data?.end_date).toLocaleDateString('pt-PT') },
-      { name: 'Eğitim-Öğretim Yılı', value: data?.edu_year.name },
+      { name: 'Eğitim-Öğretim Yılı', value: data?.edu_year?.name },
     ],
   };
 
