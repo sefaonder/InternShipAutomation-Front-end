@@ -184,7 +184,7 @@ function InternFormDetail() {
           </Box>
         </Box>
         <Box className="flex flex-col sm:flex-row gap-4"></Box>
-        {data.data && (
+        {data?.data && (
           <PDFViewer style={{ width: '100%', height: '1500px  ' }}>
             <PdfInternform data={data.data} />
           </PDFViewer>

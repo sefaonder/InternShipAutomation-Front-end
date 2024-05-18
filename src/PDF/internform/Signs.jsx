@@ -1,13 +1,18 @@
-import { Text, View } from '@react-pdf/renderer';
+import { Text, View, Font } from '@react-pdf/renderer';
 import React from 'react';
+import turkishbold from '../pdfComponents/extrabold.ttf';
+Font.register({ family: 'Turkishbold', src: turkishbold });
 
-const Signs = () => {
+const Signs = ({ data }) => {
+  const info = {
+    studentName: data.student.name,
+    studentLastName: data.student.last_name,
+  };
   return (
     <View style={styles.container2}>
       <View style={styles.box}>
         <View>
-          {' '}
-          <Text>Ogrenci Imzasi</Text>{' '}
+          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}>Ogrenci Imzasi</Text>{' '}
         </View>
         <View style={styles.text}>
           <Text> Adi Soyadi</Text>
@@ -21,7 +26,7 @@ const Signs = () => {
       <View style={styles.box}>
         <View>
           {' '}
-          <Text style={{ fontWeight: 'bold' }}>Fakulte Komisyon Onayi</Text>{' '}
+          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}>Fakulte Komisyon Onayi</Text>{' '}
         </View>
         <View style={styles.text}>
           <Text> Onaylayan</Text>
@@ -35,7 +40,7 @@ const Signs = () => {
       <View style={styles.box}>
         <View>
           {' '}
-          <Text style={{ fontWeight: 'bold' }}> Fakulte / Yuksekokul / MYO </Text>{' '}
+          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}> Fakulte / Yuksekokul / MYO </Text>{' '}
         </View>
         <View style={styles.text}>
           <Text> Onaylayan</Text>
@@ -62,7 +67,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     height: '50px',
-    margin: '10px 0px',
+    margin: '2px 0px',
   },
   box: {
     height: '100%',

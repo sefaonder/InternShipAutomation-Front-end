@@ -1,18 +1,38 @@
-import { Image, Text, View } from '@react-pdf/renderer';
-import React from 'react';
+import { Image, Text, View, Font, StyleSheet } from '@react-pdf/renderer';
+import React, { useEffect, useState } from 'react';
+import turkishbold from '../pdfComponents/extrabold.ttf';
+import turkishregular from '../pdfComponents/regular.ttf';
+
+Font.register({ family: 'Turkishbold', src: turkishbold });
+Font.register({ family: 'Turkish', src: turkishregular });
 
 const Description = () => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={styles.desc}>
-        <Text style={styles.text}>İlgili Makama,</Text>
-        <Text style={styles.text}>
-          Bilgisayar Mühendisliği Bölümü öğrencilerinin öğrenim süresi sonuna kadar kurum ve/veya kuruluşlarda zorunlu
-          ya da isteğe bağlı staj ve işyerinde mesleki eğitim olmak üzere farklı şekillerde Uygulamalı Eğitim yapmaları
-          beklenmektedir. Aşağıda yer alan ve SGK işlemleri Bursa Uludağ Üniversitesi tarafından yapılacak olan
-          öğrencinin Uygulamalı Eğitimini kurumunuzda/kuruluşunuzda yapmasında göstereceğiniz ilgiye teşekkür eder,
-          çalışmalarınızda başarılar dileriz.
-        </Text>
+        <Text style={[styles.text, { fontFamily: 'Turkishbold' }]}>İlgili Makama,</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Text style={{ fontFamily: 'Turkishbold', marginRight: '5px', textIndent: '30px' }}>
+              Bilgisayar Mühendisliği Bölümü
+            </Text>
+            <Text style={{ textIndent: '30px' }}>öğrencilerinin öğrenim süresi sonuna kadar kurum</Text>
+          </View>
+          <Text>
+            ve/veya kuruluşlarda zorunlu ya da isteğe bağlı staj ve işyerinde mesleki eğitim olmak üzere farklı
+          </Text>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Text>şekillerde Uygulamalı Eğitim yapmaları beklenmektedir. Aşağıda yer alan ve</Text>
+            <Text style={{ fontFamily: 'Turkishbold', textDecoration: 'underline' }}> SGK işlemleri Bursa </Text>
+          </View>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Text style={{ fontFamily: 'Turkishbold', textDecoration: 'underline' }}>
+              Uludağ Üniversitesi tarafından yapılacak
+            </Text>
+            <Text style={{ marginLeft: '2px' }}>olan öğrencinin Uygulamalı Eğitimini kurumunuzda/</Text>
+          </View>
+          <Text>kuruluşunuzda yapmasında göstereceğiniz ilgiye teşekkür eder, çalışmalarınızda başarılar dileriz</Text>
+        </View>
       </View>
       <View style={styles.img}>
         <Text style={styles.textBox}> FOTOGRAF </Text>
@@ -21,7 +41,11 @@ const Description = () => {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
+  highlight: {
+    color: 'red',
+    borderBottom: '1 solid red',
+  },
   container: {
     marginTop: '10px',
     display: 'flex',
@@ -29,6 +53,7 @@ const styles = {
     width: '80%',
     justifyContent: 'space-between',
     alignItems: 'center',
+    fontFamily: 'Turkish',
   },
   img: {
     width: '20%',
@@ -53,5 +78,5 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
   },
-};
+});
 export default Description;

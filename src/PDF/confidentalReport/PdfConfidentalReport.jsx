@@ -3,7 +3,9 @@ import { Document, Font, Image, Page, Text, View } from '@react-pdf/renderer';
 import PdfTable from '../pdfComponents/PdfTable';
 import PdfTableMultiOptions from '../pdfComponents/PdfTableMultiOptions';
 import PdfHeader from '../pdfComponents/PdfHeader';
-import turkish from '../pdfComponents/turkish2.ttf';
+import turkishbold from '../pdfComponents/extrabold.ttf';
+
+Font.register({ family: 'Turkishbold', src: turkishbold });
 
 const PdfConfidentalReport = ({ data }) => {
   console.log(data);
@@ -46,32 +48,33 @@ const PdfConfidentalReport = ({ data }) => {
       { name: 'Meslek Bilgi Duzeyi', value: data?.intern_evaluation?.competence },
     ],
   };
-
-  Font.register({ family: 'Turkish', src: turkish });
-
+  const headerText = ['T.C.', 'ULUDAĞ ÜNİVERSİTESİ', 'MÜHENDİSLİK FAKÜLTESİ'];
   return (
     <Document>
-      <Page style={{ fontFamily: 'Turkish' }} size="A4">
+      <Page style={{ fontFamily: 'Turkishbold' }} size="A4">
         <View style={styles.viewContainer}>
-          <PdfHeader></PdfHeader>
+          <PdfHeader headerText={headerText} padding={'55px'}></PdfHeader>
           <View style={styles.view}>
-            <Text>Staj Sicil Belgesi</Text>
+            <View style={{ borderBottom: '1px solid black', width: '100%', display: 'flex', alignItems: 'center' }}>
+              <Text>Staj Sicil Belgesi</Text>
+            </View>
+
             <Text style={styles.subTitle}> Ögrenci Kimlik Bilgileri:</Text>
-            <PdfTable data={studentCredentials} />
+            <PdfTable data={studentCredentials} fontSize={12} />
             <Text style={styles.subTitle}> Kurum Bilgileri:</Text>
 
-            <PdfTable data={companyInfo} />
+            <PdfTable data={companyInfo} fontSize={12} />
             <Text style={styles.subTitle}> Staj Tarihi Ve Calisma Konulari:</Text>
 
-            <PdfTable data={internshipInfo} />
+            <PdfTable data={internshipInfo} fontSize={12} />
             <Text style={styles.subTitle}> Staj Calisma Degerlendirmesi:</Text>
 
-            <PdfTableMultiOptions data={internEvuluation} />
+            <PdfTableMultiOptions data={internEvuluation} fontSize={12} />
 
             <Text style={styles.subTitle}> Degerlendirmeyi Yapan Yetkilinin (Muhendis):</Text>
 
             <View style={styles.authContainer}>
-              <PdfTable data={authInfo} />
+              <PdfTable data={authInfo} fontSize={12} />
               <View style={styles.sign}>
                 <Text>Onay</Text>
                 <Text>Mühür Kaşe</Text>
@@ -80,7 +83,7 @@ const PdfConfidentalReport = ({ data }) => {
             </View>
           </View>
           <View style={styles.footer}>
-            <Text style={{ fontSize: '12px' }}>
+            <Text style={{ fontSize: '12px', marginTop: '10px' }}>
               Not: Ulaşımın daha pratik olması maksadıyla uygun görülürse, Gizli Sicil Fişi kapalı ve mühürlenmiş bir
               zarfa konulmak suretiyle, öğrenci ile gönderilebilir.
             </Text>
@@ -106,8 +109,7 @@ const styles = {
   },
   subTitle: {
     fontSize: 12,
-    fontWeight: 'bold',
-    paddingBottom: 1,
+    marginTop: '10px',
     width: '100%',
   },
   view: {

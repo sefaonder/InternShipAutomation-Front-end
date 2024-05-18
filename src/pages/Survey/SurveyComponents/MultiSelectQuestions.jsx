@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
-import { Container, Typography, Box, Checkbox, FormControlLabel, Button } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { dataMulti as data } from './SurveyQs';
 
 const MultiSelectQuestions = ({ responses, setResponses }) => {
   const handleResponseChange = (questionId, answer) => {
     setResponses((prevResponses) => {
-      const updatedResponses = [...prevResponses]; // responses dizisini kopyalayın
+      const updatedResponses = [...prevResponses];
       const questionResponses = updatedResponses[questionId] || [];
 
-      if (questionResponses.includes(answer)) {
-        updatedResponses[questionId] = questionResponses.filter((selectedAnswer) => selectedAnswer !== answer);
+      if (answer === 'Hiçbiri') {
+        // If "Hiçbiri" is selected, replace the current responses with only "Hiçbiri"
+        updatedResponses[questionId] = ['Hiçbiri'];
       } else {
-        updatedResponses[questionId] = [...questionResponses, answer];
+        // Otherwise, remove "Hiçbiri" if it's present and toggle the selected answer
+        const filteredResponses = questionResponses.filter((selectedAnswer) => selectedAnswer !== 'Hiçbiri');
+
+        if (filteredResponses.includes(answer)) {
+          // Remove the answer if it's already selected
+          updatedResponses[questionId] = filteredResponses.filter((selectedAnswer) => selectedAnswer !== answer);
+        } else {
+          // Add the answer to the responses
+          updatedResponses[questionId] = [...filteredResponses, answer];
+        }
       }
+
       return updatedResponses;
     });
   };
@@ -24,9 +35,10 @@ const MultiSelectQuestions = ({ responses, setResponses }) => {
           <h2 className="font-bold">
             {question.id}: {question.question}
           </h2>
-          <div className="flex justify-between flex-col lg:flex-row ">
+          <div className="flex justify-between flex-col lg:flex-row">
             {question.answers.map((answer) => (
               <div
+                key={answer.text}
                 className={
                   responses[question.id]?.includes(answer.text)
                     ? 'bg-emerald-500 text-left text-white cursor-pointer py-0.5 px-4 rounded-md m-1'

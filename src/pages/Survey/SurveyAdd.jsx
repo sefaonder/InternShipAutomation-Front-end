@@ -72,6 +72,18 @@ const SurveyAdd = ({ survey, surveyId }) => {
       }
     }
   };
+  const processArray = (array) => {
+    return array.map((subArray) => {
+      if (Array.isArray(subArray) && subArray.includes('Hiçbiri') && subArray.length > 1) {
+        return subArray.filter((option) => option === 'Hiçbiri');
+      }
+      return subArray;
+    });
+  };
+  useEffect(() => {
+    const processedArray = processArray(selectedAnswersMulti);
+    setSelectedAnswersMulti(processedArray);
+  }, [selectedAnswersMulti]); // Empty dependency array means this effect runs once after the initial render
 
   useEffect(() => {
     setFormikValuesss();

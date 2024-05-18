@@ -15,33 +15,48 @@ const StudentInfo = ({ data }) => {
     right: [
       { name: 'Öğrenci No', value: data?.student?.school_number },
       { name: 'Programı', value: data?.edu_program },
+<<<<<<< Updated upstream
       { name: 'Gün Sayısı', value: data?.total_work_day },
       { name: 'Başlangıç Tarihi', value: new Date(data?.start_date).toLocaleDateString('pt-PT') },
       { name: 'Bitiş Tarihi', value: new Date(data?.end_date).toLocaleDateString('pt-PT') },
       { name: 'Eğitim-Öğretim Yılı', value: data?.edu_year?.name },
+=======
+      { name: 'Uygulamalı Eğitim Gün/İş Günü', value: data?.total_work_day, bold: true },
+      {
+        name: 'Uygulamalı Eğitim Başlangıç Tarihi',
+        value: new Date(data?.start_date).toLocaleDateString('pt-PT'),
+        bold: true,
+      },
+      {
+        name: 'Uygulamalı Eğitim Bitiş Tarihi',
+        value: new Date(data?.end_date).toLocaleDateString('pt-PT'),
+        bold: true,
+      },
+      { name: 'Eğitim-Öğretim Yılı', value: data?.edu_year.name },
+>>>>>>> Stashed changes
     ],
   };
 
   const address = {
-    name: 'İkametgah Adresi:',
+    name: 'İkametgah Adresi ve Telefonu:',
     value: data?.company_info?.address,
   };
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <View>
-          <PdfTable data={studentInfo.left}></PdfTable>
+        <View style={{ width: '40%' }}>
+          <PdfTable widthName="50%" widthValue="50%" data={studentInfo.left}></PdfTable>
         </View>
-        <View>
-          <PdfTable data={studentInfo.right}></PdfTable>
+        <View style={{ width: '60%' }}>
+          <PdfTable widthName="60%" widthValue="40%" data={studentInfo.right}></PdfTable>
         </View>
       </View>
 
       <View style={styles.address}>
-        <View style={{ width: '25%', border: '1px solid black', padding: 4 }}>
+        <View style={{ width: '20%', border: '1px solid black', padding: 4 }}>
           <Text> {address.name} </Text>
         </View>
-        <View style={{ width: '75%', border: '1px solid black', padding: 4 }}>
+        <View style={{ width: '80%', border: '1px solid black', padding: 4 }}>
           <Text> {address.value} </Text>
         </View>
       </View>
