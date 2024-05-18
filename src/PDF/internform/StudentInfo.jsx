@@ -15,12 +15,7 @@ const StudentInfo = ({ data }) => {
     right: [
       { name: 'Öğrenci No', value: data?.student?.school_number },
       { name: 'Programı', value: data?.edu_program },
-<<<<<<< Updated upstream
-      { name: 'Gün Sayısı', value: data?.total_work_day },
-      { name: 'Başlangıç Tarihi', value: new Date(data?.start_date).toLocaleDateString('pt-PT') },
-      { name: 'Bitiş Tarihi', value: new Date(data?.end_date).toLocaleDateString('pt-PT') },
       { name: 'Eğitim-Öğretim Yılı', value: data?.edu_year?.name },
-=======
       { name: 'Uygulamalı Eğitim Gün/İş Günü', value: data?.total_work_day, bold: true },
       {
         name: 'Uygulamalı Eğitim Başlangıç Tarihi',
@@ -32,8 +27,6 @@ const StudentInfo = ({ data }) => {
         value: new Date(data?.end_date).toLocaleDateString('pt-PT'),
         bold: true,
       },
-      { name: 'Eğitim-Öğretim Yılı', value: data?.edu_year.name },
->>>>>>> Stashed changes
     ],
   };
 
