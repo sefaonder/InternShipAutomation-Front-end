@@ -7,22 +7,24 @@ import StudentInfo from './StudentInfo';
 import Company from './Company';
 import WorkDays from './WorkDays';
 import Signs from './Signs';
-import turkish from '../pdfComponents/turkish2.ttf';
+import turkishbold from '../pdfComponents/extrabold.ttf';
+import turkishregular from '../pdfComponents/regular.ttf';
 
+Font.register({ family: 'Turkish', src: turkishregular });
+Font.register({ family: 'Turkishbold', src: turkishbold });
 const PdfInternform = ({ data }) => {
   console.log(data);
 
-  Font.register({ family: 'Turkish', src: turkish });
   console.log(data);
   return (
     <Document>
-      <Page style={{ fontFamily: 'Turkish' }} size="A4"></Page>
+      <Page style={{ fontFamily: 'Turkishbold' }} size="A4"></Page>
       <View style={styles.internformContainer}>
         <Header></Header>
         <Description></Description>
         <View style={styles.internOption}>
-          <Text style={{ border: '1px solid black', width: '100%', padding: '2px' }}>
-            Yapmak İstediğiniz Uygulamalı Eğitim Seçeneği
+          <Text style={{ border: '1px solid black', width: '100%', padding: '2px', fontFamily: 'Turkishbold' }}>
+            YAPMAK İSTEDİĞİNİZ UYGULAMALI EĞİTİM SEÇENEĞİ
           </Text>
           <View style={styles.options}>
             {['Zorunlu Staj', 'İsteğe Bağlı Staj', 'Dönem İçi Staj', 'iş Yerindeki Meslek Eğitimi'].map(
@@ -34,38 +36,47 @@ const PdfInternform = ({ data }) => {
             )}
           </View>
         </View>
-        <View style={{ width: '80%', fontSize: '12px' }}>
-          <Text>Öğrencinin</Text>
+        <View style={{ width: '80%' }}>
+          <Text style={{ fontFamily: 'Turkishbold' }}>ÖĞRENCİNİN</Text>
         </View>
         <StudentInfo data={data} />
-        <View style={{ width: '80%', fontSize: '12px' }}>
-          <Text>Uygulamalı Eğitim Yapılan Yerin</Text>
+        <View style={{ width: '80%' }}>
+          <Text style={{ fontFamily: 'Turkishbold' }}>UYGULAMALI EĞİTİM YAPILAN YERİN</Text>
         </View>
         <Company data={data} />
-        <View style={{ width: '80%', margin: '10px 0px' }}>
-          {' '}
+        <View style={{ width: '80%', margin: '5px 0px' }}>
+          <Text
+            style={{
+              border: '1px solid black',
+              width: '100%',
+              fontSize: '9px',
+              padding: '2px',
+              fontFamily: 'Turkishbold',
+            }}
+          >
+            BU ALAN İLGİLİ FAKÜLTE / YÜKSEKOKUL / MESLEK YÜKSEKOKULU TARAFINDAN DOLDURULACAKTIR{' '}
+          </Text>
           <WorkDays data={data} />
         </View>
 
-        <View style={{ width: '80%', fontSize: '12px' }}>
-          <Text>Kayıtlı Olduğu Fakülte / Yüksekokul</Text>
+        <View style={{ width: '80%', fontSize: '10px', fontFamily: 'Turkishbold' }}>
+          <Text>KAYITLI OLDUĞU FAKÜLTE / YÜKSEKOKUL / MESLEK YÜKSEKOKULU</Text>
         </View>
         <View style={{ width: '80%', border: '1px solid grey' }}>
           <Text style={{ fontSize: '10px', padding: '3px' }}>
             {data.edu_faculty} - {data.edu_program}
           </Text>
         </View>
-        <View style={{ width: '80%', fontSize: '8px' }}>
+        <View style={{ width: '80%', fontSize: '9px' }}>
           <Text>
-            E.K. Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores harum facere incidunt earum
-            necessitatibus aliquam velit magnam eius, perspiciatis laboriosam alias illo consequatur ducimus minus
-            beatae facilis ut nihil ea.
+            E.K. Sağlık Provizyon ve Aktivasyon Sistemi (SPAS) Müstehaklık Belgesi (E DEVLET üzerinden alınarak
+            eklenecektir. SGK işlemlerinin sağlıklı yürütülebilmesi için önemlidir.)
           </Text>
         </View>
         <View style={{ width: '80%', fontSize: '8px' }}>
-          <Signs />
+          <Signs data={data} />
         </View>
-        <View style={{ width: '80%', fontSize: '8px' }}>
+        <View style={{ width: '80%', fontSize: '8px', fontFamily: 'Turkishbold' }}>
           <Text>
             6764 sayili kanunun 48. Maddesi ile 3308 sayili kanunun ek geçici 12. Maddesi uyarinca Staj ücretlerine
             işsizlik fonu katkisindan faydalanmak isteyen işverenlerin web sayfamizda yer alan formlar içerisinde Staj
@@ -81,6 +92,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     fontFamily: 'Turkish',
+    fontSize: '10px',
   },
   internOption: {
     width: '80%',
@@ -97,7 +109,7 @@ const styles = {
     display: 'flex',
     border: '1px solid black',
     width: 'auto',
-    padding: '5px 12px',
+    padding: '3px 15px',
     alignItems: 'center',
     justifyContent: 'center',
   },

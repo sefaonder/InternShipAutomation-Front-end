@@ -145,7 +145,7 @@ function UserDetail() {
   const calculateTotalWorkDay = (data) => {
     const initialValue = 0;
 
-    if (!(data.length > 0)) {
+    if (!(data?.length > 0)) {
       return 0;
     }
 

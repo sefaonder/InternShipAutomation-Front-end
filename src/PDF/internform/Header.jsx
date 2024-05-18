@@ -8,8 +8,8 @@ const Header = () => {
       <Image style={styles.img} src={logo}></Image>
 
       <View style={styles.title}>
-        <Text style={styles.text}>Bursa Uludağ Üniversitesi</Text>
-        <Text style={styles.text}>Uygulamalı Eğitim Başvuru Formu</Text>
+        <Text style={styles.text}>BURSA ULUDAĞ ÜNİVERSİTESİ</Text>
+        <Text style={styles.text}>UYGULAMALI EĞİTİM BAŞVURU FORMU</Text>
       </View>
       <Text style={styles.text}>FR 1.2.3_01</Text>
     </View>

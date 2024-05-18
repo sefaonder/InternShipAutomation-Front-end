@@ -89,8 +89,8 @@ const SurveyDetail = () => {
         <UpdateButton loading={isLoading} variant="outlined" onClick={() => navigate('/survey/update/' + surveyId)}>
           Güncelle
         </UpdateButton>
-        {data && (
-          <PDFDownloadLink fileName="FORM" document={<PdfSurvey data={data} />}>
+        {data?.data && (
+          <PDFDownloadLink fileName="FORM" document={<PdfSurvey data={data?.data} />}>
             {({ loading }) =>
               loading ? (
                 <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>

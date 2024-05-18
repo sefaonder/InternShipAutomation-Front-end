@@ -1,9 +1,9 @@
-import { Text, View } from '@react-pdf/renderer';
+import { Text, View, Font } from '@react-pdf/renderer';
 import React from 'react';
 import PdfTable from '../pdfComponents/PdfTable';
+import turkishbold from '../pdfComponents/extrabold.ttf';
 
 const Company = ({ data }) => {
-  console.log(data);
   const company = [
     { name: 'Adı', value: data?.company_info?.name },
     { name: 'Adresi', value: data?.company_info?.address },
@@ -12,14 +12,17 @@ const Company = ({ data }) => {
     { name: 'E-Posta Adresi', value: data?.company_info?.email },
     { name: 'Hizmet Alanı', value: data?.company_info?.service_area },
   ];
+  Font.register({ family: 'Turkishbold', src: turkishbold });
 
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <PdfTable data={company} />
+        <PdfTable widthName="35%" widthValue="65%" data={company} />
         <View style={styles.auth}>
           <View style={styles.text}>
-            <Text style={{ fontWeight: 'bold', fontSize: '10px' }}>İŞVEREN VEYA İŞVEREN YETKİLİNİN:</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: '10px', fontFamily: 'Turkishbold' }}>
+              İŞVEREN VEYA İŞVEREN YETKİLİNİN:
+            </Text>
           </View>
           <View style={styles.text}>
             <Text>Adı:</Text>
@@ -59,7 +62,7 @@ const styles = {
     width: '60%',
     display: 'flex',
     justifyContent: 'space-evenly',
-    height: '133px',
+    height: '131px',
   },
   text: {
     display: 'flex',

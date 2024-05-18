@@ -10,7 +10,6 @@ const styles = {
   checkbox: {
     width: 10,
     height: 10,
-    marginRight: 5,
     border: '1 solid #000',
   },
 };

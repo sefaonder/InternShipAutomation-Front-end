@@ -2,7 +2,7 @@ import { Text, View, Image } from '@react-pdf/renderer';
 import React from 'react';
 import icon from '../../../public/images/correct.png';
 
-const PdfTableMultiOptions = ({ data }) => {
+const PdfTableMultiOptions = ({ data, fontSize = 10 }) => {
   const styles = {
     table: {
       marginBottom: 10,
@@ -33,7 +33,7 @@ const PdfTableMultiOptions = ({ data }) => {
     },
     tableCell: {
       marginTop: 5,
-      fontSize: 10,
+      fontSize: fontSize,
     },
     image: {
       width: '20px',

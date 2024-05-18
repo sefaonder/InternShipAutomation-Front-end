@@ -128,7 +128,6 @@ const WorkDays = ({ data }) => {
     }
     const workDays = getBusinessDays(first, last, [], data.weekDayWork);
 
-    // If item doesn't exist, add it to box with workDays
     setItems((prev) => [...prev, { ...item, days: workDays }]);
   };
   useEffect(() => {
@@ -148,10 +147,9 @@ const WorkDays = ({ data }) => {
         <View style={styles.days}>
           {days?.map((day, index) => (
             <View style={styles.day}>
-              <Text> {day} </Text>{' '}
+              <Text style={{ borderBottom: '1px solid black', width: '100%' }}> {day} </Text>
               {index + 1 == data?.weekDayWork[index] ? (
                 <View style={styles.box}>
-                  {' '}
                   <Image src={correct}></Image>
                 </View>
               ) : (

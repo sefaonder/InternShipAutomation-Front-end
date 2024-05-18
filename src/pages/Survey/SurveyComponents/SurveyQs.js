@@ -518,7 +518,7 @@ export const dataMulti = [
         text: 'Ulaşım imkânları',
       },
       {
-        text: 'Hiçbir kıstasım yoktu',
+        text: 'Hiçbiri',
       },
     ],
   },
