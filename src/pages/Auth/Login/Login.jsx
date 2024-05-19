@@ -105,6 +105,10 @@ function Login() {
         <Link component="a" href="/password-change">
           Şifremi unuttum
         </Link>
+
+        <Link component="a" href="/register">
+          Kayıt Ol
+        </Link>
       </form>
     </div>
   );
