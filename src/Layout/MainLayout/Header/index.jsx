@@ -60,6 +60,10 @@ const Header = ({ open, handleDrawerToggle }) => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    refetch();
+  }, [location, navigate]);
+
   const settings = [{ label: 'Profilim', navigate: 'profile' }];
 
   const handleCloseUserMenu = () => {
@@ -106,7 +110,7 @@ const Header = ({ open, handleDrawerToggle }) => {
         {!open ? <MenuOpenOutlinedIcon /> : <MenuOutlinedIcon />}
       </IconButton>
 
-      <Typography>{UserRolesEnum[userAuth?.roles]?.label}</Typography>
+      <Typography>{UserRolesEnum[userProfile?.user_type]?.label}</Typography>
       <Typography>{userProfile ? `${userProfile.name} ${userProfile.last_name}` : ''}</Typography>
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
