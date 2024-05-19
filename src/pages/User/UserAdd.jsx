@@ -149,15 +149,19 @@ function UserAdd() {
           helperText={formik.errors.userType}
         />
 
-        <CustomTextInput
-          id="schoolNumber"
-          name="schoolNumber"
-          label="Okul Numarası"
-          value={formik.values.schoolNumber}
-          onChange={(value) => formik.setFieldValue('schoolNumber', value.target.value, true) && formik.setStatus(true)}
-          error={Boolean(formik.errors.schoolNumber)}
-          helperText={formik.errors.schoolNumber}
-        />
+        {formik.values.userType === UserRolesEnum.STUDENT.id && (
+          <CustomTextInput
+            id="schoolNumber"
+            name="schoolNumber"
+            label="Okul Numarası"
+            value={formik.values.schoolNumber}
+            onChange={(value) =>
+              formik.setFieldValue('schoolNumber', value.target.value, true) && formik.setStatus(true)
+            }
+            error={Boolean(formik.errors.schoolNumber)}
+            helperText={formik.errors.schoolNumber}
+          />
+        )}
 
         <CustomTextInput
           id="tcNumber"

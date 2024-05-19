@@ -26,6 +26,13 @@ export const internFormSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    unlockForm: builder.mutation({
+      query: (internFormId) => ({
+        url: `/api/intern-form/unlock/${internFormId}`,
+        method: 'PUT',
+      }),
+    }),
+
     deleteForm: builder.mutation({
       query: (internFormId) => ({
         url: `/api/intern-form/delete/${internFormId}`,
@@ -69,7 +76,8 @@ export const internFormSlice = apiSlice.injectEndpoints({
 
 export const { useGetFormsQuery, useGetFormDetailQuery } = internFormSlice;
 
-export const { useCreateNewFormMutation, useUpdateFormMutation, useDeleteFormMutation } = internFormSlice;
+export const { useCreateNewFormMutation, useUpdateFormMutation, useDeleteFormMutation, useUnlockFormMutation } =
+  internFormSlice;
 
 // Student & Company Info
 export const { useCreateNewStudentInfoMutation, useCreateNewCompanyInfoMutation } = internFormSlice;

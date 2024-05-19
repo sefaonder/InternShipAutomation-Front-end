@@ -13,10 +13,18 @@ import DeleteButton from 'src/components/inputs/DeleteButton';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
-import { useDeleteFormMutation, useGetFormDetailQuery } from 'src/store/services/internForm/internFormApiSlice';
+import {
+  useDeleteFormMutation,
+  useGetFormDetailQuery,
+  useUnlockFormMutation,
+} from 'src/store/services/internForm/internFormApiSlice';
 import { setInternFormData } from 'src/store/services/internForm/internFormSlice';
 import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import LockIcon from '@mui/icons-material/Lock';
+
 import dayjs from 'dayjs';
+import CustomIconButton from 'src/components/inputs/CustomIconButton';
 
 function InternFormDetail() {
   const dispatch = useDispatch();
@@ -26,15 +34,9 @@ function InternFormDetail() {
   const location = useLocation();
 
   const { data, isLoading, isSuccess, isError, error, refetch } = useGetFormDetailQuery(internFormId);
-  const [
-    deleteForm,
-    {
-      isLoading: isLoadingDeleteForm,
-      isSuccess: isSuccesDeleteForm,
-      isError: isErrorDeleteForm,
-      error: errorDeleteForm,
-    },
-  ] = useDeleteFormMutation();
+  const [deleteForm, { isLoading: isLoadingDeleteForm }] = useDeleteFormMutation();
+
+  const [unlockForm, { isLoading: isLoadingUnlockForm }] = useUnlockFormMutation();
 
   const userRole = useSelector((state) => state.auth.roles);
   const studentPermission = permissionControll(userRole, UserRolesEnum.COMISSION.id);
@@ -65,6 +67,15 @@ function InternFormDetail() {
       console.log('error', error);
     }
     navigate('/intern-form');
+  };
+
+  const handleUnlock = async () => {
+    try {
+      const response = await unlockForm(internFormId).unwrap();
+    } catch (error) {
+      console.log('error', error);
+    }
+    refetch();
   };
 
   console.log('data', data);
@@ -153,6 +164,16 @@ function InternFormDetail() {
             variant="outlined"
             loading={isLoading}
           />
+          {studentPermission && (
+            <CustomIconButton
+              onClick={handleUnlock}
+              color={'warning'}
+              loading={isLoadingUnlockForm}
+              disabled={isLoadingUnlockForm}
+              Icon={internFormData?.isSealed ? <LockOpenIcon /> : <LockIcon />}
+              text={internFormData?.isSealed ? 'Mührü aç' : 'Mühürle'}
+            />
+          )}
           {data && (
             <PDFDownloadLink fileName="FORM" document={<PdfInternform data={data.data} />}>
               {({ loading }) =>

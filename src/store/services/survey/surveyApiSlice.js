@@ -27,8 +27,23 @@ export const SurveyApiSlice = apiSlice.injectEndpoints({
     getCompanyInfo: builder.query({
       query: (interviewId) => ({ url: `/api/survey/getCompanyInfo/${interviewId}` }),
     }),
+
+    unlockSurvey: builder.mutation({
+      query: (surveyId) => ({
+        url: `/api/survey/unlock/${surveyId}`,
+        method: 'PUT',
+      }),
+    }),
+
+    deleteSurvey: builder.mutation({
+      query: (surveyId) => ({
+        url: `/api/survey/delete/${surveyId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 export const { useGetSurveysQuery, useGetSurveyQuery, useGetCompanyInfoQuery } = SurveyApiSlice;
 
-export const { useCreateNewSurveyMutation, useUpdateSurveyMutation } = SurveyApiSlice;
+export const { useCreateNewSurveyMutation, useUpdateSurveyMutation, useUnlockSurveyMutation, useDeleteSurveyMutation } =
+  SurveyApiSlice;
