@@ -1,14 +1,19 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import dayjs from 'dayjs';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
+import NavigateLink from 'src/components/details/NavigateLink';
 import DeleteButton from 'src/components/inputs/DeleteButton';
+import DialogButton from 'src/components/inputs/DialogButton';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
+import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
+import usePermission from 'src/hooks/usePermission';
 import {
   useDeleteConfidentalReportMutation,
   useGetConfidentalReportQuery,
@@ -19,6 +24,10 @@ const ConfidentalReportDetail = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
+  const checkPermission = usePermission();
+
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
 
   const { confidentalReportId } = useParams();
   const { data, isLoading, isSuccess, isError, error, refetch, currentData } =
@@ -55,7 +64,24 @@ const ConfidentalReportDetail = () => {
           gap: '1rem',
         }}
       >
-        <DeleteButton loading={isLoadingDelete} disabled={isLoadingDelete} variant="outlined" onClick={handleDelete} />
+        {isAdvancedComission && (
+          <DialogButton
+            className="px-4 flex"
+            onSubmit={handleDelete}
+            buttonColor="error"
+            Icon={<DeleteIcon />}
+            variant="outlined"
+            disabled={isLoadingDelete}
+            loading={isLoadingDelete}
+            button="Sil"
+            message="Bu kayıt silindikten sonra (varsa) ilişkili kayıtlar silinir."
+            subContent={
+              <ul>
+                <li>1.Mülakat</li>
+              </ul>
+            }
+          />
+        )}
         <UpdateButton
           loading={isLoading}
           variant="outlined"
@@ -76,12 +102,17 @@ const ConfidentalReportDetail = () => {
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
           <Box className=" w-full gap-2 flex flex-col ">
+            <NavigateLink text={'İlgili Mülakat'} linkId={data?.data?.interview?.id} route={'interview'} />
             <Container>
-              <Typography className="text-red-400">Öğrencinin Kimlik Bilgileri:</Typography>
+              <Typography variant="h5" className="text-red-400">
+                Öğrencinin Kimlik Bilgileri:
+              </Typography>
 
               <Box className="flex items-center justify-between">
                 <Typography className="font-extrabold">Adı - Soyadı: </Typography>
-                <Typography> Murat ilhan </Typography>
+                <Typography>
+                  {data?.data?.interview?.student?.name + ' ' + data?.data?.interview?.student?.last_name}{' '}
+                </Typography>
               </Box>
 
               <Box className="flex items-center  justify-between">
@@ -103,14 +134,16 @@ const ConfidentalReportDetail = () => {
               </Box>
             </Container>
             <Container>
-              <Typography className="text-red-400">Staj Tarihi ve Çalışma Konuları:</Typography>
+              <Typography variant="h5" className="text-red-400">
+                Staj Tarihi ve Çalışma Konuları
+              </Typography>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Staj Başlama Tarihi:</Typography>
-                <Typography>{data?.data.start_date}</Typography>
+                <Typography>{dayjs(data?.data.start_date).format('DD.MM.YYYY')}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Staj Bitiş Tarihi :</Typography>
-                <Typography>{data?.data.end_date}</Typography>
+                <Typography>{dayjs(data?.data.end_date).format('DD.MM.YYYY')}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Öğrencinin Devamsızlık Günleri:</Typography>
@@ -126,7 +159,9 @@ const ConfidentalReportDetail = () => {
               </Box>
             </Container>
             <Container>
-              <Typography className="text-red-400">Staj Çalışma Değerlendirmesi:</Typography>
+              <Typography variant="h5" className="text-red-400">
+                Staj Çalışma Değerlendirmesi
+              </Typography>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Çalışmada Dikkat ve Sorumluluk:</Typography>
                 <Typography>{data?.data.intern_evaluation?.responsibility}</Typography>
@@ -157,7 +192,9 @@ const ConfidentalReportDetail = () => {
               </Box>
             </Container>
             <Container>
-              <Typography className="text-red-400">Değerlendirmeyi Yapan Yetkilinin (Mühendis):</Typography>
+              <Typography variant="h5" className="text-red-400">
+                Değerlendirmeyi Yapan Yetkilinin (Mühendis)
+              </Typography>
               <Box className="flex items-center  justify-between">
                 <Typography className="font-extrabold">Adı Soyadı:</Typography>
                 <Typography>{data?.data.auth_name}</Typography>
@@ -175,33 +212,15 @@ const ConfidentalReportDetail = () => {
                 <Typography>{data?.data.auth_tc_number}</Typography>
               </Box>
               <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Taril: </Typography>
-                <Typography> 123 123 123</Typography>
+                <Typography className="font-extrabold">Tarih: </Typography>
+                <Typography>{dayjs(data?.data?.createdAt).format('DD.MM.YYYY')}</Typography>
               </Box>
             </Container>
           </Box>
         </Paper>
-        <Paper sx={{ flex: 1, padding: '1rem' }}>
-          <Stack spacing={2}>
-            <Box className="flex flex-col gap-2">
-              <Typography variant="h5">Kayıt Oluşturulma Tarihi</Typography>
-              <Typography>{moment(data?.createdAt).format('DD.MM.YYYY HH:mm:ss')}</Typography>
-            </Box>
-            <Box className="flex flex-col gasp-2">
-              <Typography variant="h5">Kaydı oluşturan kişi</Typography>
-              <Typography>{data?.createdBy?.name + ' ' + data?.createdBy?.last_name}</Typography>
-            </Box>
-
-            <Box className="flex flex-col gap-2">
-              <Typography variant="h5">Son Güncelleme Tarihi</Typography>
-              <Typography>{moment(data?.updatedAt).format('DD.MM.YYYY HH:mm:ss')}</Typography>
-            </Box>
-            <Box className="flex flex-col gap-2">
-              <Typography variant="h5">Son Güncelleyen kişi</Typography>
-              <Typography>{data?.updatedBy?.name + ' ' + data?.updatedBy?.last_name}</Typography>
-            </Box>
-          </Stack>
-        </Paper>
+        <Box sx={{ flex: 1 }}>
+          <RecordTraceCard record={data?.data} />
+        </Box>
       </Box>
     </div>
   );

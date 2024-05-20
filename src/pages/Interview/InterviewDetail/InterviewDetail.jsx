@@ -12,7 +12,12 @@ import {
   useSendCompanyConfidentalMutation,
 } from 'src/store/services/interview/interviewApiSlice';
 import { setInterviewData } from 'src/store/services/interview/interviewSlice';
-import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
+import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
+import NavigateLink from 'src/components/details/NavigateLink';
+import usePermission from 'src/hooks/usePermission';
+import { UserRolesEnum } from 'src/app/enums/roleList';
+import CustomIconButton from 'src/components/inputs/CustomIconButton';
+import InterviewAlert from 'src/components/details/InterviewAlert';
 
 function InterviewDetail() {
   const dispatch = useDispatch();
@@ -25,6 +30,11 @@ function InterviewDetail() {
   const { data, isLoading, isSuccess, isError, error, refetch } = useGetInterviewDetailQuery(interviewId);
   const [deleteInterview, { isLoading: isLoadingDelete }] = useDeleteInterviewMutation();
   const [sendCompanyConfidental, { isLoading: isLoadingSend }] = useSendCompanyConfidentalMutation();
+
+  const checkPermission = usePermission();
+
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
+
   let interviewData = {};
 
   useEffect(() => {
@@ -58,6 +68,7 @@ function InterviewDetail() {
     // TODO: snackbar
     try {
       const response = await sendCompanyConfidental({ interviewId: interviewId }).unwrap();
+      refetch();
     } catch (error) {
       console.log('error', error);
     }
@@ -109,24 +120,39 @@ function InterviewDetail() {
         />
 
         <Tooltip title="Firmaya Doldurup imzalaması için Sicil Fişini ilet">
-          <Button variant="outlined" onClick={handleSendCompanyConfidental}>
-            Sicil fişini ilet
-          </Button>
+          <CustomIconButton
+            onClick={handleSendCompanyConfidental}
+            color={'secondary'}
+            loading={isLoadingSend}
+            disabled={isLoadingSend}
+            Icon={<ForwardToInboxIcon />}
+            text={'Sicil Fişini Ilet'}
+          />
         </Tooltip>
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
           <Container className="my-2 px-6 gap-2 flex">
-            {data?.data.internStatus && (
-              <Link to={`/intern-status/${data.data?.internStatus.id}`}>
-                <span className="underline">InternStatus</span>
-                <CallMadeSharpIcon className="text-sm text-black" />
-              </Link>
+            <NavigateLink text={'İlgili Staj Durumu'} linkId={data?.data?.internStatus?.id} route={'intern-status'} />
+            {isAdvancedComission && (
+              <NavigateLink
+                text={'İlgili Sicil Fişi'}
+                linkId={data?.data?.confidentalReport?.id}
+                route={'confidental-report'}
+              />
             )}
+            <NavigateLink
+              text={'İlgili Öğrenci Değerlendirme Anketi'}
+              linkId={data?.data?.survey?.id}
+              route={'survey'}
+            />
           </Container>
           <CustomDetailPageBox data={accordionData} />
         </Paper>
-        <RecordTraceCard record={interviewData} />
+        <Box className="flex flex-1 flex-col gap-4">
+          <InterviewAlert />
+          <RecordTraceCard record={interviewData} />
+        </Box>
       </Box>
     </div>
   );

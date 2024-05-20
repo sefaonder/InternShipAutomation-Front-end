@@ -1,14 +1,14 @@
-import { Box, Button, CircularProgress, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Paper, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   useDeleteSurveyMutation,
   useGetSurveyQuery,
   useUnlockSurveyMutation,
 } from 'src/store/services/survey/surveyApiSlice';
-import moment from 'moment';
+
 import { dataInterm, dataMulti, dataSingle } from '../SurveyComponents/SurveyQs';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSurvey } from 'src/store/services/survey/surveySlice';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import DownloadButton from 'src/components/inputs/DownloadButton';
@@ -17,12 +17,15 @@ import PdfSurvey from 'src/PDF/survey/PdfSurvey';
 
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
+
 import usePermission from 'src/hooks/usePermission';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
 import DeleteButton from 'src/components/inputs/DeleteButton';
 import SealedRecordAlert from 'src/components/details/SealedRecordAlert';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
+import NavigateLink from 'src/components/details/NavigateLink';
+import DialogButton from 'src/components/inputs/DialogButton';
 
 const SurveyDetail = () => {
   const { surveyId } = useParams();
@@ -86,7 +89,7 @@ const SurveyDetail = () => {
     } catch (error) {
       console.log('error', error);
     }
-    navigate('/intern-form');
+    navigate('/survey');
   };
 
   const handleUnlock = async () => {
@@ -117,11 +120,21 @@ const SurveyDetail = () => {
         }}
       >
         {isAdvancedComission && (
-          <DeleteButton
-            onClick={handleDelete}
+          <DialogButton
+            className="px-4 flex"
+            onSubmit={handleDelete}
+            buttonColor="error"
+            Icon={<DeleteIcon />}
             variant="outlined"
-            loading={isLoadingDeleteSurvey}
             disabled={isLoadingDeleteSurvey}
+            loading={isLoadingDeleteSurvey}
+            button="Sil"
+            message="Bu kayıt silindikten sonra (varsa) ilişkili kayıtlar silinir."
+            subContent={
+              <ul>
+                <li>1.Mülakat</li>
+              </ul>
+            }
           />
         )}
         {isAdvancedComission && (
@@ -153,6 +166,7 @@ const SurveyDetail = () => {
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
+          <NavigateLink text={'İlgili Mülakat'} linkId={data?.data?.interview?.id} route={'interview'} />
           <Box className="flex flex-col gap-3">
             <Typography variant="h4" className="font-extrabold flex justify-center items-center mb-4">
               STAJ DEĞERLENDİRME ANKET FORMU

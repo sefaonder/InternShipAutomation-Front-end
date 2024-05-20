@@ -1,7 +1,6 @@
-import { Alert, AlertTitle, Box, Button, CircularProgress, Container, Paper, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Paper, Typography } from '@mui/material';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
-import moment from 'moment';
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfInternform from 'src/PDF/internform/PdfInternform';
@@ -9,7 +8,7 @@ import { UserRolesEnum } from 'src/app/enums/roleList';
 import { permissionControll } from 'src/app/permissions/permissionController';
 import SealedRecordAlert from 'src/components/details/SealedRecordAlert';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
-import DeleteButton from 'src/components/inputs/DeleteButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
@@ -19,12 +18,14 @@ import {
   useUnlockFormMutation,
 } from 'src/store/services/internForm/internFormApiSlice';
 import { setInternFormData } from 'src/store/services/internForm/internFormSlice';
-import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 
 import dayjs from 'dayjs';
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
+import DialogButton from 'src/components/inputs/DialogButton';
+import NavigateLink from 'src/components/details/NavigateLink';
+import WorkOnSaturdayAlert from 'src/components/details/WorkOnSaturdayAlert';
 
 function InternFormDetail() {
   const dispatch = useDispatch();
@@ -150,11 +151,24 @@ function InternFormDetail() {
           }}
         >
           {studentPermission && (
-            <DeleteButton
-              onClick={handleDelete}
+            <DialogButton
+              className="px-4 flex"
+              onSubmit={handleDelete}
+              buttonColor="error"
+              Icon={<DeleteIcon />}
               variant="outlined"
-              loading={isLoadingDeleteForm}
               disabled={isLoadingDeleteForm}
+              loading={isLoadingDeleteForm}
+              button="Sil"
+              message="Bu kayıt silindikten sonra (varsa) ilişkili kayıtlar silinir."
+              subContent={
+                <ul>
+                  <li>1.Staj Durumu</li>
+                  <li>2.Mülakat</li>
+                  <li>3.Öğrenci Değerlendirme Anketi</li>
+                  <li>4.Gizli Sicil Fişi</li>
+                </ul>
+              }
             />
           )}
 
@@ -190,16 +204,13 @@ function InternFormDetail() {
         </Paper>
         <Box className="flex flex-col sm:flex-row gap-4">
           <Paper sx={{ flex: 2 }}>
-            <Container className="my-2 px-6 gap-2 flex">
-              {data?.data?.internStatus?.id && (
-                <Link to={`/intern-status/${data.data.internStatus.id}`}>
-                  <span className="underline">Intern Status</span> <CallMadeSharpIcon className="text-sm text-black" />
-                </Link>
-              )}
+            <Container>
+              <NavigateLink text={'İlgili Staj Durumu'} linkId={data?.data?.internStatus?.id} route={'intern-status'} />
             </Container>
             <CustomDetailPageBox data={accordionData} />
           </Paper>
           <Box className="flex flex-1 flex-col">
+            {internFormData.workOnSaturday && <WorkOnSaturdayAlert />}
             {internFormData?.isSealed && <SealedRecordAlert />}
             <RecordTraceCard record={internFormData} />
           </Box>

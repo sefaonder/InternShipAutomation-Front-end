@@ -9,6 +9,7 @@ import { UserRolesEnum } from 'src/app/enums/roleList';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
 import DeleteButton from 'src/components/inputs/DeleteButton';
+import DialogButton from 'src/components/inputs/DialogButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import usePermission from 'src/hooks/usePermission';
@@ -178,11 +179,25 @@ function UserDetail() {
           }}
         >
           {isAdvancedAdmin && (
-            <DeleteButton
-              onClick={handleDelete}
+            <DialogButton
+              className="px-4 flex"
+              onSubmit={handleDelete}
+              buttonColor="error"
+              Icon={<DeleteIcon />}
               variant="outlined"
-              loading={isLoadingDeleteUser}
               disabled={isLoadingDeleteUser}
+              loading={isLoadingDeleteUser}
+              button="Sil"
+              message="Bu kayıt silindikten sonra (varsa) ilişkili kayıtlar silinir."
+              subContent={
+                <ul>
+                  <li>1.Staj Durumu</li>
+                  <li>2.Staj Formu</li>
+                  <li>3.Mülakat</li>
+                  <li>4.Öğrenci Değerlendirme Anketi</li>
+                  <li>5.Sicil Fişi</li>
+                </ul>
+              }
             />
           )}
           <UpdateButton

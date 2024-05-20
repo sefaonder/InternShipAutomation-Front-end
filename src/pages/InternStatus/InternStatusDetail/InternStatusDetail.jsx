@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Paper, Typography, Container } from '@mui/material';
+import { Box, Button, Paper, Container, Tooltip } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
@@ -6,16 +6,27 @@ import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import { useGetStatusDetailQuery } from 'src/store/services/internStatus/internStatusApiSlice';
 import { setInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
 import { Link } from 'react-router-dom';
+
 import CallMadeSharpIcon from '@mui/icons-material/CallMadeSharp';
+import EditIcon from '@mui/icons-material/Edit';
+
 import { useEffect } from 'react';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 import dayjs from 'dayjs';
 import { InternStatusEnum } from 'src/app/enums/internStatus';
+import DeleteButton from 'src/components/inputs/DeleteButton';
+import usePermission from 'src/hooks/usePermission';
+import { UserRolesEnum } from 'src/app/enums/roleList';
+import CustomIconButton from 'src/components/inputs/CustomIconButton';
 function InternStatusDetail() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const checkPermission = usePermission();
+
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
 
   const { internStatusId } = useParams();
 
@@ -110,9 +121,25 @@ function InternStatusDetail() {
           flexDirection: 'row-reverse',
           padding: '1rem',
           marginBottom: '1rem',
+          gap: '1rem',
         }}
       >
-        <Button onClick={() => navigate('/intern-status/update/' + internStatusId)}>Güncelle</Button>
+        {isAdvancedComission && (
+          <Tooltip title="Staj Durumu silmek için lütfen ilgili Staj Formunu silin.">
+            <span>
+              <DeleteButton disabled />
+            </span>
+          </Tooltip>
+        )}
+
+        {isAdvancedComission && (
+          <CustomIconButton
+            onClick={() => navigate('/intern-status/update/' + internStatusId)}
+            color={'primary'}
+            Icon={<EditIcon />}
+            text={'Staj Durumunu Güncelle'}
+          />
+        )}
       </Paper>
       <Box className="flex flex-col xl:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
