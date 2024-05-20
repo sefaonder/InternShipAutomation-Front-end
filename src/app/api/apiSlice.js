@@ -77,6 +77,11 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     enqueueSnackbar(message, { variant: 'error' });
   }
 
+  if (result.error && result.error.status === 500) {
+    const message = result.error.data?.message?.errorCode || '';
+    enqueueSnackbar(message, { variant: 'error' });
+  }
+
   return result;
 };
 
