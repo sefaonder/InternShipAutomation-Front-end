@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
-import { List, ListItem, ListItemButton, ListItemText, useTheme } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemText, Tooltip, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 const CustomAutocomplete = ({
@@ -17,6 +17,7 @@ const CustomAutocomplete = ({
   disabled,
   required,
   filterId,
+  disabledTooltipText,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const { data: data, isLoading, isSucces } = useACSlice();
@@ -46,7 +47,6 @@ const CustomAutocomplete = ({
     return options.filter((option) => {
       const searchText = value?.id ? '' : inputValue.toLowerCase();
       const { label, subtext, id, translate } = option;
-      console.log('filterId', filterId);
       if (Boolean(filterId) && id !== filterId) {
         return false;
       }
@@ -65,17 +65,21 @@ const CustomAutocomplete = ({
       aria-required={required}
       options={data?.data || []}
       loading={isLoading}
-      getOptionDisabled={(option) => option.disabled}
+      getOptionDisabled={(option) => {
+        return Boolean(option.disabled || option.surveyId || option.confidentalReportId);
+      }}
       freeSolo
       renderOption={(props, option) => (
-        <List key={option.id} sx={{ width: '100%', bgcolor: 'background.paper' }}>
-          <ListItemButton key={option.id} {...props} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
-            <ListItemText
-              primary={option?.label}
-              secondary={option.translate ? `${option?.subtext} -> ${option?.translate}` : option?.subtext}
-            />
-          </ListItemButton>
-        </List>
+        <Tooltip title={Boolean(props['aria-disabled']) && Boolean(disabledTooltipText) ? disabledTooltipText : null}>
+          <List key={option.id} sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <ListItemButton key={option.id} {...props} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
+              <ListItemText
+                primary={option?.label}
+                secondary={option.translate ? `${option?.subtext} -> ${option?.translate}` : option?.subtext}
+              />
+            </ListItemButton>
+          </List>
+        </Tooltip>
       )}
       getOptionLabel={(option) => ACLabelFunction(option)}
       value={value}
