@@ -66,6 +66,15 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     }
   }, [confidentalReport?.data]);
 
+  useEffect(() => {
+    if (!confidentalReport?.data && data?.data?.form) {
+      formik.setFieldValue('company_name', data.data.form.company_info.name, false);
+      formik.setFieldValue('address', data.data.form.company_info.address, false);
+      formik.setFieldValue('start_date', data.data.form.start_date, false);
+      formik.setFieldValue('end_date', data.data.form.end_date, false);
+    }
+  }, [isSuccess]);
+
   const validationSchema = yup.object({
     interview: yup.object().shape({
       id: yup.string().required('Lütfen İlgili Mülakatı seçin'),
@@ -213,6 +222,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             disabled={confidentalReport?.data?.id}
             required
             // filterId={!isAdvancedComission && userAuth?.userId}
+            disabledTooltipText="Mülakata ait bir kayıt var"
             useACSlice={useGetInterviewACQuery}
             label={'İlgili Mülakat & Staj'}
             value={formik.values.interview}
