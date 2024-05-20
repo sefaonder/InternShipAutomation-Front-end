@@ -5,7 +5,7 @@ export const getBusinessDays = (startDate, endDate, holidayDates, weekDayWork) =
   let currentDate = moment(startDate);
   let finalDate = moment(endDate);
 
-  while (currentDate.isBefore(finalDate)) {
+  while (currentDate.isSameOrBefore(finalDate)) {
     if (calculateWeeklyWork(currentDate, weekDayWork) && !isHoliday(currentDate, holidayDates)) {
       count++;
     }
