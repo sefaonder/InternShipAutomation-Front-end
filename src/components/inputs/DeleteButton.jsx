@@ -2,7 +2,7 @@ import { Button, CircularProgress } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 
-function DeleteButton({ variant = 'contained', onClick, disabled, loading }) {
+function DeleteButton({ variant = 'outlined', onClick, disabled, loading }) {
   return (
     <Button
       color="error"

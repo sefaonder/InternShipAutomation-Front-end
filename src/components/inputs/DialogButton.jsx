@@ -1,7 +1,26 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import { useState } from 'react';
 
-const DialogButton = ({ message, button, type, className, disabled, onSubmit }) => {
+const DialogButton = ({
+  message,
+  button,
+  type,
+  className,
+  disabled,
+  onSubmit,
+  loading,
+  Icon,
+  buttonColor,
+  subContent,
+}) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,7 +37,14 @@ const DialogButton = ({ message, button, type, className, disabled, onSubmit }) 
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen} disabled={disabled} className={className}>
+      <Button
+        variant="outlined"
+        color={buttonColor}
+        onClick={handleClickOpen}
+        disabled={disabled}
+        className={className}
+        startIcon={loading ? <CircularProgress /> : Icon}
+      >
         {button}
       </Button>
       <Dialog
@@ -27,9 +53,14 @@ const DialogButton = ({ message, button, type, className, disabled, onSubmit }) 
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'İşlemi Onaylıyormusunuz?'}</DialogTitle>
+        <DialogTitle variant="h5" id="alert-dialog-title">
+          {'İşlemi Onaylıyormusunuz?'}
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">{message}</DialogContentText>
+          <DialogContentText className="mb-4" id="alert-dialog-description">
+            {message}
+          </DialogContentText>
+          {subContent || null}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="error">

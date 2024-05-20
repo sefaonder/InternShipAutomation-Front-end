@@ -8,20 +8,20 @@ function RecordTraceCard({ record }) {
       <Stack spacing={2}>
         <Box className="flex flex-col gap-2">
           <Typography variant="h5">Kayıt Oluşturulma Tarihi</Typography>
-          <Typography>{moment(record.createdAt).format('DD.MM.YYYY HH:mm:ss')}</Typography>
+          <Typography>{moment(record?.createdAt).format('DD.MM.YYYY HH:mm:ss')}</Typography>
         </Box>
         <Box className="flex flex-col gap-2">
           <Typography variant="h5">Kaydı oluşturan kişi</Typography>
-          <Typography>{record.createdBy?.name + ' ' + record.createdBy?.last_name}</Typography>
+          <Typography>{record?.createdBy?.name + ' ' + record?.createdBy?.last_name}</Typography>
         </Box>
 
         <Box className="flex flex-col gap-2">
           <Typography variant="h5">Son Güncelleme Tarihi</Typography>
-          {record.updatedAt && <Typography>{moment(record.updatedAt).format('DD.MM.YYYY HH:mm:ss')}</Typography>}
+          {record?.updatedAt && <Typography>{moment(record.updatedAt).format('DD.MM.YYYY HH:mm:ss')}</Typography>}
         </Box>
         <Box className="flex flex-col gap-2">
           <Typography variant="h5">Son Güncelleyen kişi</Typography>
-          {record.updatedBy && <Typography>{record.updatedBy.name + ' ' + record.updatedBy.last_name}</Typography>}
+          {record?.updatedBy && <Typography>{record.updatedBy.name + ' ' + record.updatedBy.last_name}</Typography>}
         </Box>
       </Stack>
     </Paper>
