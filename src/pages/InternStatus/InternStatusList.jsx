@@ -8,7 +8,9 @@ import { InternStatusEnum } from 'src/app/enums/internStatus';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
 import ListPageHeader from 'src/components/details/ListPageHeader';
-import { useGetStatusesQuery } from 'src/store/services/internStatus/internStatusApiSlice';
+import CustomIconButton from 'src/components/inputs/CustomIconButton';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useGetExcelListMutation, useGetStatusesQuery } from 'src/store/services/internStatus/internStatusApiSlice';
 import { clearInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
 
 function InternStatusList() {
@@ -17,6 +19,7 @@ function InternStatusList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, currentData, isLoading, isFetching, isSuccess, isError, error, refetch } = useGetStatusesQuery(filter);
+  const [getExcelList, { isLoading: isLoadingExcel }] = useGetExcelListMutation();
 
   const handleFilterChange = (values) => {
     const filterPayload = {
@@ -39,6 +42,14 @@ function InternStatusList() {
     refetch();
     dispatch(clearInternStatusData());
   }, [location, navigate]);
+
+  const handleDownloadExcel = async () => {
+    try {
+      const response = await getExcelList();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const headers = [
     {
@@ -119,7 +130,20 @@ function InternStatusList() {
 
   return (
     <Box>
-      <ListPageHeader header={'Staj Durumu Listesi'} />
+      <ListPageHeader
+        header={'Staj Durumu Listesi'}
+        endComponent={
+          <CustomIconButton
+            onClick={handleDownloadExcel}
+            color={'success'}
+            loading={isLoadingExcel}
+            disabled={isLoadingExcel}
+            Icon={<FileDownloadIcon />}
+            text={'EXCEL ILE INDIR'}
+          />
+        }
+      />
+
       <Paper>
         <CustomTableFilter
           filterOptions={internStatusFilters}

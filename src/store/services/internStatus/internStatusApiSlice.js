@@ -17,7 +17,31 @@ export const internStatusSlice = apiSlice.injectEndpoints({
         body: payload,
       }),
     }),
+
+    getExcelList: builder.mutation({
+      query: () => ({
+        url: '/api/intern-status/download/excel',
+        method: 'POST',
+        responseHandler: async (response) => {
+          if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'staj_durumu.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+            return { data: 'ok' };
+          }
+        },
+        cache: 'no-cache',
+      }),
+    }),
   }),
+  overrideExisting: false,
 });
 
-export const { useGetStatusesQuery, useGetStatusDetailQuery, useUpdateStatusMutation } = internStatusSlice;
+export const { useGetStatusesQuery, useGetStatusDetailQuery, useUpdateStatusMutation, useGetExcelListMutation } =
+  internStatusSlice;
