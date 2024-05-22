@@ -19,11 +19,18 @@ import usePermission from 'src/hooks/usePermission';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import CustomBooleanRadioInput from 'src/components/inputs/CustomBooleanRadioInput';
+import { useGetHolidaysQuery } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 
 function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
   const navigate = useNavigate();
   const [createNewForm, { isLoading }] = useCreateNewFormMutation();
+
+  const { data, isLoading: isLoadingHolidays, error, isError, refetch } = useGetHolidaysQuery();
+
   const [updateForm, { isLoadingUpdate }] = useUpdateFormMutation();
+
+  const holidays = data?.data ? data?.data?.map((item) => item.date) : [];
 
   const userAuth = useSelector((state) => state.auth);
   const checkPermission = usePermission();
@@ -60,6 +67,12 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
       formik.setFieldValue('weekDayWork', internFormData.weekDayWork, false);
     }
   }, [internFormData]);
+
+  useEffect(() => {
+    if (error) {
+      navigate('intern-form');
+    }
+  }, [isError]);
 
   const validationSchema = yup.object({
     isInTerm: yup.boolean().optional(),
@@ -138,6 +151,10 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
 
   console.log('formik.values', formik.values);
 
+  if (isLoadingHolidays) {
+    return <CustomCircularProgress />;
+  }
+
   return (
     <div>
       <Typography className="my-4" variant="h4">
@@ -188,7 +205,7 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
           name="startDate"
           required
           label="Başlangıç Tarihi"
-          shouldDisableDate={(date) => shouldDisableDate(date, [], formik.values.weekDayWork)}
+          shouldDisableDate={(date) => shouldDisableDate(date, holidays, formik.values.weekDayWork)}
           disabled={formik.values.weekDayWork.length < 0}
           value={dayjs(formik.values.startDate)}
           onChange={(value) => formik.setFieldValue('startDate', dayjs(value).toDate(), true) && formik.setStatus(true)}
@@ -200,7 +217,7 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
           id="endDate"
           name="endDate"
           required
-          shouldDisableDate={(date) => shouldDisableDate(date, [], formik.values.weekDayWork)}
+          shouldDisableDate={(date) => shouldDisableDate(date, holidays, formik.values.weekDayWork)}
           label="Bitiş Tarihi"
           disabled={formik.values.weekDayWork.length < 0}
           value={dayjs(formik.values.endDate)}
@@ -211,7 +228,7 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
 
         {formik.values.endDate && formik.values.startDate && formik.values.weekDayWork && (
           <Typography>
-            {`Total Day : ${getBusinessDays(formik.values.startDate, formik.values.endDate, [], formik.values.weekDayWork)}`}
+            {`Total Day : ${getBusinessDays(formik.values.startDate, formik.values.endDate, holidays, formik.values.weekDayWork)}`}
           </Typography>
         )}
 

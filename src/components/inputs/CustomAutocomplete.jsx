@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import { List, ListItem, ListItemButton, ListItemText, Tooltip, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { InternStatusEnum } from 'src/app/enums/internStatus';
 
 const CustomAutocomplete = ({
   value,
@@ -75,7 +76,11 @@ const CustomAutocomplete = ({
             <ListItemButton key={option.id} {...props} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
               <ListItemText
                 primary={option?.label}
-                secondary={option.translate ? `${option?.subtext} -> ${option?.translate}` : option?.subtext}
+                secondary={
+                  option.translate
+                    ? `${option?.subtext} -> ${InternStatusEnum[option?.translate].label}`
+                    : option?.subtext
+                }
               />
             </ListItemButton>
           </List>
