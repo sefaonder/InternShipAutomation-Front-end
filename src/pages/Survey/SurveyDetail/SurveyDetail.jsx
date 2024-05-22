@@ -10,7 +10,7 @@ import {
 import { dataInterm, dataMulti, dataSingle } from '../SurveyComponents/SurveyQs';
 import { useDispatch } from 'react-redux';
 import { setSurvey } from 'src/store/services/survey/surveySlice';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import PdfSurvey from 'src/PDF/survey/PdfSurvey';
@@ -26,12 +26,14 @@ import SealedRecordAlert from 'src/components/details/SealedRecordAlert';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import NavigateLink from 'src/components/details/NavigateLink';
 import DialogButton from 'src/components/inputs/DialogButton';
+import { saveAs } from 'file-saver';
 
 const SurveyDetail = () => {
   const { surveyId } = useParams();
   const { data, isLoading, isSuccess, isError, error, refetch, currentData } = useGetSurveyQuery(surveyId);
 
   const [deleteSurvey, { isLoading: isLoadingDeleteSurvey }] = useDeleteSurveyMutation();
+  const [loadingDownload, setLoadingDownload] = useState(true);
 
   const [unlockSurvey, { isLoading: isLoadingUnlockSurvey }] = useUnlockSurveyMutation();
 
@@ -105,7 +107,13 @@ const SurveyDetail = () => {
   if (isLoading) {
     return <CircularProgress />;
   }
-
+  const submitForm = async (event) => {
+    event.preventDefault(); // prevent page reload
+    setLoadingDownload(false);
+    const blob = await pdf(<PdfSurvey data={data.data} />).toBlob();
+    saveAs(blob, 'wycena.pdf');
+    setLoadingDownload(true);
+  };
   return (
     <div>
       <Paper
@@ -150,19 +158,7 @@ const SurveyDetail = () => {
         <UpdateButton loading={isLoading} variant="outlined" onClick={() => navigate('/survey/update/' + surveyId)}>
           Güncelle
         </UpdateButton>
-        {data?.data && (
-          <PDFDownloadLink fileName="FORM" document={<PdfSurvey data={data?.data} />}>
-            {({ loading }) =>
-              loading ? (
-                <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
-              ) : (
-                <DownloadButton variant="outlined" loading={loading} text={'Download...'}>
-                  {' '}
-                </DownloadButton>
-              )
-            }
-          </PDFDownloadLink>
-        )}
+        {data?.data && <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />}
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>

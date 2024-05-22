@@ -33,7 +33,7 @@ function EmailControl({ setMailSended }) {
   });
 
   return (
-    <div className="flex items-center border-2 relative login-container h-[32rem]">
+    <div className="flex items-center border-2 relative bg-white rounded-xl login-container h-[32rem]">
       <img
         className="w-20 left-2/4 -translate-x-2/4 absolute top-[-40px]"
         src="https://uludag.edu.tr/img/uu.svg"

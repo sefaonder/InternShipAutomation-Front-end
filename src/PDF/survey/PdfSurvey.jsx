@@ -4,7 +4,7 @@ import PdfTable from '../pdfComponents/PdfTable';
 import PdfHeader from '../pdfComponents/PdfHeader';
 import CollectiveQuestions from '../pdfComponents/CollectiveQuestions';
 import turkishbold from '../pdfComponents/extrabold.ttf';
-import turkishregular from '../pdfComponents/regular.ttf';
+import turkishregular from '../pdfComponents/semibold.ttf';
 import PdfCheckbox from '../pdfComponents/PdfCheckbox';
 
 Font.register({ family: 'Turkish', src: turkishregular });

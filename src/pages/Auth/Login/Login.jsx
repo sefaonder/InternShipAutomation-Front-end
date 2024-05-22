@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { useLoginMutation } from 'src/store/services/auth/authApiSlice';
 import './login.css';
 import { setCredentials } from 'src/store/services/auth/authSlice';
-import { Link } from '@mui/material';
+import { Box, Link } from '@mui/material';
 import parseJWT from 'src/app/handlers/jwtHandler';
 
 function Login() {
@@ -67,14 +67,14 @@ function Login() {
   });
 
   return (
-    <div className="flex items-center border-2 relative login-container h-[32rem]">
+    <div className="flex items-center  border-2 m-2 relative bg-white h-[32rem] rounded-xl">
       <img
         className="w-20 left-2/4 -translate-x-2/4 absolute top-[-40px]"
         src="https://uludag.edu.tr/img/uu.svg"
         alt=""
       />
 
-      <form onSubmit={formik.handleSubmit} className="p-8 flex justify-center flex-col lg:w-[32rem] mt-12">
+      <form onSubmit={formik.handleSubmit} className="p-8 flex justify-center flex-col  gap-4 ">
         <h1 className="flex justify-center	text-2xl items-center">Bilgisayar Mühendisliği Staj Otomasyonu</h1>
 
         <TextField
@@ -87,28 +87,31 @@ function Login() {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <TextField
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          margin="normal"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        <Button className="p-3" type="submit" color="primary" variant="outlined">
-          Gönder
-        </Button>
 
-        <Link component="a" href="/password-change">
-          Şifremi unuttum
-        </Link>
+        <Box className="flex flex-col">
+          <TextField
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />{' '}
+          <Link component="a" href="/password-change">
+            Şifremi unuttum
+          </Link>
+        </Box>
 
-        <Link component="a" href="/register">
-          Kayıt Ol
-        </Link>
+        <Box className="flex flex-col">
+          <Button className="p-3" type="submit" color="primary" variant="outlined">
+            Gönder
+          </Button>
+          <Link component="a" href="/register">
+            Kayıt Ol
+          </Link>
+        </Box>
       </form>
     </div>
   );

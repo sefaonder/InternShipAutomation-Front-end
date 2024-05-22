@@ -37,7 +37,7 @@ const PdfConfidentalReport = ({ data }) => {
   ];
 
   const internEvuluation = {
-    titles: ['Başari Ölçüleri', 'İyi', 'Orta', 'İyi Değil'],
+    titles: ['Başari Ölçüleri', 'İyi', 'Orta', 'İyi Değil', 'Açıklama (Gerekirse)'],
     data: [
       { name: 'Calisma Dikkat ve Sorumluluk', value: data?.intern_evaluation?.responsibility },
       { name: 'İsi Yapmadaki Basarisi', value: data?.intern_evaluation?.success },

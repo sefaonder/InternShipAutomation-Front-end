@@ -163,7 +163,7 @@ const WorkDays = ({ data }) => {
         {items.map((stuff) => (
           <View style={styles.item}>
             <Text> {stuff.text} </Text>
-            {stuff.text !== '' && <Text> {stuff.days} Is Günü </Text>}
+            {stuff.text !== '' && <Text> {stuff.days} İş Günü </Text>}
           </View>
         ))}
       </View>

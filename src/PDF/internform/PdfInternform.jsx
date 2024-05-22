@@ -8,7 +8,7 @@ import Company from './Company';
 import WorkDays from './WorkDays';
 import Signs from './Signs';
 import turkishbold from '../pdfComponents/extrabold.ttf';
-import turkishregular from '../pdfComponents/regular.ttf';
+import turkishregular from '../pdfComponents/semibold.ttf';
 
 Font.register({ family: 'Turkish', src: turkishregular });
 Font.register({ family: 'Turkishbold', src: turkishbold });
@@ -30,14 +30,18 @@ const PdfInternform = ({ data }) => {
             {['Zorunlu Staj', 'İsteğe Bağlı Staj', 'Dönem İçi Staj', 'iş Yerindeki Meslek Eğitimi'].map(
               (item, index) => (
                 <View style={styles.checkboxItem}>
-                  <PdfCheckbox text={item} checked={data.isInTerm & (item === 'Dönem İçi Staj')} />
+                  {!data.isInTerm ? (
+                    <PdfCheckbox text={item} checked={item === 'Zorunlu Staj'} />
+                  ) : (
+                    <PdfCheckbox text={item} checked={data.isInTerm & (item === 'Dönem İçi Staj')} />
+                  )}
                 </View>
               ),
             )}
           </View>
         </View>
         <View style={{ width: '80%' }}>
-          <Text style={{ fontFamily: 'Turkishbold' }}>ÖĞRENCİNİN</Text>
+          <Text style={{ fontFamily: 'Turkishbold', marginTop: '5px' }}>ÖĞRENCİNİN</Text>
         </View>
         <StudentInfo data={data} />
         <View style={{ width: '80%' }}>
@@ -67,7 +71,7 @@ const PdfInternform = ({ data }) => {
             {data.edu_faculty} - {data.edu_program}
           </Text>
         </View>
-        <View style={{ width: '80%', fontSize: '9px' }}>
+        <View style={{ width: '80%', fontSize: '9px', margin: '5px 0' }}>
           <Text>
             E.K. Sağlık Provizyon ve Aktivasyon Sistemi (SPAS) Müstehaklık Belgesi (E DEVLET üzerinden alınarak
             eklenecektir. SGK işlemlerinin sağlıklı yürütülebilmesi için önemlidir.)

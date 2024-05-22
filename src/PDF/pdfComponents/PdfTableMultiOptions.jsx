@@ -3,6 +3,7 @@ import React from 'react';
 import icon from '../../../public/images/correct.png';
 
 const PdfTableMultiOptions = ({ data, fontSize = 10 }) => {
+  console.log(data);
   const styles = {
     table: {
       marginBottom: 10,
@@ -25,7 +26,14 @@ const PdfTableMultiOptions = ({ data, fontSize = 10 }) => {
       borderTopWidth: 0,
     },
     otherCols: {
-      flex: 1,
+      flex: 0.8,
+      padding: 3,
+      borderWidth: 1,
+      borderTopWidth: 0,
+      textAlign: 'center',
+    },
+    lastCol: {
+      flex: 1.5,
       padding: 3,
       borderWidth: 1,
       borderTopWidth: 0,
@@ -44,14 +52,17 @@ const PdfTableMultiOptions = ({ data, fontSize = 10 }) => {
     <View style={styles.table}>
       <View style={styles.tableRow}>
         {data?.titles.map((item, index) => (
-          <View style={index === 0 ? styles.firstCol : styles.otherCols}>
+          <View
+            key={index}
+            style={index === 0 ? styles.firstCol : index === data.titles.length - 1 ? styles.lastCol : styles.otherCols}
+          >
             <Text style={styles.tableCell}>{item}</Text>
           </View>
         ))}
       </View>
 
       {data?.data.map((item, index) => (
-        <View style={styles.tableRow}>
+        <View key={index} style={styles.tableRow}>
           <View style={styles.firstCol}>
             <Text style={styles.tableCell}>{item.name}</Text>
           </View>
@@ -68,6 +79,11 @@ const PdfTableMultiOptions = ({ data, fontSize = 10 }) => {
           <View style={styles.otherCols}>
             <Text style={styles.tableCell}>
               {item?.value === 'İyi Değil' && <Image style={styles.image} src={icon}></Image>}
+            </Text>
+          </View>
+          <View style={styles.lastCol}>
+            <Text style={styles.tableCell}>
+              {item?.value === 'Açıklama (Gerekirse)' && <Image style={styles.image} src={icon}></Image>}
             </Text>
           </View>
         </View>

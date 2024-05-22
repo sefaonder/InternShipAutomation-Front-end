@@ -1,10 +1,15 @@
 import { Button, CircularProgress } from '@mui/material';
 import React from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
-const DownloadButton = ({ loading, text, variant }) => {
+const DownloadButton = ({ variant, submitForm, loadingDownload }) => {
   return (
-    <Button color="success" variant={variant} startIcon={loading ? <CircularProgress /> : <DownloadIcon />}>
-      {text}
+    <Button
+      onClick={(e) => submitForm(e)}
+      color="success"
+      variant={variant}
+      startIcon={!loadingDownload ? <CircularProgress /> : <DownloadIcon />}
+    >
+      {!loadingDownload ? 'yükleniyor' : 'İndir'}
     </Button>
   );
 };

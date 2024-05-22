@@ -1,14 +1,14 @@
 import { Box, FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '@mui/material';
 import React from 'react';
 
-const CustomRadioGroup = ({ data, formik, error, helperText }) => {
+const CustomRadioGroup = ({ data, formik, error, helperText, index }) => {
   return (
-    <FormControl error={error} className="w-full flex lg:flex-row items-center">
+    <FormControl error={error} className="w-full flex-col flex  items-center">
       <FormLabel
         className="font-extrabold w-full flex flex-row !text-[rgba(0,0,0,0.6)]"
         id="demo-radio-buttons-group-label"
       >
-        {data.name}
+        {index && index} - {data.name}
       </FormLabel>
       <Box className="w-full">
         <RadioGroup

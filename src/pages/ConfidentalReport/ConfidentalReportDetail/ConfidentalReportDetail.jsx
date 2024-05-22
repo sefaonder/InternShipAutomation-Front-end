@@ -1,9 +1,9 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDownloadLink, PDFViewer, pdf } from '@react-pdf/renderer';
 import dayjs from 'dayjs';
 import { enqueueSnackbar } from 'notistack';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
@@ -19,6 +19,7 @@ import {
   useGetConfidentalReportQuery,
 } from 'src/store/services/confidentalReport/confidentalReportApiSlice';
 import { setConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
+import { saveAs } from 'file-saver';
 
 const ConfidentalReportDetail = () => {
   const navigate = useNavigate();
@@ -28,11 +29,12 @@ const ConfidentalReportDetail = () => {
   const checkPermission = usePermission();
 
   const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
-
+  const [loadingDownload, setLoadingDownload] = useState(true);
   const { confidentalReportId } = useParams();
   const { data, isLoading, isSuccess, isError, error, refetch, currentData } =
     useGetConfidentalReportQuery(confidentalReportId);
   const [deleteConfidentalReport, { isLoading: isLoadingDelete }] = useDeleteConfidentalReportMutation();
+  console.log(data);
 
   useEffect(() => {
     refetch();
@@ -50,7 +52,13 @@ const ConfidentalReportDetail = () => {
     } catch (error) {}
     navigate('/confidental-report');
   };
-
+  const submitForm = async (event) => {
+    event.preventDefault(); // prevent page reload
+    setLoadingDownload(false);
+    const blob = await pdf(<PdfConfidentalReport data={data.data} />).toBlob();
+    saveAs(blob, 'wycena.pdf');
+    setLoadingDownload(true);
+  };
   return (
     <div>
       <Paper
@@ -87,17 +95,7 @@ const ConfidentalReportDetail = () => {
           variant="outlined"
           onClick={() => navigate('/confidental-report/update/' + confidentalReportId)}
         />
-        {data && (
-          <PDFDownloadLink fileName="FORM" document={<PdfConfidentalReport data={data.data} />}>
-            {({ loading }) =>
-              loading ? (
-                <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
-              ) : (
-                <DownloadButton variant="outlined" loading={loading} text={'Download...'}></DownloadButton>
-              )
-            }
-          </PDFDownloadLink>
-        )}
+        {data?.data && <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />}
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
