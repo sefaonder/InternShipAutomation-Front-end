@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Container, Paper, Typography } from '@mui/material';
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
-import React, { useEffect } from 'react';
+import { PDFDownloadLink, PDFViewer, pdf } from '@react-pdf/renderer';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfInternform from 'src/PDF/internform/PdfInternform';
@@ -20,6 +20,7 @@ import {
 import { setInternFormData } from 'src/store/services/internForm/internFormSlice';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
+import { saveAs } from 'file-saver';
 
 import dayjs from 'dayjs';
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
@@ -33,6 +34,8 @@ function InternFormDetail() {
   const { internFormId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [loadingDownload, setLoadingDownload] = useState(true);
 
   const { data, isLoading, isSuccess, isError, error, refetch } = useGetFormDetailQuery(internFormId);
   const [deleteForm, { isLoading: isLoadingDeleteForm }] = useDeleteFormMutation();
@@ -135,7 +138,13 @@ function InternFormDetail() {
         { text: 'Hizmet Alanı', value: data?.data?.company_info?.service_area },
       ],
     ];
-
+    const submitForm = async (event) => {
+      event.preventDefault(); // prevent page reload
+      setLoadingDownload(false);
+      const blob = await pdf(<PdfInternform data={data.data} />).toBlob();
+      saveAs(blob, 'uludag.pdf');
+      setLoadingDownload(true);
+    };
     return (
       <div>
         <Typography variant="h2">Staj Formu</Typography>
@@ -188,18 +197,8 @@ function InternFormDetail() {
               text={internFormData?.isSealed ? 'Mührü aç' : 'Mühürle'}
             />
           )}
-          {data && (
-            <PDFDownloadLink fileName="FORM" document={<PdfInternform data={data.data} />}>
-              {({ loading }) =>
-                loading ? (
-                  <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
-                ) : (
-                  <DownloadButton variant="outlined" loading={loading} text={'Download...'}>
-                    {' '}
-                  </DownloadButton>
-                )
-              }
-            </PDFDownloadLink>
+          {data?.data && (
+            <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />
           )}
         </Paper>
         <Box className="flex flex-col sm:flex-row gap-4">

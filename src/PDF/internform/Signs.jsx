@@ -12,7 +12,7 @@ const Signs = ({ data }) => {
     <View style={styles.container2}>
       <View style={styles.box}>
         <View>
-          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}>Ogrenci Imzasi</Text>{' '}
+          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}>Öğrenci İmzası</Text>{' '}
         </View>
         <View style={styles.text}>
           <Text> Adi Soyadi</Text>
@@ -26,7 +26,7 @@ const Signs = ({ data }) => {
       <View style={styles.box}>
         <View>
           {' '}
-          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}>Fakulte Komisyon Onayi</Text>{' '}
+          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}>Fakülte Komisyon Onayı</Text>{' '}
         </View>
         <View style={styles.text}>
           <Text> Onaylayan</Text>
@@ -40,7 +40,7 @@ const Signs = ({ data }) => {
       <View style={styles.box}>
         <View>
           {' '}
-          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}> Fakulte / Yuksekokul / MYO </Text>{' '}
+          <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}> Fakülte / Yükselokul / MYO </Text>{' '}
         </View>
         <View style={styles.text}>
           <Text> Onaylayan</Text>

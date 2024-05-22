@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useRegisterMutation } from 'src/store/services/auth/authApiSlice';
-import { Button, Link } from '@mui/material';
+import { Box, Button, Link } from '@mui/material';
 
 function Register() {
   const navigate = useNavigate();
@@ -40,14 +40,14 @@ function Register() {
   });
 
   return (
-    <div className="flex items-center border-2 relative login-container h-[32rem]">
+    <div className="flex items-center  border-2 m-2 relative bg-white h-[36rem] rounded-xl">
       <img
         className="w-20 left-2/4 -translate-x-2/4 absolute top-[-40px]"
         src="https://uludag.edu.tr/img/uu.svg"
         alt=""
       />
 
-      <form onSubmit={formik.handleSubmit} className="p-8 flex justify-center flex-col lg:w-[32rem] mt-12 gap-4">
+      <form onSubmit={formik.handleSubmit} className="p-8 flex justify-center flex-col gap-4">
         <h1 className="flex justify-center	text-2xl items-center">Bilgisayar Mühendisliği Staj Otomasyonu</h1>
 
         <CustomTextInput
@@ -93,14 +93,15 @@ function Register() {
           error={Boolean(formik.errors.tcNumber)}
           helperText={formik.errors.tcNumber}
         />
+        <Box className="flex flex-col">
+          <Button className="p-3" type="submit" color="primary" variant="outlined">
+            Üye Ol
+          </Button>
 
-        <Button className="p-3" type="submit" color="primary" variant="outlined">
-          Üye Ol
-        </Button>
-
-        <Link component="a" href="/login">
-          Giriş Yap
-        </Link>
+          <Link component="a" href="/login">
+            Giriş Yap
+          </Link>
+        </Box>
       </form>
     </div>
   );

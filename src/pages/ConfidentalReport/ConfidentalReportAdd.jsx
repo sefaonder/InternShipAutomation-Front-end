@@ -252,7 +252,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           </Collapse>
 
           <Box className="flex gap-4 flex-col">
-            <Typography className="my-2 text-red-500"> Kurum Bilgileri: </Typography>
+            <Typography className="my-2 text-red-500 text-lg	border-b-2"> Kurum Bilgileri: </Typography>
             <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
               <FormLabel className="font-extrabold">Staj Yapılan Firma Adı: </FormLabel>
               <TextField
@@ -282,7 +282,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           </Box>
         </Container>
         <Container className="lg:w-1/2 sm:w-full  flex flex-col gap-4">
-          <Typography className="my-2 text-red-500"> Staj Tarihi Ve Çalışma Konuları: </Typography>
+          <Typography className="my-2 text-red-500 text-lg	border-b-2"> Staj Tarihi Ve Çalışma Konuları: </Typography>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold my-2">Staj Başlama Tarihi: </FormLabel>
             <CustomDateInput
@@ -342,10 +342,11 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           <CustomRadioGroup data={is_edu_program} formik={formik} />
         </Container>
         <Container className="lg:w-1/2 sm:w-full flex flex-col">
-          <Typography className="my-2 text-red-500"> Staj Çalışma Değerlendirmesi: </Typography>
+          <Typography className="my-2 text-lg	border-b-2 text-red-500"> Staj Çalışma Değerlendirmesi: </Typography>
 
-          {internship_evulation.map((data) => (
+          {internship_evulation.map((data, index) => (
             <CustomRadioGroup
+              index={index + 1}
               error={formik.touched[data.type] && Boolean(formik.errors[data.type])}
               helperText={formik.touched[data.type] && formik.errors[data.type]}
               data={data}
@@ -368,7 +369,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           </Box>
         </Container>
         <Container className="lg:w-1/2 sm:w-full flex flex-col gap-4">
-          <Typography className="my-2 text-red-500">Değerlendirmeyi Yapan Yetkilinin: </Typography>
+          <Typography className="my-2 text-red-500 text-lg	border-b-2">Değerlendirmeyi Yapan Yetkilinin: </Typography>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold m-2">Adı-Soyadı: </FormLabel>
             <TextField

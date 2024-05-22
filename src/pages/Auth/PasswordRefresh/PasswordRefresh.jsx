@@ -57,14 +57,14 @@ function PasswordRefresh() {
   console.log('formik', formik.values);
 
   return (
-    <div className="flex items-center border-2 relative login-container h-[32rem]">
+    <div className="flex items-center  border-2 m-2 relative login-container h-[32rem]">
       <img
         className="w-20 left-2/4 -translate-x-2/4 absolute top-[-40px]"
         src="https://uludag.edu.tr/img/uu.svg"
         alt=""
       />
 
-      <form onSubmit={formik.handleSubmit} className="p-8 flex justify-center flex-col lg:w-[32rem] mt-12">
+      <form onSubmit={formik.handleSubmit} className="p-8 flex justify-center gap-4 flex-col">
         <h1 className="flex justify-center	text-2xl items-center">Bilgisayar Mühendisliği Staj Otomasyonu</h1>
 
         <TextField
@@ -72,7 +72,6 @@ function PasswordRefresh() {
           name="password"
           label="Password"
           type="password"
-          margin="normal"
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
@@ -84,7 +83,7 @@ function PasswordRefresh() {
           name="password2"
           label="Password2"
           type="password"
-          margin="normal"
+          margin=""
           value={formik.values.password2}
           onChange={formik.handleChange}
           error={formik.touched.password2 && Boolean(formik.errors.password2)}

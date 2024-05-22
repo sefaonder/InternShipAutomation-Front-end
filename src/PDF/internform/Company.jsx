@@ -62,7 +62,6 @@ const styles = {
     width: '60%',
     display: 'flex',
     justifyContent: 'space-evenly',
-    height: '131px',
   },
   text: {
     display: 'flex',

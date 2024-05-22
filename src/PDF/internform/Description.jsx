@@ -1,7 +1,7 @@
 import { Image, Text, View, Font, StyleSheet } from '@react-pdf/renderer';
 import React, { useEffect, useState } from 'react';
 import turkishbold from '../pdfComponents/extrabold.ttf';
-import turkishregular from '../pdfComponents/regular.ttf';
+import turkishregular from '../pdfComponents/semibold.ttf';
 
 Font.register({ family: 'Turkishbold', src: turkishbold });
 Font.register({ family: 'Turkish', src: turkishregular });
@@ -10,7 +10,7 @@ const Description = () => {
   return (
     <View style={[styles.container]}>
       <View style={styles.desc}>
-        <Text style={[styles.text, { fontFamily: 'Turkishbold' }]}>İlgili Makama,</Text>
+        <Text style={{ fontFamily: 'Turkishbold', fontSize: '10px' }}>İlgili Makama,</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <Text style={{ fontFamily: 'Turkishbold', marginRight: '5px', textIndent: '30px' }}>
@@ -23,15 +23,17 @@ const Description = () => {
           </Text>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <Text>şekillerde Uygulamalı Eğitim yapmaları beklenmektedir. Aşağıda yer alan ve</Text>
-            <Text style={{ fontFamily: 'Turkishbold', textDecoration: 'underline' }}> SGK işlemleri Bursa </Text>
+            <Text style={{ fontFamily: 'Turkishbold', textDecoration: 'underline' }}> SGK işlemleri</Text>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <Text style={{ fontFamily: 'Turkishbold', textDecoration: 'underline' }}>
-              Uludağ Üniversitesi tarafından yapılacak
+              Bursa Uludağ Üniversitesi tarafından yapılacak
             </Text>
-            <Text style={{ marginLeft: '2px' }}>olan öğrencinin Uygulamalı Eğitimini kurumunuzda/</Text>
+            <Text style={{ marginLeft: '2px' }}>olan öğrencinin Uygulamalı Eğitimini </Text>
           </View>
-          <Text>kuruluşunuzda yapmasında göstereceğiniz ilgiye teşekkür eder, çalışmalarınızda başarılar dileriz</Text>
+          <Text>
+            kurumunuzda/kuruluşunuzda yapmasında göstereceğiniz ilgiye teşekkür eder, çalışmalarınızda başarılar dileriz
+          </Text>
         </View>
       </View>
       <View style={styles.img}>

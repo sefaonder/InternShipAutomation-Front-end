@@ -166,8 +166,9 @@ const SurveyAdd = ({ survey, surveyId }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
+    <div className="w-full flex items-center justify-center flex-col">
+      <Typography className="m-4 text-xl text-red-500 lg:text-3xl">Öğrenci Değerlendirme Anketi</Typography>
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 justify-center w-3/4 items-between">
         <CustomAutocomplete
           name="interview"
           id="interview"
