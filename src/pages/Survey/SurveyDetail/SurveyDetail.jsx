@@ -21,7 +21,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import usePermission from 'src/hooks/usePermission';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
-import DeleteButton from 'src/components/inputs/DeleteButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import SealedRecordAlert from 'src/components/details/SealedRecordAlert';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import NavigateLink from 'src/components/details/NavigateLink';
