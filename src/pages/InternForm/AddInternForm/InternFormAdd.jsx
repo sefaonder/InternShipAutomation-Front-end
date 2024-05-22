@@ -7,19 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { clearInternFormData } from 'src/store/services/internForm/internFormSlice';
 
-function InternFormAdd() {
+function InternFormAdd({ internForm, internFormId, isLoadingState }) {
   const [step, setStep] = useState(1);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(isLoadingState || false);
   const navigate = useNavigate();
-  const { internFormId } = useParams();
-
-  const internForm = useSelector((state) => state.internForm);
-
-  console.log('hibili', internForm);
 
   useEffect(() => {
-    if (internFormId && !Boolean(internForm?.id)) {
+    if (internFormId && !Boolean(internForm?.data?.id)) {
       // navigate back detail page
       navigate('/intern-form/' + internFormId);
     }
@@ -55,10 +50,12 @@ function InternFormAdd() {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {step === 1 && <FormAdd internFormData={internForm} nextStep={nextStep} setIsLoading={(e) => setIsLoading(e)} />}
+      {step === 1 && (
+        <FormAdd internFormData={internForm?.data} nextStep={nextStep} setIsLoading={(e) => setIsLoading(e)} />
+      )}
       {step === 2 && (
         <StudentInfoAdd
-          internFormData={internForm}
+          internFormData={internForm?.data}
           nextStep={nextStep}
           prevStep={prevStep}
           setIsLoading={(e) => setIsLoading(e)}
@@ -66,7 +63,7 @@ function InternFormAdd() {
       )}
       {step === 3 && (
         <CompanyInfoAdd
-          internFormData={internForm}
+          internFormData={internForm?.data}
           nextStep={nextStep}
           prevStep={prevStep}
           setIsLoading={(e) => setIsLoading(e)}

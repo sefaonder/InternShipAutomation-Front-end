@@ -14,12 +14,12 @@ import {
 import CustomDateTimeInput from 'src/components/inputs/CustomDateTimeInput';
 import dayjs from 'dayjs';
 
-function InterviewAdd() {
+function InterviewAdd({ interview, interviewId, isLoadingState }) {
   const [createNewInterview, { isLoading }] = useCreateNewInterviewMutation();
   const [updateInterview, { isLoadingUpdate }] = useUpdateInterviewMutation();
 
   const navigate = useNavigate();
-  const interviewData = useSelector((state) => state.interview);
+  const interviewData = interview?.data;
 
   const initialValues = {
     comission: {},
@@ -29,7 +29,6 @@ function InterviewAdd() {
 
   useEffect(() => {
     if (interviewData?.id) {
-      console.log('formil', interviewData);
       formik.setFieldValue('comission', interviewData.comission, false);
       formik.setFieldValue('internStatus', interviewData.internStatus, false);
       formik.setFieldValue('date', interviewData.date, false);
@@ -77,8 +76,6 @@ function InterviewAdd() {
     onSubmit: handleSubmit,
     validationSchema: validationSchema,
   });
-
-  console.log('formik', formik.values);
 
   return (
     <div>

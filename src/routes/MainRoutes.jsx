@@ -16,12 +16,12 @@ const InternStatusUpdate = Loadable(lazy(() => import('src/pages/InternStatus/Ad
 const InternFormList = Loadable(lazy(() => import('src/pages/InternForm/InternFormList')));
 const InternFormDetail = Loadable(lazy(() => import('src/pages/InternForm/InternFormDetail/InternFormDetail')));
 const InternFormAdd = Loadable(lazy(() => import('src/pages/InternForm/AddInternForm/InternFormAdd')));
-const InternFormUpdate = Loadable(lazy(() => import('src/pages/InternForm/AddInternForm/InternFormAdd')));
+const InternFormUpdate = Loadable(lazy(() => import('src/pages/InternForm/AddInternForm/InternFormUpdate')));
 
 const InterviewList = Loadable(lazy(() => import('src/pages/Interview/InterviewList')));
 const InterviewDetail = Loadable(lazy(() => import('src/pages/Interview/InterviewDetail/InterviewDetail')));
 const InterviewAdd = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
-const InterviewUpdate = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewAdd')));
+const InterviewUpdate = Loadable(lazy(() => import('src/pages/Interview/InterviewAdd/InterviewUpdate')));
 
 const SurveyDetail = Loadable(lazy(() => import('src/pages/Survey/SurveyDetail/SurveyDetail')));
 const SurveyAdd = Loadable(lazy(() => import('src/pages/Survey/SurveyAdd')));

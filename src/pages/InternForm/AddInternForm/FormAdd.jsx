@@ -1,4 +1,4 @@
-import { Button, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
 import React, { useEffect, useReducer } from 'react';
 import * as yup from 'yup';
 import moment from 'moment';
@@ -18,6 +18,7 @@ import { UserRolesEnum } from 'src/app/enums/roleList';
 import usePermission from 'src/hooks/usePermission';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import CustomBooleanRadioInput from 'src/components/inputs/CustomBooleanRadioInput';
 
 function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
   const navigate = useNavigate();
@@ -125,10 +126,6 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
     validationSchema: validationSchema,
   });
 
-  // console.log('formik.dirty', formik.dirty);
-  // console.log('formik.status', formik.status);
-  // console.log('formik', formik.errors);
-
   const weekDaysOfInternship = [
     { id: 0, name: 'Pazar' },
     { id: 1, name: 'Pazartesi' },
@@ -147,13 +144,17 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
         1.Adım Staj Formu Bilgileri
       </Typography>
       <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
-        <CustomBooleanInput
-          name="isInTerm"
-          id="isInTerm"
-          label="Dönem içi staj"
-          value={formik.values.isInTerm}
-          onChange={(value) => formik.setFieldValue('isInTerm', value, true) && formik.setStatus(true)}
-        />
+        <Box>
+          <CustomBooleanRadioInput
+            name="isInTerm"
+            id="isInTerm"
+            label="Staj Tipi"
+            value={formik.values.isInTerm}
+            onChange={(value) => formik.setFieldValue('isInTerm', value, true) && formik.setStatus(true)}
+            trueLabel="Dönem İçi"
+            falseLabel="Dönem Dışı"
+          />
+        </Box>
 
         <CustomAutocomplete
           name="student"
