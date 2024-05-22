@@ -139,7 +139,7 @@ function InternStatusList() {
             loading={isLoadingExcel}
             disabled={isLoadingExcel}
             Icon={<FileDownloadIcon />}
-            text={'EXCEL ILE INDIR'}
+            text={'EXCEL'}
           />
         }
       />

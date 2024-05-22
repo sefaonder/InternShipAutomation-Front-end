@@ -58,7 +58,7 @@ function AddInternStatus() {
     } catch (error) {
       console.log(error);
     } finally {
-      navigate('/intern-status');
+      navigate('/intern-status/' + internStatusData?.id);
     }
   }
 
@@ -73,7 +73,9 @@ function AddInternStatus() {
 
   return (
     <div>
-      <Typography variant="h6">Adım 1</Typography>
+      <Typography className="mb-4" variant="h4">
+        Staj Durmu Güncelle
+      </Typography>
       <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
         <Typography>{`Önceki Staj Durumu : ${InternStatusEnum[internStatusData?.status]?.label}`}</Typography>
 

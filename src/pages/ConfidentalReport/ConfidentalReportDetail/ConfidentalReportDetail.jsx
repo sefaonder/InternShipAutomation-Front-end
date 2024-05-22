@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
+import { UserRolesEnum } from 'src/app/enums/roleList';
 import NavigateLink from 'src/components/details/NavigateLink';
 import DeleteButton from 'src/components/inputs/DeleteButton';
 import DialogButton from 'src/components/inputs/DialogButton';

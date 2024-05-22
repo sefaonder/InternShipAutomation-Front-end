@@ -1,5 +1,4 @@
-import { Alert, AlertTitle, Box, Button, CircularProgress, Paper, Typography } from '@mui/material';
-import dayjs from 'dayjs';
+import { Alert, Box, Paper, Typography } from '@mui/material';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,13 +7,14 @@ import { InternStatusEnum } from 'src/app/enums/internStatus';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
-import DeleteButton from 'src/components/inputs/DeleteButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DialogButton from 'src/components/inputs/DialogButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import usePermission from 'src/hooks/usePermission';
 import { useDeleteUserMutation, useGetUserDetailQuery } from 'src/store/services/user/userApiSlice';
 import { setUserData } from 'src/store/services/user/userSlice';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 
 function UserDetail() {
   const dispatch = useDispatch();
@@ -70,7 +70,7 @@ function UserDetail() {
 
   console.log('data', data);
   if (isLoading) {
-    return <CircularProgress />;
+    return <CustomCircularProgress />;
   }
 
   const accordionData = [
