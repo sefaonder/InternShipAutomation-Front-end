@@ -1,15 +1,23 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 // ==============================|| MINIMAL LAYOUT ||============================== //
 
-const MinimalLayout = () => (
-  <div className="w-full h-screen  flex justify-center items-center">
-    <div
-      className="absolute flex items-center justify-center inset-0 bg-cover bg-no-repeat bg-center opacity-80"
-      style={{ backgroundImage: "url('/public/images/uludagPhoto.jpg')" }}
-    >
-      <Outlet />
+const MinimalLayout = () => {
+  const location = useLocation();
+  const checkCompany = location.pathname.split('/')[1] === 'company';
+  return (
+    <div className="w-full  flex justify-center items-center">
+      {!checkCompany ? (
+        <div
+          className="absolute flex items-center justify-center inset-0 bg-cover bg-no-repeat bg-center opacity-80"
+          style={{ backgroundImage: "url('/public/images/uludagPhoto.jpg')" }}
+        >
+          <Outlet />
+        </div>
+      ) : (
+        <Outlet />
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 export default MinimalLayout;

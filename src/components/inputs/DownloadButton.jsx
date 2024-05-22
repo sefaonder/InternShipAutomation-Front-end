@@ -9,7 +9,7 @@ const DownloadButton = ({ variant, submitForm, loadingDownload }) => {
       variant={variant}
       startIcon={!loadingDownload ? <CircularProgress /> : <DownloadIcon />}
     >
-      {!loadingDownload ? 'yükleniyor' : 'İndir'}
+      {!loadingDownload ? 'PDF Hazırlanıyor' : 'PDF Olarak İndir'}
     </Button>
   );
 };

@@ -132,7 +132,6 @@ function InterviewDetail() {
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
-          asdasd
           <Container className="my-2 px-6 gap-2 flex">
             <NavigateLink text={'İlgili Staj Durumu'} linkId={data?.data?.internStatus?.id} route={'intern-status'} />
             {isAdvancedComission && (
