@@ -1,15 +1,14 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import dayjs from 'dayjs';
-import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
+import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import NavigateLink from 'src/components/details/NavigateLink';
-import DeleteButton from 'src/components/inputs/DeleteButton';
 import DialogButton from 'src/components/inputs/DialogButton';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
