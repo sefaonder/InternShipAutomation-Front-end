@@ -13,11 +13,12 @@ import {
   useGetCompanyConfidentalReportQuery,
 } from 'src/store/services/confidentalReport/confidentalReportApiSlice';
 import { useGetInterviewACQuery } from 'src/app/api/autocompleteSlice';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import DialogButton from 'src/components/inputs/DialogButton';
 import { enqueueSnackbar } from 'notistack';
+import { saveAs } from 'file-saver';
 
 function CompanyConfidentalReport() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ function CompanyConfidentalReport() {
   const isAlreadySubmitted = data?.data?.interview?.confidentalReport?.id;
 
   const [createCompanyConfidentalReport, { isLoading: isLoadingCreate }] = useCreateCompanyConfidentalReportMutation();
+  const [loadingDownload, setLoadingDownload] = useState(true);
 
   // createCompanyConfidentalReport
 
@@ -86,13 +88,13 @@ function CompanyConfidentalReport() {
     data: ['Evet', 'Hayır'],
   };
   const internship_evulation = [
-    { name: 'Çalışmada Dikkat ve Sorumluluk', type: 'responsibility', data: ['İyi', 'Orta', 'Iyi Degil'] },
-    { name: 'İşi Yapmadaki Başarısı', type: 'success', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'Öğrenme ve Araştırma İlgisi', type: 'interest', data: ['Iyi', 'Orta', 'İyi Değil'] },
-    { name: 'Üstelerine Karşı Davranışı', type: 'behaviour_to_auths', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'Çalışma Arkadaşlarına Davranışı', type: 'behaviour_to_coworkers', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'İş Güvenliği Kurallarına Uyumu', type: 'work_safety', data: ['Iyi', 'Orta', 'Iyi Degil'] },
-    { name: 'Meslek Bilgi Düzeyi', type: 'competence', data: ['Iyi', 'Orta', 'Iyi Degil'] },
+    { name: 'Çalışmada Dikkat ve Sorumluluk', type: 'responsibility', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'İşi Yapmadaki Başarısı', type: 'success', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Öğrenme ve Araştırma İlgisi', type: 'interest', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Üstelerine Karşı Davranışı', type: 'behaviour_to_auths', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Çalışma Arkadaşlarına Davranışı', type: 'behaviour_to_coworkers', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'İş Güvenliği Kurallarına Uyumu', type: 'work_safety', data: ['İyi', 'Orta', 'İyi Değil'] },
+    { name: 'Meslek Bilgi Düzeyi', type: 'competence', data: ['İyi', 'Orta', 'İyi Değil'] },
   ];
 
   const validationSchema = yup.object({
@@ -191,11 +193,19 @@ function CompanyConfidentalReport() {
     enableReinitialize: true,
   });
 
+  const submitForm = async (event) => {
+    event.preventDefault(); // prevent page reload
+    setLoadingDownload(false);
+    const blob = await pdf(<PdfConfidentalReport data={data.data} />).toBlob();
+    saveAs(blob, 'uludag.pdf');
+    setLoadingDownload(true);
+  };
+
   console.log('formik', formik.values);
   console.log('formikerrors', formik.errors);
 
   return (
-    <div className="flex items-center justify-center border-2 relative bg-white rounded-xl">
+    <div className="flex lg:m-16 m-4 mt-12 w-full lg:w-1/2 items-center justify-center border-2 relative bg-white rounded-xl">
       <img
         className="w-20 left-2/4 -translate-x-2/4 absolute top-[-40px]"
         src="https://uludag.edu.tr/img/uu.svg"
@@ -205,7 +215,14 @@ function CompanyConfidentalReport() {
         onSubmit={formik.handleSubmit}
         className="p-8 flex items-center gap-6 justify-center flex-col lg:w-full mt-auto"
       >
-        <Typography className=" text-red-700 text-3xl mt-4 border-b-2">Staj Sicil Belgesi</Typography>
+        <Container className="flex xl:flex-row flex-col relative items-center justify-center w-full">
+          <Typography className=" text-red-700 text-3xl mt-4 border-b-2">Staj Sicil Belgesi</Typography>
+          {data?.data && (
+            <Box className="xl:absolute right-0 p-6">
+              <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />
+            </Box>
+          )}
+        </Container>
         {isAlreadySubmitted && (
           <Alert severity="warning" className="my-4 flex items-center">
             <Typography variant="h5">
@@ -216,7 +233,7 @@ function CompanyConfidentalReport() {
             </Typography>
           </Alert>
         )}
-        <Container className="lg:w-1/2 sm:w-full flex flex-col">
+        <Container className="lg:w-full sm:w-full flex flex-col">
           <CustomAutocomplete
             name="interview"
             id="interview"
@@ -249,7 +266,7 @@ function CompanyConfidentalReport() {
           <Box className="flex gap-4 flex-col">
             <Typography className="my-2 text-red-500"> Kurum Bilgileri: </Typography>
             <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-              <FormLabel className="font-extrabold">Staj Yapılan Firma Adı: </FormLabel>
+              <FormLabel className="font-extrabold mb-2">Staj Yapılan Firma Adı: </FormLabel>
               <TextField
                 className="w-full lg:w-1/2 !p-0"
                 id="company_name"
@@ -263,7 +280,7 @@ function CompanyConfidentalReport() {
               />
             </Box>
             <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-              <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi:</FormLabel>
+              <FormLabel className="font-extrabold mb-2">Staj Yapılan Firma Adresi:</FormLabel>
               <TextField
                 className="w-full lg:w-1/2 !p-0"
                 id="address"
@@ -278,7 +295,7 @@ function CompanyConfidentalReport() {
             </Box>
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full  flex flex-col gap-4">
+        <Container className="w-full sm:w-full flex flex-col gap-4">
           <Typography className="my-2 text-red-500"> Staj Tarihi Ve Çalışma Konuları: </Typography>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold mb-2">Staj Başlama Tarihi: </FormLabel>
@@ -308,7 +325,7 @@ function CompanyConfidentalReport() {
           </Box>
 
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold ">Staj Yapılan Departman:</FormLabel>
+            <FormLabel className="font-extrabold mb-2">Staj Yapılan Departman:</FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               required
@@ -322,7 +339,7 @@ function CompanyConfidentalReport() {
             />
           </Box>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Öğrencinin Devamsızlık Sayısı: </FormLabel>
+            <FormLabel className="font-extrabold mb-2">Öğrencinin Devamsızlık Sayısı: </FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               required
@@ -337,10 +354,10 @@ function CompanyConfidentalReport() {
             />
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col">
+        <Container className="w-full sm:w-full flex flex-col">
           <CustomRadioGroup data={is_edu_program} formik={formik} />
         </Container>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col">
+        <Container className="w-full sm:w-full flex flex-col">
           <Typography className="my-2 text-red-500"> Staj Çalışma Değerlendirmesi: </Typography>
 
           {internship_evulation.map((data) => (
@@ -352,7 +369,7 @@ function CompanyConfidentalReport() {
             />
           ))}
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Puanlama: </FormLabel>
+            <FormLabel className="font-extrabold mb-2">Puanlama: </FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               id="score"
@@ -367,10 +384,10 @@ function CompanyConfidentalReport() {
             />
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col gap-4">
+        <Container className="w-full sm:w-full flex flex-col gap-4">
           <Typography className="my-2 text-red-500">Değerlendirmeyi Yapan Yetkilinin: </Typography>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Adı-Soyadı: </FormLabel>
+            <FormLabel className="font-extrabold mb-2">Adı-Soyadı: </FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               id="auth_name"
@@ -384,7 +401,7 @@ function CompanyConfidentalReport() {
             />
           </Box>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Görevi: </FormLabel>
+            <FormLabel className="font-extrabold mb-2">Görevi: </FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               id="auth_position"
@@ -398,7 +415,7 @@ function CompanyConfidentalReport() {
             />
           </Box>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Diploma Ünvanı:</FormLabel>
+            <FormLabel className="font-extrabold mb-2">Diploma Ünvanı:</FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               id="auth_title"
@@ -412,7 +429,7 @@ function CompanyConfidentalReport() {
             />
           </Box>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold ">Sicil No / İsteğe Bağlı:</FormLabel>
+            <FormLabel className="font-extrabold mb-2">Sicil No / İsteğe Bağlı:</FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               id="reg_number"
@@ -425,7 +442,7 @@ function CompanyConfidentalReport() {
             />
           </Box>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">TC Kimlik:</FormLabel>
+            <FormLabel className="font-extrabold mb-2">TC Kimlik:</FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               id="auth_tc_number"
@@ -439,7 +456,7 @@ function CompanyConfidentalReport() {
             />
           </Box>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Açıklama:</FormLabel>
+            <FormLabel className="font-extrabold mb-2">Açıklama:</FormLabel>
             <TextField
               multiline
               rows={4}
@@ -465,21 +482,6 @@ function CompanyConfidentalReport() {
             button="Gönder"
             message={'Bu form bir kez oluşturulduktan sonra değiştirilemez'}
           />
-
-          {data?.data && (
-            <PDFDownloadLink
-              fileName="FORM"
-              document={<PdfConfidentalReport data={data?.data?.interview?.confidentalReport} />}
-            >
-              {({ loading }) =>
-                loading ? (
-                  <DownloadButton variant="outlined" loading={loading} text={'Loading...'}></DownloadButton>
-                ) : (
-                  <DownloadButton variant="outlined" loading={loading} text={'Yazdır'}></DownloadButton>
-                )
-              }
-            </PDFDownloadLink>
-          )}
         </Box>
       </form>
     </div>

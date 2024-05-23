@@ -60,7 +60,7 @@ const ConfidentalReportList = () => {
       style: 'text-left',
       notSortable: true,
       cellComponent: (value) => (
-        <p className="">{value.student ? value.student?.name + ' ' + value.student?.last_name : ''}</p>
+        <p className="">{value?.student ? value.student?.name + ' ' + value.student?.last_name : ''}</p>
       ),
     },
     {
@@ -71,7 +71,7 @@ const ConfidentalReportList = () => {
       style: 'text-left',
       notSortable: true,
       cellComponent: (value) => (
-        <p className="">{value.comission ? value.comission?.name + ' ' + value.comission?.last_name : ''}</p>
+        <p className="">{value?.comission ? value.comission?.name + ' ' + value.comission?.last_name : ''}</p>
       ),
     },
     {
