@@ -42,14 +42,14 @@ function CustomTableFilter({ filterOptions, filterValues, onChangeFilterValues, 
       }}
     >
       <Box sx={{ alignSelf: 'baseline', margin: '0.5rem' }}>
-        <Tooltip title="Refresh List">
+        <Tooltip title="Listeyi Yenile">
           <IconButton sx={{ mr: '1rem' }} onClick={() => setRefresh()}>
             <RefreshIcon />
           </IconButton>
         </Tooltip>
 
         {isAdvancedComission && (
-          <Tooltip title="Filter list">
+          <Tooltip title="Filtreler">
             <IconButton sx={{}} onClick={() => setOpen(!open)}>
               <FilterListIcon />
             </IconButton>

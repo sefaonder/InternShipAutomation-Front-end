@@ -1,4 +1,3 @@
-import AbcIcon from '@mui/icons-material/Abc';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import PeopleIcon from '@mui/icons-material/People';
@@ -9,9 +8,6 @@ import EventIcon from '@mui/icons-material/Event';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import i18n from 'src/locales/i18n';
-
-// TODO: we need to add role control
-// TODO: path must be connected to main drawer component
 
 const t = i18n.t;
 
