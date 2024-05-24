@@ -63,7 +63,9 @@ const Header = ({ open, handleDrawerToggle }) => {
   }, [isSuccess]);
 
   useEffect(() => {
-    refetch();
+    if (!userAuth.userId || !userAuth.roles) {
+      refetch();
+    }
   }, [location, navigate]);
 
   const settings = [{ label: 'Profilim', navigate: 'profile' }];
