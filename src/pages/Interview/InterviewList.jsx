@@ -103,7 +103,6 @@ function InterviewList() {
     { id: 'date_lte', type: 'date', componentProps: { label: 'Mülakat Tarihi (En Geç)' } },
 
     { id: 'status', type: 'enum', componentProps: { enumObject: InternStatusEnum, label: 'Staj durumu' } },
-    { id: 'isSealed', type: 'boolean', componentProps: { label: 'Mühürsüz Kayıtlar' } },
   ];
 
   return (
