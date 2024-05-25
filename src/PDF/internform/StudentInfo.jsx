@@ -3,9 +3,10 @@ import React from 'react';
 import PdfTable from '../pdfComponents/PdfTable';
 
 const StudentInfo = ({ data }) => {
+  console.log(data);
   const studentInfo = {
     left: [
-      { name: 'Adı Soyadı', value: data?.student?.name },
+      { name: 'Adı Soyadı', value: data?.student?.name + ' ' + data?.student?.last_name },
       { name: 'Tc Kimlik No', value: data?.student?.tc_number },
       { name: 'Baba Adı', value: data?.student_info?.fathers_name },
       { name: 'Anne Adı', value: data?.student_info?.mothers_name },
@@ -37,10 +38,10 @@ const StudentInfo = ({ data }) => {
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <View style={{ width: '40%' }}>
-          <PdfTable widthName="50%" widthValue="50%" data={studentInfo.left}></PdfTable>
+        <View style={{ width: '50%' }}>
+          <PdfTable widthName="40%" widthValue="60%" data={studentInfo.left}></PdfTable>
         </View>
-        <View style={{ width: '60%' }}>
+        <View style={{ width: '50%' }}>
           <PdfTable widthName="60%" widthValue="40%" data={studentInfo.right}></PdfTable>
         </View>
       </View>

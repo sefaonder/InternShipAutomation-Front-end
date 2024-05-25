@@ -48,7 +48,7 @@ const PdfInternform = ({ data }) => {
           <Text style={{ fontFamily: 'Turkishbold' }}>UYGULAMALI EĞİTİM YAPILAN YERİN</Text>
         </View>
         <Company data={data} />
-        <View style={{ width: '80%', margin: '5px 0px' }}>
+        <View style={{ width: '80%', margin: '10px 0px' }}>
           <Text
             style={{
               border: '1px solid black',
