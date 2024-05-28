@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { enqueueSnackbar } from 'notistack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import PdfConfidentalReport from 'src/PDF/confidentalReport/PdfConfidentalReport';
 import { UserRolesEnum } from 'src/app/enums/roleList';
@@ -20,6 +20,7 @@ import {
 } from 'src/store/services/confidentalReport/confidentalReportApiSlice';
 import { setConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
 import { saveAs } from 'file-saver';
+import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
 
 const ConfidentalReportDetail = () => {
   const navigate = useNavigate();
@@ -59,6 +60,56 @@ const ConfidentalReportDetail = () => {
     saveAs(blob, 'wycena.pdf');
     setLoadingDownload(true);
   };
+  console.log(data);
+  const accordionData = [
+    [
+      { header: 'Öğrenci Kimlik Bilgileri' },
+      {
+        text: 'Adı - Soyadı',
+        value: data?.data?.interview?.student?.name + ' ' + data?.data?.interview?.student?.last_name,
+      },
+      {
+        text: 'Doğum Yeri / Tarihi ',
+        value:
+          data?.data?.interview.intern_status?.form?.student_info?.birth_place +
+          ' ' +
+          dayjs(data?.data?.interview?.intern_status?.form?.student_info.birth_date).format('DD.MM.YYYY'),
+      },
+      { text: 'Tc Kimlik', value: data?.data?.interview.student.tc_number },
+      { text: 'Bölümü', value: 'Bilgisayar Mühendisliği' },
+      { text: 'Okul No', value: data?.data?.interview.student.school_number },
+    ],
+    [
+      { header: 'Staj Tarihi ve Çalışma Konuları' },
+      { text: 'Staj Başlama Tarihi', value: data?.data?.start_date },
+      { text: 'Staj Bitiş Tarihi', value: data?.data?.end_date },
+      {
+        text: 'Öğrenci Devamsızlık Gün Sayısı',
+        value: data?.data?.days_of_absence,
+      },
+      { text: 'Staj Yapılan Departman', value: data?.data?.department },
+      { text: 'Staj İçerisinde Eğitim Programı Uygulandı mı ?', value: data?.data?.is_edu_program ? 'Evet' : 'Hayır' },
+    ],
+    [
+      { header: 'Staj Çalışma Değerlendirme' },
+      { text: 'Çalışmada Dikkat ve Sorumluluk', value: data?.data?.intern_evaluation?.responsibility },
+      { text: 'İş Yapmadaki Başarısı', value: data?.data?.intern_evaluation?.success },
+      { text: 'Öğrenme ve Araştırma İlgisi', value: data?.data?.intern_evaluation?.interest },
+      { text: 'Üstlerine Karşı Davranışı', value: data?.data?.intern_evaluation?.behaviour_to_auths },
+      { text: 'Çalışma Arkadaşlarına Karşı Davranışı', value: data?.data?.intern_evaluation?.behaviour_to_coworkers },
+      { text: 'İş Güvenliği Kurallarına Uyumu', value: data?.data?.intern_evaluation?.work_safety },
+      { text: 'Meslek Bilgi Düzeyi', value: data?.data?.intern_evaluation?.competence },
+      { text: 'Puanlama', value: data?.data?.intern_evaluation?.score },
+    ],
+    [
+      { header: 'Değerlendirmeyi Yapan Yetkilinin (mühendis)' },
+      { text: 'Adı - Soyadı', value: data?.data?.auth_name },
+      { text: 'Diploma Ünvanı', value: data?.data?.auth_position },
+      { text: 'Sicil No', value: data?.data?.reg_number },
+      { text: 'Tc Kimlik No', value: data?.data?.auth_tc_number },
+      { text: 'Tarih', value: '26/05/2024' },
+    ],
+  ];
   return (
     <div>
       <Paper
@@ -100,120 +151,10 @@ const ConfidentalReportDetail = () => {
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
           <Box className=" w-full gap-2 flex flex-col ">
-            <NavigateLink text={'İlgili Mülakat'} linkId={data?.data?.interview?.id} route={'interview'} />
             <Container>
-              <Typography variant="h5" className="text-red-400">
-                Öğrencinin Kimlik Bilgileri:
-              </Typography>
-
-              <Box className="flex items-center justify-between">
-                <Typography className="font-extrabold">Adı - Soyadı: </Typography>
-                <Typography>
-                  {data?.data?.interview?.student?.name + ' ' + data?.data?.interview?.student?.last_name}{' '}
-                </Typography>
-              </Box>
-
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Doğum Yeri / Tarihi:</Typography>
-                <Typography>Artvin</Typography>
-              </Box>
-
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">TC Kimlik No:</Typography>
-                <Typography>123 123 123 12</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Bölümü:</Typography>
-                <Typography>B. mühendisliği</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Okul No:</Typography>
-                <Typography>123 123 123 12</Typography>
-              </Box>
+              <NavigateLink text={'İlgili Mülakat'} linkId={data?.data?.interview?.id} route={'interview'} />
             </Container>
-            <Container>
-              <Typography variant="h5" className="text-red-400">
-                Staj Tarihi ve Çalışma Konuları
-              </Typography>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Staj Başlama Tarihi:</Typography>
-                <Typography>{dayjs(data?.data.start_date).format('DD.MM.YYYY')}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Staj Bitiş Tarihi :</Typography>
-                <Typography>{dayjs(data?.data.end_date).format('DD.MM.YYYY')}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Öğrencinin Devamsızlık Günleri:</Typography>
-                <Typography>{data?.data.days_of_absence}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Staj Yapılan Departman:</Typography>
-                <Typography>{data?.data.department}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Staj İçerisinde Eğitim Programı Uygulandı mı?</Typography>
-                <Typography>{data?.data.is_edu_program ? 'Evet' : 'Hayır'}</Typography>
-              </Box>
-            </Container>
-            <Container>
-              <Typography variant="h5" className="text-red-400">
-                Staj Çalışma Değerlendirmesi
-              </Typography>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Çalışmada Dikkat ve Sorumluluk:</Typography>
-                <Typography>{data?.data.intern_evaluation?.responsibility}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">İşi Yapmadakı Başarısı:</Typography>
-                <Typography>{data?.data.intern_evaluation?.success}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Üstlerine Karşı Davranış:</Typography>
-                <Typography>{data?.data.intern_evaluation?.behaviour_to_auths}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Çalışma Arkadaşlarına Karşı Davranışı:</Typography>
-                <Typography>{data?.data.intern_evaluation?.behaviour_to_coworkers}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">İş Güvenliği Kurallarına Uyumu: </Typography>
-                <Typography> {data?.data.intern_evaluation?.work_safety}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Meslek Bilgi Düzeyi:</Typography>
-                <Typography>{data?.data.intern_evaluation?.competence}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Puanlama:</Typography>
-                <Typography> {data?.data.intern_evaluation?.score}</Typography>
-              </Box>
-            </Container>
-            <Container>
-              <Typography variant="h5" className="text-red-400">
-                Değerlendirmeyi Yapan Yetkilinin (Mühendis)
-              </Typography>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Adı Soyadı:</Typography>
-                <Typography>{data?.data.auth_name}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Diploma Ünvanı:</Typography>
-                <Typography>{data?.data.auth_position}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Sicil No (isteğe bağlı):</Typography>
-                <Typography>{data?.data.reg_number}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">TC Kimlik No:</Typography>
-                <Typography>{data?.data.auth_tc_number}</Typography>
-              </Box>
-              <Box className="flex items-center  justify-between">
-                <Typography className="font-extrabold">Tarih: </Typography>
-                <Typography>{dayjs(data?.data?.createdAt).format('DD.MM.YYYY')}</Typography>
-              </Box>
-            </Container>
+            <CustomDetailPageBox data={accordionData} />
           </Box>
         </Paper>
         <Box sx={{ flex: 1 }}>

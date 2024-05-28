@@ -46,9 +46,7 @@ const PdfTable = ({ data, widthName = '50%', widthValue = '50%', fontSize = 8 })
             <Text style={[styles.tableCell, { fontFamily: item.bold && 'Turkishbold' }]}>{item.name}</Text>
           </View>
           <View style={styles.tableCol2}>
-            <Text style={styles.tableCell}>
-              {item.value} {item.value2 && ' - '} {item.value2 && item.value2}
-            </Text>
+            <Text style={styles.tableCell}>{item.value}</Text>
           </View>
         </View>
       ))}

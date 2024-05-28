@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import MiniDrawerStyled from './MiniDrawerStyled';
 import logo from '/public/images/uuLogoRenkli.png';
+import { Link } from 'react-router-dom';
 const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -21,8 +22,10 @@ const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
       {!matchDownMD ? (
         <MiniDrawerStyled variant="permanent" open={open}>
           <Toolbar className="px-4 flex justify-between">
-            <Avatar alt="Remy Sharp" src={logo} />
-            <Typography>B.U.Ü. Staj Otomasyonu</Typography>
+            <Link to="/" className="flex justify-between items-center gap-2">
+              <Avatar alt="Remy Sharp" src={logo} />
+              <Typography>B.U.Ü. Staj Otomasyonu</Typography>
+            </Link>
           </Toolbar>
           <Divider />
           <NavGroup navigations={navigations} />

@@ -43,12 +43,32 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   };
 
   const validationSchema = yup.object({
-    name: yup.string().required('Lütfen firma ismi girin'),
-    address: yup.string().required('Lütfen adres girin'),
+    name: yup
+      .string()
+      .required('Lütfen firma ismi girin')
+      .min(3, 'Firma adı en az 3 karakter olabilir')
+      .max(50, 'Firma adı en fazla 50 karakter olabilir'),
+    address: yup
+      .string()
+      .required('Lütfen adres girin')
+      .min(3, 'Firma adı en az 3 karakter olabilir')
+      .max(50, 'firma adresi en fazla 50 karakter olabilir'),
     phone: yup.string().required('Lütfen geçerli bir telefon girin'),
-    fax: yup.string().required('Lütfen geçerli bir fax girin'),
-    email: yup.string().required('Lütfen geçerli bir email adresi girin'),
-    serviceArea: yup.string().required('Lütfen hizmet alanı girin'),
+    fax: yup
+      .string()
+      .required('Lütfen geçerli bir fax girin')
+      .min(3, 'Fax en az 3 karakter olabilir')
+      .max(50, 'fax en fazla 50 karakter olabilir'),
+    email: yup
+      .string()
+      .required('Lütfen geçerli bir email adresi girin')
+      .min(3, 'Firma Maili en az 3 karakter olabilir')
+      .max(50, 'Firma Maili en fazla 50 karakter olabilir'),
+    serviceArea: yup
+      .string()
+      .required('Lütfen hizmet alanı girin')
+      .min(3, 'Firma Servis Alanı en az 3 karakter olabilir')
+      .max(50, 'Firma Servis Alanı en fazla 50 karakter olabilir'),
   });
 
   async function handleSubmit(values) {

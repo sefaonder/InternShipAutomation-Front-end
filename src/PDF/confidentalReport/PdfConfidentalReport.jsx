@@ -8,12 +8,18 @@ import turkishbold from '../pdfComponents/extrabold.ttf';
 Font.register({ family: 'Turkishbold', src: turkishbold });
 
 const PdfConfidentalReport = ({ data }) => {
-  console.log(data);
   const studentCredentials = [
-    { name: 'Adı Soyadı', value: 'asdasd' },
-    { name: 'Doğum Yeri / Tarihi', value: 'asdasd' },
-    { name: 'TC Kimlik No', value: 'Bölümü' },
-    { name: 'Okul Numarası', value: 'asdasd' },
+    { name: 'Adı Soyadı', value: data?.interview?.student?.name + ' ' + data?.interview?.student?.last_name },
+    {
+      name: 'Doğum Yeri / Tarihi',
+      value:
+        new Date(data?.interview?.internStatus?.form.student_info?.birth_date).toLocaleDateString('pt-PT') +
+        ' - ' +
+        data?.interview?.internStatus?.form.student_info.birth_place,
+    },
+    { name: 'TC Kimlik No', value: data?.interview?.student?.tc_number },
+    { name: 'Bölümü', value: 'Bilgisayar Mühendisliği' },
+    { name: 'Okul Numarası', value: data?.interview?.student?.school_number },
   ];
   const companyInfo = [
     { name: 'Firma Adı', value: data?.company_name },
@@ -22,18 +28,20 @@ const PdfConfidentalReport = ({ data }) => {
   const internshipInfo = [
     {
       name: 'Staja Başlama ve Bitiş Tarihleri',
-      value: new Date(data?.start_date).toLocaleDateString('pt-PT'),
-      value2: new Date(data?.end_date).toLocaleDateString('pt-PT'),
+      value:
+        new Date(data?.start_date).toLocaleDateString('pt-PT') +
+        ' - ' +
+        new Date(data?.end_date).toLocaleDateString('pt-PT'),
     },
     { name: 'Öğrencinin Devamsızlık Günleri ve Sayısı', value: data?.days_of_absence },
     { name: 'Staj Yapilan Departman', value: data?.department },
     { name: 'Staj Icerisinde Egitim Programi Uygulandı mı?', value: data?.is_edu_program ? 'Evet' : 'Hayır' },
   ];
   const authInfo = [
-    { name: 'Adi Soyadi / Görevi', value: data?.auth_name },
+    { name: 'Adi Soyadi / Görevi', value: data?.auth_position },
     { name: 'Diploma Unvani', value: data?.auth_position },
     { name: 'Oda Sicil No (varsa)', value: data?.reg_number },
-    { name: 'Tarih / İmza', value: 'asdasd caddesi' },
+    { name: 'Tarih / İmza', value: '' },
   ];
 
   const internEvuluation = {
@@ -60,21 +68,21 @@ const PdfConfidentalReport = ({ data }) => {
             </View>
 
             <Text style={styles.subTitle}> Ögrenci Kimlik Bilgileri:</Text>
-            <PdfTable data={studentCredentials} fontSize={12} />
+            <PdfTable data={studentCredentials} fontSize={11} />
             <Text style={styles.subTitle}> Kurum Bilgileri:</Text>
 
-            <PdfTable data={companyInfo} fontSize={12} />
+            <PdfTable data={companyInfo} fontSize={11} />
             <Text style={styles.subTitle}> Staj Tarihi Ve Calisma Konulari:</Text>
 
-            <PdfTable data={internshipInfo} fontSize={12} />
+            <PdfTable data={internshipInfo} fontSize={11} />
             <Text style={styles.subTitle}> Staj Calisma Degerlendirmesi:</Text>
 
-            <PdfTableMultiOptions data={internEvuluation} fontSize={12} />
+            <PdfTableMultiOptions data={internEvuluation} fontSize={11} />
 
             <Text style={styles.subTitle}> Degerlendirmeyi Yapan Yetkilinin (Muhendis):</Text>
 
             <View style={styles.authContainer}>
-              <PdfTable data={authInfo} fontSize={12} />
+              <PdfTable data={authInfo} widthName="35%" widthValue="65%" fontSize={11} />
               <View style={styles.sign}>
                 <Text>Onay</Text>
                 <Text>Mühür Kaşe</Text>
