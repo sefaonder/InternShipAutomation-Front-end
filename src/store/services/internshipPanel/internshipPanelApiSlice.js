@@ -61,6 +61,28 @@ export const internshipPanelSlice = apiSlice.injectEndpoints({
     getInterviewReady: builder.query({
       query: (params) => ({ url: '/api/internship-panel/InterviewReady/get', params: params }),
     }),
+
+    // Active Follow Up
+
+    getActiveFollowUp: builder.query({
+      query: (params) => ({ url: '/api/internship-panel/activeFollowUp/get', params: params }),
+    }),
+
+    addActiveFollowUp: builder.mutation({
+      query: ({ payload }) => ({
+        url: '/api/internship-panel/activeFollowUp/add',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+
+    updateActiveFollowUp: builder.mutation({
+      query: ({ activeFollowUpId, payload }) => ({
+        url: `/api/internship-panel/activeFollowUp/update/${activeFollowUpId}`,
+        method: 'PUT',
+        body: payload,
+      }),
+    }),
   }),
 });
 
@@ -69,4 +91,7 @@ export const { useGetHolidaysQuery, useAddHolidayMutation, useDeleteHolidayMutat
 export const { useGetEduYearsQuery, useAddEduYearMutation, useDeleteEduYearMutation } = internshipPanelSlice;
 
 export const { useStartInterviewsMutation, useGetConfidentalMailListQuery, useGetInterviewReadyQuery } =
+  internshipPanelSlice;
+
+export const { useGetActiveFollowUpQuery, useAddActiveFollowUpMutation, useUpdateActiveFollowUpMutation } =
   internshipPanelSlice;

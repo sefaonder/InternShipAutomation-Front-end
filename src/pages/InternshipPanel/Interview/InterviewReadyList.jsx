@@ -48,7 +48,7 @@ function InterviewReadyList({ open }) {
       <Typography variant="h5">Mülakata Hazır Stajlar</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Checkbox checked={data?.data.length === checked.length} onClick={() => selectAllRecord(data?.data)} />
-        <Button disabled={checked.length < 1} onClick={() => setDialog(true)}>
+        <Button variant="outlined" disabled={checked.length < 1} onClick={() => setDialog(true)}>
           Mülakat Tanımla
         </Button>
       </Box>

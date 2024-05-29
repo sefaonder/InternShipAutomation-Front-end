@@ -30,13 +30,15 @@ function HolidayList({ open }) {
   console.log('data', data);
   return (
     <Box>
-      <Button onClick={() => setDialog(true)}>Tatil Ekle</Button>
+      <Button variant="outlined" onClick={() => setDialog(true)}>
+        Tatil Ekle
+      </Button>
       <Box>
         <CustomActionList
           listData={data?.data}
           loading={isLoading}
           onDelete={handleDelete}
-          itemHandler={(item) => dayjs(item.date).format('DD.MM.YYYY')}
+          itemHandler={(item) => dayjs(item.date).format('DD.MM.YYYY') + ' - ' + item?.desc || ''}
         />
       </Box>
       <HolidayCreateDialog open={dialog} handleClose={() => setDialog(false)} onSucces={() => refetch()} />

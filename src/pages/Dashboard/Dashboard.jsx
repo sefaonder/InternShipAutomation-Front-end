@@ -38,13 +38,11 @@ function Dashboard() {
         </Box>
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4 ">
-        {!isAdvancedComission && (
-          <Paper sx={{ flex: 2, padding: '1rem' }}>
-            <Diagram />
-          </Paper>
-        )}
+        <Paper sx={{ flex: 1, padding: '1rem' }}>
+          <Diagram />
+        </Paper>
 
-        <Box className="flex flex-1 flex-col"></Box>
+        {/* <Box className="flex flex-1 flex-col"></Box> */}
       </Box>
     </div>
   );

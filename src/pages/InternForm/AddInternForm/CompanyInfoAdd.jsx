@@ -52,7 +52,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
       .string()
       .required('Lütfen adres girin')
       .min(3, 'Firma adı en az 3 karakter olabilir')
-      .max(50, 'firma adresi en fazla 50 karakter olabilir'),
+      .max(100, 'firma adresi en fazla 100 karakter olabilir'),
     phone: yup.string().required('Lütfen geçerli bir telefon girin'),
     fax: yup
       .string()
@@ -99,6 +99,8 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
     onSubmit: handleSubmit,
     validationSchema: validationSchema,
   });
+
+  console.log('for', formik.errors);
 
   return (
     <div>

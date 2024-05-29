@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { enqueueSnackbar } from 'notistack';
 import React from 'react';
 import CustomDateInput from 'src/components/inputs/CustomDateInput';
+import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useAddHolidayMutation } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
 
 function HolidayCreateDialog({ open, handleClose, onSucces }) {
@@ -18,10 +19,10 @@ function HolidayCreateDialog({ open, handleClose, onSucces }) {
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries(formData.entries());
           const date = formJson.date;
-          console.log(date);
+          const desc = formJson.descHoliday;
 
           try {
-            const response = await addHoliday({ date: dayjs(date).toDate() }).unwrap();
+            const response = await addHoliday({ date: dayjs(date, 'DD.MM.YYYY').toDate(), desc: desc }).unwrap();
 
             enqueueSnackbar(response.message, { variant: 'success' });
           } catch (error) {
@@ -37,7 +38,8 @@ function HolidayCreateDialog({ open, handleClose, onSucces }) {
         <DialogContentText maxWidth="20rem">
           Staj Tarihlerinide iş gününden sayılmaması için lütfen Resmi Tatil Günlerini Ekleyiniz
         </DialogContentText>
-        <CustomDateInput id="date" name="date" required label="Tatil Günü" format="MM.DD.YYYY" />
+        <CustomDateInput id="date" name="date" required label="Tatil Günü" format="DD.MM.YYYY" />
+        <CustomTextInput id="descHoliday" name="descHoliday" required label="Açıklama" />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} disabled={isLoading}>

@@ -28,7 +28,9 @@ function EduYearList({ open }) {
   console.log('data', data);
   return (
     <Box>
-      <Button onClick={() => setDialog(true)}>Staj Dönemi Ekle</Button>
+      <Button variant="outlined" onClick={() => setDialog(true)}>
+        Staj Dönemi Ekle
+      </Button>
       <Box>
         <CustomActionList
           listData={data?.data}
