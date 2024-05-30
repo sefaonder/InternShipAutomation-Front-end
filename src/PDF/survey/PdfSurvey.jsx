@@ -62,7 +62,6 @@ const PdfSurvey = ({ data }) => {
                 width: '100%',
               }}
             >
-              {' '}
               Bilgisayar Mühendisliği Bölümü Staj Komisyonu
             </Text>
 

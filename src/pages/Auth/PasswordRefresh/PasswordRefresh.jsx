@@ -57,7 +57,7 @@ function PasswordRefresh() {
   console.log('formik', formik.values);
 
   return (
-    <div className="flex items-center  border-2 m-2 relative login-container h-[32rem]">
+    <div className="flex items-center  border-2 m-2 bg-white relative login-container h-[32rem]">
       <img
         className="w-20 left-2/4 -translate-x-2/4 absolute top-[-40px]"
         src="https://uludag.edu.tr/img/uu.svg"

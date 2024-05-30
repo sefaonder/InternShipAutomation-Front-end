@@ -27,6 +27,7 @@ import CustomIconButton from 'src/components/inputs/CustomIconButton';
 import DialogButton from 'src/components/inputs/DialogButton';
 import NavigateLink from 'src/components/details/NavigateLink';
 import WorkOnSaturdayAlert from 'src/components/details/WorkOnSaturdayAlert';
+import PdfWorkingSaturday from 'src/PDF/workingSaturday/WorkingSaturday';
 
 function InternFormDetail() {
   const dispatch = useDispatch();
@@ -138,11 +139,13 @@ function InternFormDetail() {
         { text: 'Hizmet Alanı', value: data?.data?.company_info?.service_area },
       ],
     ];
-    const submitForm = async (event) => {
+    const submitForm = async (event, index) => {
       event.preventDefault(); // prevent page reload
       setLoadingDownload(false);
-      const blob = await pdf(<PdfInternform data={data.data} />).toBlob();
-      saveAs(blob, 'uludag.pdf');
+      const blob = await pdf(
+        index == 1 ? <PdfInternform data={data.data} /> : <PdfWorkingSaturday data={data.data} />,
+      ).toBlob();
+      saveAs(blob, index == 1 ? 'staj_form' : 'cumartesi_calisir');
       setLoadingDownload(true);
     };
     return (
@@ -198,7 +201,11 @@ function InternFormDetail() {
             />
           )}
           {data?.data && (
-            <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />
+            <DownloadButton
+              loadingDownload={loadingDownload}
+              submitForm={(event) => submitForm(event, 1)}
+              variant="outlined"
+            />
           )}
         </Paper>
         <Box className="flex flex-col sm:flex-row gap-4">
@@ -209,8 +216,20 @@ function InternFormDetail() {
             <CustomDetailPageBox data={accordionData} />
           </Paper>
           <Box className="flex flex-1 flex-col">
+            {data?.data && (
+              <Paper sx={{ padding: '1rem' }}>
+                <DownloadButton
+                  loadingDownload={loadingDownload}
+                  text={true}
+                  submitForm={(event) => submitForm(event, 2)}
+                  variant="outlined"
+                />{' '}
+              </Paper>
+            )}
             {internFormData.workOnSaturday && <WorkOnSaturdayAlert />}
+
             {internFormData?.isSealed && <SealedRecordAlert />}
+
             <RecordTraceCard record={internFormData} />
           </Box>
         </Box>

@@ -79,8 +79,8 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
     interview: yup.object().shape({
       id: yup.string().required('Lütfen İlgili Mülakatı seçin'),
     }),
-    company_name: yup.string().required('Bu Alan'),
-    address: yup.string().required('Bu Alan'),
+    company_name: yup.string().required('Bu Alan').max(100, 'Bu Alan En Fazla 100 Karakter Olabilir.'),
+    address: yup.string().required('Bu Alan').max(100, 'Bu Alan En Fazla 100 Karakter Olabilir.'),
     days_of_absence: yup.number().required('Bu Alan'),
     department: yup.string().required('Bu Alan'),
     is_edu_program: yup.string().required('Bu Alan'),

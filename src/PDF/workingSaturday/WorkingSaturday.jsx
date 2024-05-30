@@ -2,23 +2,26 @@ import React from 'react';
 import { Document, Font, Image, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { useState, useEffect } from 'react';
 import { values } from 'lodash';
-import turkish from '../pdfComponents/turkish2.ttf';
+import turkish from '../pdfComponents/semibold.ttf';
+import turkish2 from '../pdfComponents/extrabold.ttf';
 
-const PdfWorkingSaturday = () => {
-  const studentInformation = [
-    { name: 'Adı Soyadı', value: 'Ahmet Serhat ilgin' },
-    { name: 'Günün tarhi', value: '03/05/2024' },
-    { name: 'Okul Numarası', value: '032090042' },
-    { name: 'Başlangıç tarihi', value: '02/04/2023' },
-    { name: 'Bitiş tarihi', value: '02/05/2024' },
-  ];
+const PdfWorkingSaturday = ({ data }) => {
+  console.log(data);
+  const studentInformation = {
+    name: data?.student?.name + ' ' + data?.student?.last_name,
+    date: '..../..../20....',
+    no: data?.student?.school_number,
+    startDate: new Date(data?.start_date).toLocaleDateString('pt-PT'),
+    endDate: new Date(data?.end_date).toLocaleDateString('pt-PT'),
+  };
   Font.register({ family: 'Turkish', src: turkish });
+  Font.register({ family: 'Turkish2', src: turkish2 });
 
   return (
     <Document>
       <Page style={styles.page} size={'A4'}>
         <View style={styles.day}>
-          <Text>{studentInformation.find((item) => item.name === 'Günün tarhi').value}</Text>
+          <Text>{studentInformation.date}</Text>
         </View>
         <View style={styles.header}>
           <Text>BURSA ULUDAĞ ÜNİVERSİTESİ</Text>
@@ -26,12 +29,10 @@ const PdfWorkingSaturday = () => {
         </View>
         <View style={styles.content}>
           <Text style={[styles.subTitle, { marginBottom: 10 }]}>
-            {studentInformation.find((item) => item.name === 'Okul Numarası').value} numaralı öğrenciniz{' '}
-            {studentInformation.find((item) => item.name === 'Adı Soyadı').value} zorunlu Stajını{' '}
-            {studentInformation.find((item) => item.name === 'Başlangıç tarihi').value} -
-            {studentInformation.find((item) => item.name === 'Bitiş tarihi').value} tarihleri arasında firmamız
-            bünyesinde yapacaktır. Firmamız <Text style={styles.bold}>Cumartesi</Text> günleri de mesai yaptığından
-            öğrenciniz staj süresince Cumartesi günleri de firmamızda staj yapacaktır.
+            {studentInformation.no} numaralı öğrenciniz {studentInformation.name} zorunlu Stajını{' '}
+            {studentInformation.startDate} - {studentInformation.endDate} tarihleri arasında firmamız bünyesinde
+            yapacaktır. Firmamız <Text style={styles.bold}>Cumartesi</Text> günleri de mesai yaptığından öğrenciniz staj
+            süresince cumartesi günleri de firmamızda staj yapacaktır.
           </Text>
         </View>
         <View style={styles.signature}>
@@ -45,42 +46,40 @@ const PdfWorkingSaturday = () => {
 const styles = {
   page: {
     fontFamily: 'Turkish',
-    paddingTop: 35,
-    paddingBottom: 65,
-    marginLeft: 25,
-    paddingHorizontal: 35,
+    display: 'flex',
+    alignItems: 'center',
   },
   day: {
-    paddingRight: 28,
+    width: '100%',
     textAlign: 'right',
-    marginBottom: 43,
-    fontSize: 13,
+    fontSize: 12,
+    right: '30px',
+    padding: '50px',
   },
   header: {
-    paddingRight: 20,
-    textAlign: 'center',
+    fontFamily: 'Turkish2',
+    display: 'flex',
+    alignItems: 'center',
     marginBottom: 35,
-    fontSize: 16,
+    fontSize: 14,
   },
   content: {
-    marginBottom: 45,
-    paddingLeft: 20,
+    marginBottom: 50,
+    width: '70%',
   },
   signature: {
+    fontFamily: 'Turkish2',
     textAlign: 'right',
-    fontSize: 14,
-    paddingRight: 28,
+    fontSize: 12,
+    paddingRight: 80,
+    width: '100%',
+    right: 0,
   },
-  signature_extra: {
-    paddingRight: 6,
-  },
+
   subTitle: {
     fontSize: 11,
     paddingBottom: 5,
     width: '100%',
-  },
-  bold: {
-    fontWeight: 'extrabold',
   },
 };
 export default PdfWorkingSaturday;

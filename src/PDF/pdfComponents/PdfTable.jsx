@@ -4,11 +4,18 @@ import turkishbold from '../pdfComponents/extrabold.ttf';
 
 Font.register({ family: 'Turkishbold', src: turkishbold });
 
-const PdfTable = ({ data, widthName = '50%', widthValue = '50%', fontSize = 8 }) => {
+const PdfTable = ({
+  data,
+  widthName = '50%',
+  widthValue = '50%',
+  fontSize = 8,
+  secondLine = false,
+  width = 'auto',
+}) => {
   const styles = {
     table: {
       display: 'table',
-      width: 'auto',
+      width: width,
       borderStyle: 'solid',
       borderWidth: 1,
       borderRightWidth: 0,
@@ -24,6 +31,8 @@ const PdfTable = ({ data, widthName = '50%', widthValue = '50%', fontSize = 8 })
       borderWidth: 1,
       borderLeftWidth: 0,
       borderTopWidth: 0,
+      display: 'flex',
+      justifyContent: 'center',
     },
     tableCol2: {
       width: widthValue,
@@ -31,6 +40,7 @@ const PdfTable = ({ data, widthName = '50%', widthValue = '50%', fontSize = 8 })
       borderWidth: 1,
       borderLeftWidth: 0,
       borderTopWidth: 0,
+      fontSize: 8,
     },
     tableCell: {
       padding: 2,
@@ -41,12 +51,15 @@ const PdfTable = ({ data, widthName = '50%', widthValue = '50%', fontSize = 8 })
   return (
     <View style={styles.table}>
       {data.map((item, index) => (
-        <View style={styles.tableRow} key={index}>
+        <View
+          style={[styles.tableRow, { height: (index === 0 || index === 1) && secondLine ? '30px' : 'auto' }]}
+          key={index}
+        >
           <View style={styles.tableCol1}>
             <Text style={[styles.tableCell, { fontFamily: item.bold && 'Turkishbold' }]}>{item.name}</Text>
           </View>
           <View style={styles.tableCol2}>
-            <Text style={styles.tableCell}>{item.value}</Text>
+            <Text style={[styles.tableCell, { fontSize: secondLine ? 9 : fontSize }]}>{item.value}</Text>
           </View>
         </View>
       ))}

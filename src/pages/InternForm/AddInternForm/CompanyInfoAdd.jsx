@@ -47,7 +47,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
       .string()
       .required('Lütfen firma ismi girin')
       .min(3, 'Firma adı en az 3 karakter olabilir')
-      .max(50, 'Firma adı en fazla 50 karakter olabilir'),
+      .max(100, 'Firma adı en fazla 50 karakter olabilir'),
     address: yup
       .string()
       .required('Lütfen adres girin')

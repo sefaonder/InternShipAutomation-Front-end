@@ -15,7 +15,6 @@ Font.register({ family: 'Turkishbold', src: turkishbold });
 const PdfInternform = ({ data }) => {
   console.log(data);
 
-  console.log(data);
   return (
     <Document>
       <Page style={{ fontFamily: 'Turkishbold' }} size="A4"></Page>
@@ -113,7 +112,7 @@ const styles = {
     display: 'flex',
     border: '1px solid black',
     width: 'auto',
-    padding: '3px 15px',
+    padding: '3px 20px',
     alignItems: 'center',
     justifyContent: 'center',
   },
