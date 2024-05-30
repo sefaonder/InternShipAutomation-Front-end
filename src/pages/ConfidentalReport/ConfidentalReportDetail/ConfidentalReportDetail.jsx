@@ -71,7 +71,7 @@ const ConfidentalReportDetail = () => {
       {
         text: 'Doğum Yeri / Tarihi ',
         value:
-          data?.data?.interview.intern_status?.form?.student_info?.birth_place +
+          data?.data?.interview?.intern_status?.form?.student_info?.birth_place +
           ' ' +
           dayjs(data?.data?.interview?.intern_status?.form?.student_info.birth_date).format('DD.MM.YYYY'),
       },
@@ -81,8 +81,8 @@ const ConfidentalReportDetail = () => {
     ],
     [
       { header: 'Staj Tarihi ve Çalışma Konuları' },
-      { text: 'Staj Başlama Tarihi', value: data?.data?.start_date },
-      { text: 'Staj Bitiş Tarihi', value: data?.data?.end_date },
+      { text: 'Staj Başlama Tarihi', value: dayjs(data?.data?.start_date).format('DD.MM.YYYY') },
+      { text: 'Staj Bitiş Tarihi', value: dayjs(data?.data?.end_date).format('DD.MM.YYYY') },
       {
         text: 'Öğrenci Devamsızlık Gün Sayısı',
         value: data?.data?.days_of_absence,

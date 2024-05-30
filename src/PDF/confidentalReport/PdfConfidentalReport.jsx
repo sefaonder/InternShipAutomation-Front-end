@@ -71,7 +71,7 @@ const PdfConfidentalReport = ({ data }) => {
             <PdfTable data={studentCredentials} fontSize={11} />
             <Text style={styles.subTitle}> Kurum Bilgileri:</Text>
 
-            <PdfTable data={companyInfo} fontSize={11} />
+            <PdfTable secondLine={true} data={companyInfo} fontSize={10} />
             <Text style={styles.subTitle}> Staj Tarihi Ve Calisma Konulari:</Text>
 
             <PdfTable data={internshipInfo} fontSize={11} />

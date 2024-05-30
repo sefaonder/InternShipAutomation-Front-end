@@ -17,7 +17,7 @@ const Company = ({ data }) => {
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <PdfTable widthName="35%" widthValue="65%" data={company} />
+        <PdfTable widthName="35%" secondLine={true} width="100%" widthValue="65%" data={company} />
         <View style={styles.auth}>
           <View style={styles.text}>
             <Text style={{ fontWeight: 'bold', fontSize: '10px', fontFamily: 'Turkishbold' }}>
@@ -61,7 +61,7 @@ const styles = {
     padding: '0 10px',
     width: '60%',
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
   },
   text: {
     display: 'flex',
