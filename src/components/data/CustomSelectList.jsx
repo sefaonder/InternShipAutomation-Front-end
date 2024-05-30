@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import { CircularProgress, Typography } from '@mui/material';
 import _ from 'lodash';
+import dayjs from 'dayjs';
 
 function CustomSelectList({ data, checked, handleToggle, loading }) {
   if (loading) {
@@ -35,7 +36,11 @@ function CustomSelectList({ data, checked, handleToggle, loading }) {
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value.id} />
+              <ListItemText
+                id={labelId}
+                primary={`${value?.student?.name} ${value?.student?.last_name} - ${value?.student?.school_number}`}
+                secondary={`${dayjs(value?.internStatus?.form?.start_date).format('DD.MM.YYYY')} - ${dayjs(value?.internStatus?.form?.end_date).format('DD.MM.YYYY')} -> ${value?.internStatus?.form?.edu_year?.name}`}
+              />
             </ListItemButton>
           </ListItem>
         );
