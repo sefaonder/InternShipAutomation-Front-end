@@ -104,8 +104,10 @@ function UserAdd() {
   });
 
   useEffect(() => {
-    if (formik.values.schoolNumber && formik.values.userType === UserRolesEnum.STUDENT.id) {
-      formik.setFieldValue('email', formik.values.schoolNumber + '@ogr.uludag.edu.tr', false);
+    if (!userData?.id) {
+      if (formik.values.schoolNumber && formik.values.userType === UserRolesEnum.STUDENT.id) {
+        formik.setFieldValue('email', formik.values.schoolNumber + '@ogr.uludag.edu.tr', false);
+      }
     }
   }, [formik.values.schoolNumber]);
 

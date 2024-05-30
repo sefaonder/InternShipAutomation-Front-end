@@ -79,8 +79,14 @@ function UserDetail() {
       { text: 'Kullanıcı Soyismi', value: data?.data?.last_name },
     ],
     [
-      { text: 'Staj Sorumlu Adı: ', value: data?.data?.follow_up?.name },
-      { text: 'Staj Sorumlu Soyadı: ', value: data?.data?.follow_up?.last_name },
+      { text: 'Email Adresi', value: data?.data?.follow_up?.name },
+      { text: 'Kullanıcı Tipi', value: data?.data?.follow_up?.last_name },
+    ],
+    [
+      { text: 'TC Kimlik Numarası', value: data?.data?.follow_up?.name },
+      { text: 'Okul Numarası', value: data?.data?.follow_up?.last_name },
+      { text: 'Staj Durumu', value: data?.data?.follow_up?.last_name },
+      { text: 'Staj Tamamlanma Tarihi', value: data?.data?.follow_up?.last_name },
     ],
   ];
 
