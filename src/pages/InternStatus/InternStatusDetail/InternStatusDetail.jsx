@@ -59,18 +59,18 @@ function InternStatusDetail() {
     [{ text: 'Statüs: ', value: data?.data.status }],
 
     [
-      { text: 'Komisyon Adı: ', value: data?.data.interview?.comission.name },
-      { text: 'Soyadı: ', value: data?.data.interview?.comission.last_name },
+      { text: 'Komisyon Adı: ', value: data?.data.interview?.comission?.name },
+      { text: 'Soyadı: ', value: data?.data.interview?.comission?.last_name },
     ],
     [
-      { text: 'Staj Sorumlusu Adı: ', value: data?.data.form?.follow_up.name },
-      { text: 'Staj Sorumlusu Soyadı: ', value: data?.data.form?.follow_up.last_name },
+      { text: 'Staj Sorumlusu Adı: ', value: data?.data.form?.follow_up?.name },
+      { text: 'Staj Sorumlusu Soyadı: ', value: data?.data.form?.follow_up?.last_name },
     ],
     [
-      { text: 'Öğrenci Ad: ', value: data?.data.student.name },
-      { text: 'Öğrenci Soyadı: ', value: data?.data.student.last_name },
-      { text: 'Okul Numarası: ', value: data?.data.student.school_number },
-      { text: 'Tc Kimlik No: ', value: data?.data.student.tc_number },
+      { text: 'Öğrenci Ad: ', value: data?.data?.student?.name },
+      { text: 'Öğrenci Soyadı: ', value: data?.data?.student?.last_name },
+      { text: 'Okul Numarası: ', value: data?.data?.student?.school_number },
+      { text: 'Tc Kimlik No: ', value: data?.data?.student?.tc_number },
     ],
   ];
 

@@ -7,12 +7,14 @@ import {
   useStartInterviewsMutation,
 } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
 import InterviewCreateDialog from './InterviewCreateDialog';
+import InterviewDateDialog from './InterviewDateDialog';
 
 function InterviewReadyList({ open }) {
   const [checked, setChecked] = useState([]);
 
   const { data, isLoading, refetch } = useGetInterviewReadyQuery({}, { skip: !open });
-  const [dialog, setDialog] = useState(false);
+  const [dialog, setDialog] = useState({ create: false, date: false });
+  const [interviewDate, setInterviewDate] = useState({ interviewStartDate: null, interviewEndTime: null });
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -32,6 +34,10 @@ function InterviewReadyList({ open }) {
     setChecked(recordIds);
   };
 
+  const clearAllRecord = () => {
+    setChecked([]);
+  };
+
   function getIntersectionRecords(data, checkedIds) {
     if (!data || !checkedIds) {
       return [];
@@ -43,19 +49,42 @@ function InterviewReadyList({ open }) {
       return intersection;
     }, []);
   }
+
+  function toggleDialog(dialogType) {
+    if (dialogType === 'date') {
+      setDialog({ date: true });
+    } else if (dialogType === 'create') {
+      setDialog({ create: true });
+    } else {
+      setDialog({ date: false, create: false });
+    }
+  }
   return (
     <Box>
       <Typography variant="h5">Mülakata Hazır Stajlar</Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Checkbox checked={data?.data.length === checked.length} onClick={() => selectAllRecord(data?.data)} />
-        <Button variant="outlined" disabled={checked.length < 1} onClick={() => setDialog(true)}>
-          Mülakat Tanımla
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '1rem' }}>
+        <Checkbox
+          checked={data?.data.length === checked.length}
+          onClick={() => (checked.length > 0 ? clearAllRecord() : selectAllRecord(data?.data))}
+        />
+        <Button variant="outlined" disabled={checked.length < 1} onClick={() => toggleDialog('date')}>
+          Mülakat Tarihlerini Ata
         </Button>
       </Box>
       <CustomSelectList handleToggle={handleToggle} checked={checked} data={data?.data} loading={isLoading} />
+      <InterviewDateDialog
+        open={dialog.date}
+        handleClose={() => toggleDialog('reset')}
+        setDates={({ interviewStartDate, interviewEndTime }) =>
+          setInterviewDate({ interviewStartDate: interviewStartDate, interviewEndTime: interviewEndTime })
+        }
+        onSucces={() => toggleDialog('create')}
+      />
       <InterviewCreateDialog
-        open={dialog}
-        handleClose={() => setDialog(false)}
+        open={dialog.create}
+        startDate={interviewDate.interviewStartDate}
+        endDate={interviewDate.interviewEndTime}
+        handleClose={() => toggleDialog('reset')}
         onSucces={() => refetch()}
         selectedRecords={getIntersectionRecords(data?.data, checked)}
       />

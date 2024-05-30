@@ -6,6 +6,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from '@mui/material';
@@ -15,15 +17,69 @@ import { useGetComissionACQuery, useGetInternStatusACQuery } from 'src/app/api/a
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 import CustomDateTimeInput from 'src/components/inputs/CustomDateTimeInput';
 import { useStartInterviewsMutation } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Link } from 'react-router-dom';
 
-function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, loading }) {
+function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, loading, startDate, endDate }) {
   const [startInterviews, { isLoading }] = useStartInterviewsMutation();
 
   const matches = useMediaQuery('(min-width:1000px)');
 
   console.log('selectedRecords', selectedRecords);
 
-  const [interviews, setInterviews] = useState([{ internStatusId: null, comission: null, date: null }]);
+  const [interviews, setInterviews] = useState([{ interviewId: null, comission: null, date: null }]);
+
+  const { data, isLoading: isLoadingQuery, isSuccess } = useGetComissionACQuery({}, { skip: !open });
+
+  console.log('data', data);
+
+  function distributeRecords(selectedRecords, comissions, interviewStartDate, interviewEndTime) {
+    const recordsPerPerson = Math.ceil(selectedRecords.length / comissions.length);
+    const interval = 15 * 60 * 1000; // 15 dakika milisaniye cinsinden
+
+    const hourTime = dayjs(interviewEndTime, 'HH:mm').format('HH:mm');
+    console.log('hourTime', hourTime);
+    const interviewEndTimeHour = parseInt(hourTime.split(':')[0]);
+    const interviewEndTimeMinute = parseInt(hourTime.split(':')[1]);
+
+    const interviewStartDateTime = new Date(dayjs(interviewStartDate, 'DD.MM.YYYY HH:mm').toDate());
+
+    console.log('zamanlar', interviewEndTime, interviewEndTimeHour, interviewEndTimeMinute);
+    console.log('selectedRecords22', selectedRecords);
+
+    const results = [];
+
+    for (let i = 0; i < selectedRecords.length; i++) {
+      const personIndex = Math.floor(i / recordsPerPerson);
+      const person = comissions[personIndex % comissions.length];
+      let interviewDateTime = new Date(interviewStartDateTime);
+
+      // Her kişiye kendi zaman dilimini hesapla
+      const personIndexOffset = Math.floor(personIndex / comissions.length);
+      interviewDateTime.setDate(interviewDateTime.getDate() + personIndexOffset);
+
+      // Her kayıt için zamanı ayarla
+      const recordIndex = i % recordsPerPerson;
+      interviewDateTime.setTime(interviewStartDateTime.getTime() + recordIndex * interval);
+
+      // Eğer mülakat zamanı bitiş saatini geçerse, bir sonraki güne geç
+      if (
+        interviewDateTime.getHours() >= interviewEndTimeHour &&
+        interviewDateTime.getMinutes() > interviewEndTimeMinute
+      ) {
+        interviewDateTime.setDate(interviewDateTime.getDate() + 1);
+        interviewDateTime.setHours(interviewStartDateTime.getHours());
+        interviewDateTime.setMinutes(interviewStartDateTime.getMinutes());
+      }
+
+      results.push({
+        record: selectedRecords[i],
+        person: person,
+        date: dayjs(interviewDateTime),
+      });
+    }
+    return results;
+  }
 
   console.log('interviews', interviews);
 
@@ -35,12 +91,22 @@ function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, l
 
   useEffect(() => {
     const recordData = [];
-    selectedRecords.map((item, index) => {
-      recordData.push({ internStatusId: item.id, comission: null, date: null });
-    });
+    if (data?.data.length > 0 && selectedRecords.length > 0 && startDate && endDate) {
+      const result = distributeRecords(selectedRecords, data?.data, startDate, endDate);
+
+      result.map((item) => {
+        recordData.push({ interviewId: item.record.id, comission: { id: item.person.id }, date: item.date });
+      });
+
+      console.log('result', result);
+    }
+
+    // selectedRecords.map((item, index) => {
+    //   recordData.push({ interviewId: item.id, comission: null, date: null });
+    // });
 
     setInterviews(recordData);
-  }, [selectedRecords]);
+  }, [selectedRecords, isSuccess]);
 
   return (
     <Dialog
@@ -54,7 +120,7 @@ function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, l
           event.preventDefault();
 
           const payload = interviews.map((item) => ({
-            internStatusId: item.internStatusId,
+            interviewId: item.interviewId,
             comissionId: item.comission.id,
             date: dayjs(item.date).toDate(),
           }));
@@ -71,7 +137,7 @@ function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, l
         },
       }}
     >
-      <DialogTitle>Mülakatları Tanımla</DialogTitle>
+      <DialogTitle>Mülakat Tarihlerini ve Yetkili Komisyon Üyesi Ata</DialogTitle>
       <DialogContent className="flex flex-col gap-4">
         <DialogContentText>
           Staj Tarihlerinide iş gününden sayılmaması için lütfen Resmi Tatil Günlerini Ekleyiniz
@@ -87,19 +153,24 @@ function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, l
               gap: '1rem',
             }}
           >
-            <Typography sx={{ minWidth: '2rem' }}>{index + 1} - </Typography>
-            <CustomAutocomplete
-              sx={{ minWidth: '15rem' }}
-              name={`internStatus-${index}`}
-              id={`internStatus-${index}`}
-              label={'İlgili Staj Durumu'}
-              disabled
-              value={{ id: interview.id }}
-              filterId={interview.id}
-              onChange={(value) => handleInterviewChange(index, 'internStatus', value)}
-              required
-              useACSlice={useGetInternStatusACQuery}
-            />
+            <Typography sx={{ minWidth: '2rem', marginY: 'auto' }}>{index + 1} - </Typography>
+            <Box className="flex items-start flex-shrink-0 flex-col justify-center">
+              <Typography variant="h5">Öğrenci</Typography>
+
+              <Box>
+                <Typography variant="p">{interview.student.name + ' ' + interview.student.last_name}</Typography>
+                <Typography variant="p">{' - ' + interview.student.school_number}</Typography>
+              </Box>
+            </Box>
+            <Box className="flex items-center flex-shrink-0">
+              <Typography variant="p">
+                <Typography variant="h5">Staj Tarihi</Typography>
+
+                {dayjs(interview.internStatus.form.start_date).format('DD.MM.YYYY') +
+                  ' - ' +
+                  dayjs(interview.internStatus.form.end_date).format('DD.MM.YYYY')}
+              </Typography>
+            </Box>
             <CustomAutocomplete
               sx={{ minWidth: '15rem' }}
               name={`comission-${index}`}
@@ -118,6 +189,14 @@ function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, l
               value={interviews[index]?.date}
               onChange={(value) => handleInterviewChange(index, 'date', value)}
             />
+            <Tooltip title="İlgili Mülakat Kaydı">
+              <Link className="flex" to={'/interview/' + interview.id} target="_blank">
+                <IconButton aria-label="releatedInterview">
+                  <OpenInNewIcon />
+                </IconButton>
+              </Link>
+            </Tooltip>
+
             {/* <Button onClick={() => removeInterview(index)}>Sil</Button> */}
           </Box>
         ))}

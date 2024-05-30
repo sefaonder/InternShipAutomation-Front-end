@@ -85,19 +85,19 @@ function InterviewDetail() {
 
   const accordionData = [
     [
-      { text: 'Statüs: ', value: data?.data.internStatus.status },
+      { text: 'Statüs: ', value: data?.data?.internStatus?.status },
       { text: 'Mühür: ', value: data?.data.status ? 'Mühürlü değil' : 'Mühürlü' },
     ],
     [
-      { text: 'Komisyon Adı: ', value: data?.data.comission.name },
-      { text: 'Soyadı: ', value: data?.data.comission.last_name },
+      { text: 'Komisyon Adı: ', value: data?.data?.comission?.name },
+      { text: 'Soyadı: ', value: data?.data?.comission?.last_name },
     ],
 
     [
-      { text: 'Öğrenci Ad: ', value: data?.data.student.name },
-      { text: 'Öğrenci Soyadı: ', value: data?.data.student.last_name },
-      { text: 'Okul Numarası: ', value: data?.data.student.school_number },
-      { text: 'Tc Kimlik No: ', value: data?.data.student.tc_number },
+      { text: 'Öğrenci Ad: ', value: data?.data?.student?.name },
+      { text: 'Öğrenci Soyadı: ', value: data?.data?.student?.last_name },
+      { text: 'Okul Numarası: ', value: data?.data?.student?.school_number },
+      { text: 'Tc Kimlik No: ', value: data?.data?.student?.tc_number },
     ],
   ];
 

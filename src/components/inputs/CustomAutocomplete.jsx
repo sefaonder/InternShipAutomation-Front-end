@@ -71,7 +71,10 @@ const CustomAutocomplete = ({
       }}
       freeSolo
       renderOption={(props, option) => (
-        <Tooltip title={Boolean(props['aria-disabled']) && Boolean(disabledTooltipText) ? disabledTooltipText : null}>
+        <Tooltip
+          key={option.id}
+          title={Boolean(props['aria-disabled']) && Boolean(disabledTooltipText) ? disabledTooltipText : null}
+        >
           <List key={option.id} sx={{ width: '100%', bgcolor: 'background.paper' }}>
             <ListItemButton key={option.id} {...props} style={{ borderBottom: `1px solid ${theme.palette.divider}` }}>
               <ListItemText
