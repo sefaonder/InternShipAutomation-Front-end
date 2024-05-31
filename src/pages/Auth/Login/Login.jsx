@@ -6,7 +6,6 @@ import { Formik, useFormik } from 'formik';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useLoginMutation } from 'src/store/services/auth/authApiSlice';
-import './login.css';
 import { setCredentials } from 'src/store/services/auth/authSlice';
 import { Box, Link } from '@mui/material';
 import parseJWT from 'src/app/handlers/jwtHandler';

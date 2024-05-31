@@ -6,12 +6,19 @@ import usePermission from 'src/hooks/usePermission';
 import PopUp from './PopUp';
 import { useState } from 'react';
 import { dashboardInfo } from './DasboardInfo';
+import DiagramHeader from 'src/components/diagram/DiagramHeader';
+import { useGetStudentActiveInternshipQuery } from 'src/store/services/dashboard/dashboardApiSlice';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 
 function Dashboard() {
   const dispatch = useDispatch();
   const checkPermission = usePermission();
+
   const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
   const isAdvancedAdmin = checkPermission(UserRolesEnum.ADMIN.id);
+
+  const { data, isLoading } = useGetStudentActiveInternshipQuery({}, { skip: isAdvancedComission });
+
   return (
     <div>
       <Typography variant="h2">Bursa Uludağ Üniversitesi Bilgisayar Mühendisliği Staj Otomasyonu</Typography>
@@ -37,12 +44,18 @@ function Dashboard() {
           </Box>
         </Box>
       </Paper>
+
       <Box className="flex flex-col sm:flex-row gap-4 ">
         <Paper sx={{ flex: 1, padding: '1rem' }}>
-          <Diagram />
+          {isLoading ? (
+            <CustomCircularProgress />
+          ) : (
+            <>
+              {!isAdvancedComission && <DiagramHeader data={data?.data} />}
+              <Diagram data={data?.data} />
+            </>
+          )}
         </Paper>
-
-        {/* <Box className="flex flex-1 flex-col"></Box> */}
       </Box>
     </div>
   );
