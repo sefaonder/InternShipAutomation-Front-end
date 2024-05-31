@@ -62,6 +62,15 @@ function InternStatusList() {
       cellComponent: (value) => <p className="">{value?.name}</p>,
     },
     {
+      id: 'student',
+      numeric: false,
+      disablePadding: true,
+      label: 'Öğrenci Numarası',
+      style: 'text-left',
+      notSortable: true,
+      cellComponent: (value) => <p className="">{value?.school_number}</p>,
+    },
+    {
       id: 'form',
       numeric: false,
       disablePadding: true,

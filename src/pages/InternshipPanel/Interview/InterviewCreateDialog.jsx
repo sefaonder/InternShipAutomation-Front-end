@@ -101,10 +101,6 @@ function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, l
       console.log('result', result);
     }
 
-    // selectedRecords.map((item, index) => {
-    //   recordData.push({ interviewId: item.id, comission: null, date: null });
-    // });
-
     setInterviews(recordData);
   }, [selectedRecords, isSuccess]);
 

@@ -51,7 +51,7 @@ function InterviewList() {
       disablePadding: true,
       label: 'Oluşturulma Zamanı',
       style: 'text-left',
-      cellComponent: (value) => <p className="">{moment(value).format('DD.MM.YYYY')}</p>,
+      cellComponent: (value) => <p className="">{value ? moment(value).format('DD.MM.YYYY') : ''}</p>,
     },
     {
       id: 'student',
@@ -77,9 +77,7 @@ function InterviewList() {
       disablePadding: true,
       label: 'Mülakat Tarihi',
       style: 'text-left',
-      cellComponent: (value) => {
-        return <p className="">{dayjs(value).format('DD.MM.YYYY - HH:mm')}</p>;
-      },
+      cellComponent: (value) => <p className="">{value ? dayjs(value).format('DD.MM.YYYY - HH:mm') : ''}</p>,
     },
     {
       id: 'internStatus',

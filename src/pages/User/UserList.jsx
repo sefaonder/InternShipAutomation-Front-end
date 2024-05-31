@@ -7,9 +7,10 @@ import { UserRolesEnum } from 'src/app/enums/roleList';
 import EnhancedTable from 'src/components/data/CustomMUITable';
 import CustomTableFilter from 'src/components/data/CustomTableFilter';
 import ListPageHeader from 'src/components/details/ListPageHeader';
-import AddButton from 'src/components/inputs/AddButton';
-import { useGetUsersQuery } from 'src/store/services/user/userApiSlice';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useGetGraduatedExcelListMutation, useGetUsersQuery } from 'src/store/services/user/userApiSlice';
 import { clearUserData } from 'src/store/services/user/userSlice';
+import CustomIconButton from 'src/components/inputs/CustomIconButton';
 
 function UserList() {
   const location = useLocation();
@@ -18,6 +19,8 @@ function UserList() {
 
   const [filter, setFilter] = useState({});
   const { data, isLoading, isSuccess, isError, error, refetch, currentData, isFetching } = useGetUsersQuery(filter);
+
+  const [getGraduatedExcelList, { isLoading: isLoadingExcel }] = useGetGraduatedExcelListMutation();
 
   const handleFilterChange = (values) => {
     const filterPayload = {
@@ -40,6 +43,14 @@ function UserList() {
     refetch();
     dispatch(clearUserData());
   }, [location, navigate]);
+
+  const handleDownloadExcel = async () => {
+    try {
+      const response = await getGraduatedExcelList();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const headers = [
     {
@@ -102,7 +113,21 @@ function UserList() {
 
   return (
     <Box>
-      <ListPageHeader header={'Kullanıcı Listesi'} location={location.pathname} />
+      <ListPageHeader
+        header={'Kullanıcı Listesi'}
+        location={location.pathname}
+        tooltipTitle="Kullanıcı Ekle"
+        endComponent={
+          <CustomIconButton
+            onClick={handleDownloadExcel}
+            color={'success'}
+            loading={isLoadingExcel}
+            disabled={isLoadingExcel}
+            Icon={<FileDownloadIcon />}
+            text={'EXCEL'}
+          />
+        }
+      />
       <Paper>
         <CustomTableFilter
           filterOptions={userFilters}
