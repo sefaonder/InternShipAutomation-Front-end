@@ -52,7 +52,7 @@ function Dashboard() {
           ) : (
             <>
               {!isAdvancedComission && <DiagramHeader data={data?.data} />}
-              <Diagram data={data?.data} />
+              <Diagram data={data?.data} isAdvancedComission={isAdvancedComission} />
             </>
           )}
         </Paper>

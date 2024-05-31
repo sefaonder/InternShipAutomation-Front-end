@@ -4,7 +4,7 @@ import DiagramBox from './DiagramBox';
 import PopUp from 'src/pages/Dashboard/PopUp';
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 
-const Diagram = ({ data }) => {
+const Diagram = ({ data, isAdvancedComission }) => {
   const diagramData = [
     {
       id: 'FRM01',
@@ -92,7 +92,7 @@ const Diagram = ({ data }) => {
     setOpen(false);
   };
 
-  const status = diagramData.findIndex((item) => item.id === data.status);
+  const status = !isAdvancedComission && diagramData.findIndex((item) => item.id === data.status);
 
   return (
     <Box className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] justify-items-center gap-2">

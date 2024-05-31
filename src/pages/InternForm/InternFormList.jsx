@@ -86,6 +86,7 @@ function InternFormList() {
       disablePadding: true,
       label: 'Staj Dönemi',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value?.name || ''}</p>,
     },
     {

@@ -83,6 +83,7 @@ function UserList() {
       disablePadding: true,
       label: 'Kullanıcı Rolü',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{UserRolesEnum[value]?.label}</p>,
     },
     {
