@@ -18,6 +18,7 @@ import usePermission from 'src/hooks/usePermission';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
 import InterviewAlert from 'src/components/details/InterviewAlert';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 
 function InterviewDetail() {
   const dispatch = useDispatch();
@@ -76,7 +77,7 @@ function InterviewDetail() {
 
   console.log('data', data);
   if (isLoading) {
-    return <CircularProgress />;
+    return <CustomCircularProgress />;
   }
 
   if (isSuccess) {
@@ -119,16 +120,18 @@ function InterviewDetail() {
           onClick={() => navigate('/interview/update/' + interviewId)}
         />
 
-        <Tooltip title="Firmaya Doldurup imzalaması için Sicil Fişini ilet">
-          <CustomIconButton
-            onClick={handleSendCompanyConfidental}
-            color={'secondary'}
-            loading={isLoadingSend}
-            disabled={isLoadingSend}
-            Icon={<ForwardToInboxIcon />}
-            text={'Sicil Fişini Ilet'}
-          />
-        </Tooltip>
+        {!data?.data?.confidentalReport?.id && (
+          <Tooltip title="Firmaya Doldurup imzalaması için Sicil Fişini ilet">
+            <CustomIconButton
+              onClick={handleSendCompanyConfidental}
+              color={'secondary'}
+              loading={isLoadingSend}
+              disabled={isLoadingSend}
+              Icon={<ForwardToInboxIcon />}
+              text={'Sicil Fişini Ilet'}
+            />
+          </Tooltip>
+        )}
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
