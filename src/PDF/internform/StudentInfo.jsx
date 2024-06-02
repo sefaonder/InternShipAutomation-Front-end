@@ -33,7 +33,7 @@ const StudentInfo = ({ data }) => {
 
   const address = {
     name: 'İkametgah Adresi ve Telefonu:',
-    value: data?.company_info?.address,
+    value: data?.student_info?.address,
   };
   return (
     <View style={styles.container}>

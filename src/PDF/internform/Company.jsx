@@ -5,7 +5,7 @@ import turkishbold from '../pdfComponents/extrabold.ttf';
 
 const Company = ({ data }) => {
   const company = [
-    { name: 'Adı', value: 'murat murat murat murat muat murat murat murat mur' },
+    { name: 'Adı', value: data?.company_info?.name },
     { name: 'Adresi', value: data?.company_info?.address },
     { name: 'Telefon No', value: data?.company_info?.phone },
     { name: 'Faks No', value: data?.company_info?.fax },
