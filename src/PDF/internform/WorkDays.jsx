@@ -133,7 +133,7 @@ const WorkDays = ({ data }) => {
   useEffect(() => {
     box.map((item, index) => calculatex(item, index + 1));
   }, []);
-  const days = ['Pazartesi', 'Sali', 'Carsamba', 'Persembe', ' Cuma', 'Cumartesi'];
+  const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', ' Cuma', 'Cumartesi'];
 
   return (
     <View style={styles.container}>
@@ -148,7 +148,7 @@ const WorkDays = ({ data }) => {
           {days?.map((day, index) => (
             <View style={styles.day}>
               <Text style={{ borderBottom: '1px solid black', width: '100%' }}> {day} </Text>
-              {index + 1 == data?.weekDayWork[index] ? (
+              {data?.weekDayWork.includes(index + 1) ? (
                 <View style={styles.box}>
                   <Image src={correct}></Image>
                 </View>
