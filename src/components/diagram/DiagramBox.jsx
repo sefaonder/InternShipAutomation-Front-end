@@ -1,12 +1,18 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-const DiagramBox = ({ success, index, item, handleClickOpen, progress }) => {
+const DiagramBox = ({ success, index, item, handleClickOpen, progress, error }) => {
   return (
     <Box
       onClick={() => handleClickOpen(item)}
       sx={{
-        backgroundColor: success ? 'success.light' : progress ? 'warning.light' : 'background.paper',
+        backgroundColor: error
+          ? 'error.light'
+          : success
+            ? 'success.light'
+            : progress
+              ? 'warning.light'
+              : 'background.paper',
       }}
       className={`w-[200px] shadow-2xl flex-col justify-center items-center relative h-[120px] p-2 m-1 rounded-md flex hover:opacity-40  transition ease-in-out delay-100 hover:cursor-pointer`}
     >

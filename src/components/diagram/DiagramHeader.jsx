@@ -6,7 +6,6 @@ import NavigateLink from '../details/NavigateLink';
 function DiagramHeader({ data }) {
   return (
     <Box>
-      x"
       <Typography variant="h4">Güncel Staj Durumu</Typography>
       <NavigateLink text={'İlgili Staj Durumu'} linkId={data?.id} route={'intern-status'} />
       <Box className="my-4">
