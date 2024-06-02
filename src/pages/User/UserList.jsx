@@ -107,8 +107,8 @@ function UserList() {
   const userFilters = [
     { id: 'schoolNumber', type: 'text', componentProps: { label: 'Okul Numarası' } },
     { id: 'userType', type: 'enum', componentProps: { enumObject: UserRolesEnum, label: 'Kullanıcı Yetkisi' } },
-    { id: 'name', type: 'text', componentProps: { label: 'İsim' } },
-    { id: 'last_name', type: 'text', componentProps: { label: 'Soyisim' } },
+    { id: 'name', type: 'text', componentProps: { label: 'Ad' } },
+    { id: 'lastName', type: 'text', componentProps: { label: 'Soyad' } },
     { id: 'isGraduate', type: 'boolean', componentProps: { label: 'Sadece Mezunlar' } },
   ];
 

@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 import * as yup from 'yup';
@@ -79,8 +79,16 @@ function InterviewAdd({ interview, interviewId, isLoadingState }) {
 
   return (
     <div>
-      <Typography variant="h6">Mülakat</Typography>
+      <Typography variant="h4" className="my-4">
+        Mülakat
+      </Typography>
       <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+        <Alert severity="warning">
+          <Typography>
+            <b>Dikkat</b>, Mülakatın Tanımlanması veya Mevcut Mülakatın Güncellenmesi otomatik olarak staj durumunu{' '}
+            <b>güncellemez</b>, lütfen ilgili Staj Durumunu'da güncelleyiniz
+          </Typography>
+        </Alert>
         <CustomAutocomplete
           name="internStatus"
           id="internStatus"
@@ -97,7 +105,6 @@ function InterviewAdd({ interview, interviewId, isLoadingState }) {
         <CustomAutocomplete
           name="comission"
           id="comission"
-          disabled={interviewData?.id}
           required
           useACSlice={useGetComissionACQuery}
           label={'Mülakat Yetkilisi'}

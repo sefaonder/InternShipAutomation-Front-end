@@ -12,6 +12,8 @@ import CustomIconButton from 'src/components/inputs/CustomIconButton';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useGetExcelListMutation, useGetStatusesQuery } from 'src/store/services/internStatus/internStatusApiSlice';
 import { clearInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
+import usePermission from 'src/hooks/usePermission';
+import { UserRolesEnum } from 'src/app/enums/roleList';
 
 function InternStatusList() {
   const [filter, setFilter] = useState({});
@@ -20,6 +22,10 @@ function InternStatusList() {
   const dispatch = useDispatch();
   const { data, currentData, isLoading, isFetching, isSuccess, isError, error, refetch } = useGetStatusesQuery(filter);
   const [getExcelList, { isLoading: isLoadingExcel }] = useGetExcelListMutation();
+
+  const checkPermission = usePermission();
+
+  const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
 
   const handleFilterChange = (values) => {
     const filterPayload = {
@@ -142,14 +148,16 @@ function InternStatusList() {
       <ListPageHeader
         header={'Staj Durumu Listesi'}
         endComponent={
-          <CustomIconButton
-            onClick={handleDownloadExcel}
-            color={'success'}
-            loading={isLoadingExcel}
-            disabled={isLoadingExcel}
-            Icon={<FileDownloadIcon />}
-            text={'EXCEL'}
-          />
+          isAdvancedComission ? (
+            <CustomIconButton
+              onClick={handleDownloadExcel}
+              color={'success'}
+              loading={isLoadingExcel}
+              disabled={isLoadingExcel}
+              Icon={<FileDownloadIcon />}
+              text={'EXCEL'}
+            />
+          ) : null
         }
       />
 

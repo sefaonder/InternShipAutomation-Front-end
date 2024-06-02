@@ -48,23 +48,11 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   };
 
   const validationSchema = yup.object({
-    fathersName: yup
-      .string()
-      .required('Lütfen baba adını girin')
-      .min(3, 'baba adı en az 3 karakter olabilir')
-      .max(35, 'baba adı en fazla 35 karakter olabilir'),
-    mothersName: yup
-      .string()
-      .required('Lütfen anne adını girin')
-      .min(3, 'anne adı en az 3 karakter olabilir')
-      .max(35, 'anne adı en fazla 35 karakter olabilir'),
+    fathersName: yup.string().required('Lütfen baba adını girin').max(35, 'baba adı en fazla 35 karakter olabilir'),
+    mothersName: yup.string().required('Lütfen anne adını girin').max(35, 'anne adı en fazla 35 karakter olabilir'),
     birthDate: yup.date().required('Lütfen doğum tarihini girin'),
     birthPlace: yup.string().required('Lütfen doğum yerini girin'),
-    address: yup
-      .string()
-      .required('Lütfen adresi girin')
-      .min(3, 'adres en az 3 karakter olabilir')
-      .max(35, 'adres adı en fazla 35 karakter olabilir'),
+    address: yup.string().required('Lütfen adresi girin').max(100, 'adres adı en fazla 100 karakter olabilir'),
   });
 
   async function handleSubmit(values) {

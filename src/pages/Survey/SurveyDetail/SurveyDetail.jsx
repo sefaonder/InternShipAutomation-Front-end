@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Container, Paper, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -20,13 +20,17 @@ import LockIcon from '@mui/icons-material/Lock';
 
 import usePermission from 'src/hooks/usePermission';
 import { UserRolesEnum } from 'src/app/enums/roleList';
+
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 import SealedRecordAlert from 'src/components/details/SealedRecordAlert';
 import RecordTraceCard from 'src/components/recordTraceCard/RecordTraceCard';
 import NavigateLink from 'src/components/details/NavigateLink';
 import DialogButton from 'src/components/inputs/DialogButton';
 import { saveAs } from 'file-saver';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 
 const SurveyDetail = () => {
   const { surveyId } = useParams();
@@ -105,7 +109,7 @@ const SurveyDetail = () => {
 
   console.log('data', data);
   if (isLoading) {
-    return <CircularProgress />;
+    return <CustomCircularProgress />;
   }
   const submitForm = async (event) => {
     event.preventDefault(); // prevent page reload
@@ -145,6 +149,18 @@ const SurveyDetail = () => {
             }
           />
         )}
+
+        {!data?.data?.isSealed && isAdvancedComission && (
+          <CustomIconButton
+            color={'primary'}
+            loading={isLoading}
+            disabled={isLoading}
+            onClick={() => navigate('/survey/update/' + surveyId)}
+            Icon={<EditIcon />}
+            text="Güncelle"
+          />
+        )}
+
         {isAdvancedComission && (
           <CustomIconButton
             onClick={handleUnlock}
@@ -155,9 +171,7 @@ const SurveyDetail = () => {
             text={data?.data?.isSealed ? 'Mührü aç' : 'Mühürle'}
           />
         )}
-        <UpdateButton loading={isLoading} variant="outlined" onClick={() => navigate('/survey/update/' + surveyId)}>
-          Güncelle
-        </UpdateButton>
+
         {data?.data && <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />}
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">

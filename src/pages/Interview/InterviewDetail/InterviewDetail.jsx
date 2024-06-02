@@ -19,6 +19,8 @@ import { UserRolesEnum } from 'src/app/enums/roleList';
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
 import InterviewAlert from 'src/components/details/InterviewAlert';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
+import { InternStatusEnum } from 'src/app/enums/internStatus';
+import dayjs from 'dayjs';
 
 function InterviewDetail() {
   const dispatch = useDispatch();
@@ -85,20 +87,18 @@ function InterviewDetail() {
   }
 
   const accordionData = [
+    [{ text: 'Staj Durumu: ', value: InternStatusEnum[data?.data?.internStatus?.status].label }],
     [
-      { text: 'Statüs: ', value: data?.data?.internStatus?.status },
-      { text: 'Mühür: ', value: data?.data.status ? 'Mühürlü değil' : 'Mühürlü' },
-    ],
-    [
-      { text: 'Komisyon Adı: ', value: data?.data?.comission?.name },
-      { text: 'Soyadı: ', value: data?.data?.comission?.last_name },
+      { text: 'Komisyon Adı', value: data?.data?.comission?.name },
+      { text: 'Komisyon Soyadı', value: data?.data?.comission?.last_name },
+      { text: 'Mülakat Tarihi', value: data?.data?.date ? dayjs(data?.data?.date).format('DD.MM.YYYY HH:mm') : '-' },
     ],
 
     [
-      { text: 'Öğrenci Ad: ', value: data?.data?.student?.name },
-      { text: 'Öğrenci Soyadı: ', value: data?.data?.student?.last_name },
-      { text: 'Okul Numarası: ', value: data?.data?.student?.school_number },
-      { text: 'Tc Kimlik No: ', value: data?.data?.student?.tc_number },
+      { text: 'Öğrenci Adı', value: data?.data?.student?.name },
+      { text: 'Öğrenci Soyadı', value: data?.data?.student?.last_name },
+      { text: 'Okul Numarası', value: data?.data?.student?.school_number },
+      { text: 'TC Kimlik No', value: data?.data?.student?.tc_number },
     ],
   ];
 
@@ -135,7 +135,7 @@ function InterviewDetail() {
       </Paper>
       <Box className="flex flex-col sm:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
-          <Container className="my-2 px-6 gap-2 flex">
+          <Container className="flex-col my-2 px-6 gap-4 flex sm:flex-row">
             <NavigateLink text={'İlgili Staj Durumu'} linkId={data?.data?.internStatus?.id} route={'intern-status'} />
             {isAdvancedComission && (
               <NavigateLink
