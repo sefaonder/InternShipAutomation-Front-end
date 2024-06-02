@@ -122,9 +122,12 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
           }),
         );
       }
+      if (response.error) {
+        console.log('oops something bad req');
+        navigate('/intern-form');
+      }
       setIsLoading(false);
       handleNext();
-      console.log('oops something bad req');
     } catch (error) {
       console.log(error);
       setIsLoading(false);
