@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import dayjs from 'dayjs';
 import { enqueueSnackbar } from 'notistack';
 import React from 'react';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 import CustomDateInput from 'src/components/inputs/CustomDateInput';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useAddHolidayMutation } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
@@ -22,9 +23,11 @@ function HolidayCreateDialog({ open, handleClose, onSucces }) {
           const desc = formJson.descHoliday;
 
           try {
-            const response = await addHoliday({ date: dayjs(date, 'DD.MM.YYYY').toDate(), desc: desc }).unwrap();
+            const response = await addHoliday({ date: dayjs(date, 'DD.MM.YYYY').toDate(), desc: desc });
 
-            enqueueSnackbar(response.message, { variant: 'success' });
+            if (response.data) {
+              projectSnackbar(response.data.message, { variant: 'success' });
+            }
           } catch (error) {
             console.log(error);
           }

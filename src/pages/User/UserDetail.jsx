@@ -15,6 +15,7 @@ import usePermission from 'src/hooks/usePermission';
 import { useDeleteUserMutation, useGetUserDetailQuery } from 'src/store/services/user/userApiSlice';
 import { setUserData } from 'src/store/services/user/userSlice';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function UserDetail() {
   const dispatch = useDispatch();
@@ -44,7 +45,6 @@ function UserDetail() {
 
   useEffect(() => {
     if (error) {
-      //TODO:  error snackbar
       navigate('/user');
     }
   }, [isError]);
@@ -61,7 +61,11 @@ function UserDetail() {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteUser(userId).unwrap();
+      const response = await deleteUser(userId);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
       console.log(error);
     }

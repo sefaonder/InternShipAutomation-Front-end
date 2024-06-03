@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import React from 'react';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useAddEduYearMutation } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
 
@@ -20,9 +21,11 @@ function EduYearCreateDialog({ open, handleClose, onSucces }) {
           console.log(eduYear);
 
           try {
-            const response = await addEduYear({ name: eduYear }).unwrap();
+            const response = await addEduYear({ name: eduYear });
 
-            enqueueSnackbar(response.message, { variant: 'success' });
+            if (response.data) {
+              projectSnackbar(response.data.message, { variant: 'success' });
+            }
           } catch (error) {
             console.log(error);
           }

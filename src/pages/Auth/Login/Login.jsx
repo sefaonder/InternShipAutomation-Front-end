@@ -9,6 +9,8 @@ import { useLoginMutation } from 'src/store/services/auth/authApiSlice';
 import { setCredentials } from 'src/store/services/auth/authSlice';
 import { Box, Link } from '@mui/material';
 import parseJWT from 'src/app/handlers/jwtHandler';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import { enqueueSnackbar } from 'notistack';
 
 function Login() {
   const navigate = useNavigate();
@@ -40,26 +42,23 @@ function Login() {
     },
     onSubmit: async (values) => {
       try {
-        const userData = await login(values).unwrap();
-        const parsedData = parseJWT(userData.accessToken);
-        console.log('pardesData', parsedData);
-        dispatch(
-          setCredentials({ accessToken: userData.accessToken, roles: parsedData.roles, userId: parsedData.userId }),
-        );
-        await setToken(userData);
-        navigate('/');
-      } catch (err) {
-        console.log('err', err);
-        if (!err?.originalStatus) {
-          // isLoading: true until timeout occurs
-          //setErrMsg('No Server Response');
-        } else if (err.originalStatus === 400) {
-          //setErrMsg('Missing Username or Password');
-        } else if (err.originalStatus === 401) {
-          //setErrMsg('Unauthorized');
-        } else {
-          //setErrMsg('Login Failed');
+        const response = await login(values);
+
+        if (response.data) {
+          enqueueSnackbar('Başarılı bir şekilde giriş yapıldı.', { variant: 'success' });
+          const parsedData = parseJWT(response.data.accessToken);
+          dispatch(
+            setCredentials({
+              accessToken: response.data.accessToken,
+              roles: parsedData.roles,
+              userId: parsedData.userId,
+            }),
+          );
+          await setToken(response.data);
+          navigate('/');
         }
+      } catch (err) {
+        console.log(err);
       }
     },
     validationSchema: validationSchema,
@@ -98,16 +97,16 @@ function Login() {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />{' '}
-          <Link component="a" href="/password-change">
+          <Link className="mt-2" component="a" href="/password-change">
             Şifremi unuttum
           </Link>
         </Box>
 
         <Box className="flex flex-col">
-          <Button className="p-3" type="submit" color="primary" variant="outlined">
+          <Button className="p-3" type="submit" color="primary" variant="outlined" disabled={isLoading}>
             Gönder
           </Button>
-          <Link component="a" href="/register">
+          <Link className="mt-2" component="a" href="/register">
             Kayıt Ol
           </Link>
         </Box>

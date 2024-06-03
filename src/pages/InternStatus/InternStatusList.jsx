@@ -14,6 +14,7 @@ import { useGetExcelListMutation, useGetStatusesQuery } from 'src/store/services
 import { clearInternStatusData } from 'src/store/services/internStatus/internStatusSlice';
 import usePermission from 'src/hooks/usePermission';
 import { UserRolesEnum } from 'src/app/enums/roleList';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function InternStatusList() {
   const [filter, setFilter] = useState({});
@@ -52,6 +53,10 @@ function InternStatusList() {
   const handleDownloadExcel = async () => {
     try {
       const response = await getExcelList();
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +105,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Staj Durumu',
       style: 'text-left',
-      notSortable: true,
+
       cellComponent: (value) => <p className="">{InternStatusEnum[value].label}</p>,
     },
     {
@@ -109,6 +114,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Staj Başlangıç Tarihi',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => (
         <p className="">{value.start_date ? moment(value.start_date).format('DD.MM.YYYY') : ''}</p>
       ),
@@ -119,6 +125,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Staj Bitiş Tarihi',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value.end_date ? moment(value.end_date).format('DD.MM.YYYY') : ''}</p>,
     },
     {
@@ -127,6 +134,7 @@ function InternStatusList() {
       disablePadding: true,
       label: 'Staj Dönemi',
       style: 'text-left',
+      notSortable: true,
       cellComponent: (value) => <p className="">{value?.edu_year?.name || ''}</p>,
     },
   ];

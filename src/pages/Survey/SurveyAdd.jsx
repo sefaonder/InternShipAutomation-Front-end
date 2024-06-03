@@ -14,6 +14,7 @@ import { useGetInterviewACQuery } from 'src/app/api/autocompleteSlice';
 import { useNavigate } from 'react-router-dom';
 import { resetSurvey } from 'src/store/services/survey/surveySlice';
 import { useDispatch } from 'react-redux';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 const SurveyAdd = ({ survey, surveyId }) => {
   const navigate = useNavigate();
@@ -30,7 +31,6 @@ const SurveyAdd = ({ survey, surveyId }) => {
 
   useEffect(() => {
     if (surveyId && !Boolean(survey?.data?.id)) {
-      // navigate back detail page
       navigate('/survey/' + surveyId);
     }
 
@@ -54,7 +54,6 @@ const SurveyAdd = ({ survey, surveyId }) => {
   }, [isSuccess]);
 
   const setFormikValuesss = () => {
-    console.log(survey?.data?.company_name);
     if (survey?.data) {
       formik.setFieldValue('interview', { id: survey?.data?.interview?.id }, false);
       formik.setFieldValue('company_name', survey?.data?.company_name);
@@ -83,14 +82,14 @@ const SurveyAdd = ({ survey, surveyId }) => {
   useEffect(() => {
     const processedArray = processArray(selectedAnswersMulti);
     setSelectedAnswersMulti(processedArray);
-  }, [selectedAnswersMulti]); // Empty dependency array means this effect runs once after the initial render
+  }, [selectedAnswersMulti]);
 
   useEffect(() => {
     setFormikValuesss();
   }, [survey?.data]);
 
   const validationSchema = yup.object({
-    company_name: yup.string().required('E-mail Zorunlu'),
+    company_name: yup.string().required('Şirket Adı alanı Zorunludur'),
     company_address: yup.string().required('Şirket Adresi Zorunlu'),
     teach_type: yup.string().required('Öğrenim Türü Zorunlu'),
     gano: yup.string().required('Gano Bilgisi Zorunlu'),
@@ -120,15 +119,20 @@ const SurveyAdd = ({ survey, surveyId }) => {
     onSubmit: async (values) => {
       try {
         const payload = { ...values, interviewId: values.interview.id };
+        let response = null;
         if (survey) {
           if (!(values.intern_type === 'Dönem içi')) {
             payload.answers = payload.answers.slice(0, 31);
           }
-          await updateSurvey({ payload: payload, surveyId: surveyId }).unwrap();
+          response = await updateSurvey({ payload: payload, surveyId: surveyId });
           navigate('/survey/' + surveyId);
         } else {
-          await createSurvey(payload).unwrap();
+          response = await createSurvey(payload);
           navigate('/survey');
+        }
+
+        if (response.data) {
+          projectSnackbar(res.data.message, { variant: 'success' });
         }
       } catch (err) {
         console.log(err);

@@ -1,7 +1,7 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { useGetComissionACQuery } from 'src/app/api/autocompleteSlice';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 import CustomAutocomplete from 'src/components/inputs/CustomAutocomplete';
 import {
   useAddActiveFollowUpMutation,
@@ -24,8 +24,6 @@ function ActiveFollowUpCreateDialog({ open, handleClose, onSucces, activeFollowU
     }
   }, [activeFollowUp]);
 
-  console.log('activeFollowUp', activeFollowUp);
-  console.log('form', form);
   return (
     <Dialog
       open={open}
@@ -34,21 +32,20 @@ function ActiveFollowUpCreateDialog({ open, handleClose, onSucces, activeFollowU
         component: 'form',
         onSubmit: async (event) => {
           event.preventDefault();
-
-          console.log('form', form);
-
           try {
             let response = null;
             if (activeFollowUp?.id) {
               response = await updateActiveFollowUp({
                 payload: { followUpId: form.id },
                 activeFollowUpId: activeFollowUp?.id,
-              }).unwrap();
+              });
             } else {
-              response = await addActiveFollowUp({ payload: { followUpId: form.id } }).unwrap();
+              response = await addActiveFollowUp({ payload: { followUpId: form.id } });
             }
 
-            enqueueSnackbar(response.message, { variant: 'success' });
+            if (response.data) {
+              projectSnackbar(response.data.message, { variant: 'success' });
+            }
           } catch (error) {
             console.log(error);
           }

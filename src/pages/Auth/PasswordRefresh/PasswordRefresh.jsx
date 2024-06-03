@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { usePasswordResetMutation } from 'src/store/services/auth/authApiSlice';
 import { Button, TextField } from '@mui/material';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function PasswordRefresh() {
   const navigate = useNavigate();
@@ -38,9 +39,10 @@ function PasswordRefresh() {
     const payload = { credentials: values, token: pwdResetToken };
     const response = await passwordReset(payload);
 
-    if (response) {
+    if (response.data) {
+      projectSnackbar(response.data.message, { variant: 'success' });
       sessionStorage.removeItem('reset-token');
-      console.log('password succesfully changed');
+
       navigate('/login');
     }
   };
@@ -53,8 +55,6 @@ function PasswordRefresh() {
     onSubmit: handleSubmit,
     validationSchema: validationSchema,
   });
-
-  console.log('formik', formik.values);
 
   return (
     <div className="flex items-center  border-2 m-2 bg-white relative login-container h-[32rem]">
@@ -89,7 +89,7 @@ function PasswordRefresh() {
           error={formik.touched.password2 && Boolean(formik.errors.password2)}
           helperText={formik.touched.password2 && formik.errors.password2}
         />
-        <Button className="p-3" type="submit" color="primary" variant="outlined">
+        <Button className="p-3" type="submit" color="primary" variant="outlined" disabled={isLoading}>
           Gönder
         </Button>
       </form>

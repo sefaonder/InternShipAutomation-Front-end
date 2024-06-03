@@ -1,5 +1,45 @@
 {
-    "ERRORS":{},
+    "CODES":{
+      "USR001":"Email veya şifre yanlış",
+      "USR002":"Bu kullanıcı sistemde zaten mevcut",
+      "USR003":"Geçersiz email",
+
+      "AUTH001":"Oturum Açılamadı",
+      "AUTH002":"Oturum Açılamadı",
+      "AUTH003":"Oturum Açılamadı",
+      "AUTH004":"Oturum Açılamadı",
+      "AUTH005":"Oturum Açılamadı",
+      "AUTH006":"Email bulunamadı",
+      "AUTH007":"Geçersiz Link",
+
+      "GNR001":"Kayıt Bulunamadı",
+      "GNR002":"Geçersiz alanlar",
+      "000000":"Beklenmedik hata",
+
+      "INTF001":"Geçerli olmayan tarih aralığı seçildi",
+      "INTF002":"Mevcutta Onaylanmamış bir Staj Formu var",
+      "INTF003":"Geçerli olmayan bir tarih araşığı seçildi",
+      "INTF004":"Form Yetkilisi bulunamadı",
+
+      "CR001":"Hali hazırda Sicil fişi doldurulmuştur",
+      "CR002":"24 saat içerisinde sadece 1 defa Gizli Sicil Fişi iletilebilir",
+      "CR003":"Geçerli olmayan veya eksik link",
+      "SUR001":"Hali hazırda Öğrenci Değerlendirme Anketi doldurulmuştur",
+      "INV001":"Bu Öğrenciye ait Mülakat kaydı mevcut",
+      "INP001":"Yetkili kişi tanımı yapılmıştır.Değiştirmek için güncelleme yapılması gerekir",
+      "CRT001":"Kayıt başarılı bir şekilde oluşturulmuştur",
+      "UPT001":"Kayıt başarılı bir şekilde güncellenmiştir",
+      "DEL001":"Kayıt başarılı bir şekilde silinmiştir",
+      "SLD001":"",
+      "EML001":"E-mail başarılı bir şekilde gönderilmiştir",
+      "SEL001":"Mühür başarılı bir şekilde güncellenmiştir",
+      "SAUTH001":"Şifre başarılı bir şekilde sıfırlanmıştır",
+      "SAUTH002":"Başarılı bir şekilde kayıt olunmuştur",
+      "SAUTH003":"Başarılı bir şekilde oturum kapatıldı"
+    },
+    "RESULTS":{
+      
+    },
     "PAGES":{
      "AUTH":{},
      "CONFIDENTAL_REPORT":{

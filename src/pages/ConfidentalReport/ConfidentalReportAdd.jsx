@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { resetConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
 import { useDispatch } from 'react-redux';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   const navigate = useNavigate();
@@ -141,7 +142,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           ...restValues
         } = values;
         if (confidentalReport) {
-          await updateConfidentalReport({
+          const res = await updateConfidentalReport({
             payload: {
               ...restValues,
               intern_evaluation: {
@@ -158,9 +159,13 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             },
             confidentalReportId: confidentalReportId,
           });
-          navigate('/confidental-report/' + confidentalReportId);
+
+          if (res.data) {
+            projectSnackbar(res.data.message, { variant: 'success' });
+            navigate('/confidental-report/' + confidentalReportId);
+          }
         } else {
-          await createConfidentalReport({
+          const response = await createConfidentalReport({
             ...restValues,
             interviewId: restValues.interview?.id,
             is_edu_program: restValues.is_edu_program === 'Evet' ? true : false,
@@ -175,7 +180,11 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               score,
             },
           });
-          navigate('/confidental-report');
+
+          if (response.data) {
+            projectSnackbar(response.data.message, { variant: 'successs' });
+            navigate('/confidental-report');
+          }
         }
       } catch (err) {
         console.log(err);

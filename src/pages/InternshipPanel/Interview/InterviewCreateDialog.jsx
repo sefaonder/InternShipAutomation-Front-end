@@ -19,26 +19,23 @@ import CustomDateTimeInput from 'src/components/inputs/CustomDateTimeInput';
 import { useStartInterviewsMutation } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Link } from 'react-router-dom';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, loading, startDate, endDate }) {
   const [startInterviews, { isLoading }] = useStartInterviewsMutation();
 
   const matches = useMediaQuery('(min-width:1000px)');
 
-  console.log('selectedRecords', selectedRecords);
-
   const [interviews, setInterviews] = useState([{ interviewId: null, comission: null, date: null }]);
 
   const { data, isLoading: isLoadingQuery, isSuccess } = useGetComissionACQuery({}, { skip: !open });
-
-  console.log('data', data);
 
   function distributeRecords(selectedRecords, comissions, interviewStartDate, interviewEndTime) {
     const recordsPerPerson = Math.ceil(selectedRecords.length / comissions.length);
     const interval = 15 * 60 * 1000; // 15 dakika milisaniye cinsinden
 
     const hourTime = dayjs(interviewEndTime, 'HH:mm').format('HH:mm');
-    console.log('hourTime', hourTime);
+
     const interviewEndTimeHour = parseInt(hourTime.split(':')[0]);
     const interviewEndTimeMinute = parseInt(hourTime.split(':')[1]);
 
@@ -122,9 +119,11 @@ function InterviewCreateDialog({ open, handleClose, onSucces, selectedRecords, l
           }));
 
           try {
-            const response = await startInterviews({ interviews: payload }).unwrap();
+            const response = await startInterviews({ interviews: payload });
 
-            enqueueSnackbar(response.message, { variant: 'success' });
+            if (response.data) {
+              projectSnackbar(response.data.message, { variant: 'success' });
+            }
           } catch (error) {
             console.log(error);
           }

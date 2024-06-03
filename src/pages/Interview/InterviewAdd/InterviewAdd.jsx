@@ -13,6 +13,7 @@ import {
 
 import CustomDateTimeInput from 'src/components/inputs/CustomDateTimeInput';
 import dayjs from 'dayjs';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function InterviewAdd({ interview, interviewId, isLoadingState }) {
   const [createNewInterview, { isLoading }] = useCreateNewInterviewMutation();
@@ -58,7 +59,10 @@ function InterviewAdd({ interview, interviewId, isLoadingState }) {
       } else {
         response = await createNewInterview(payload);
       }
-      console.log('response', response);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
       console.log(error);
     } finally {

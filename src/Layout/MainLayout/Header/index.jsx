@@ -35,6 +35,7 @@ import { useGetProfileQuery } from 'src/store/services/profile/ProfileApiSlice';
 import { useTranslation } from 'react-i18next';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import { setCredentials } from 'src/store/services/auth/authSlice';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
@@ -78,15 +79,17 @@ const Header = ({ open, handleDrawerToggle }) => {
   };
   const handleLogout = () => {
     logout()
-      .then(() => {
+      .then((res) => {
         localStorage.removeItem('user');
         dispatch(removeProfile());
+
+        projectSnackbar(res?.data?.message || res?.error?.data?.message, { variant: 'info' });
 
         history.pushState(null, '', '/login');
         window.location.href = '/login';
       })
-      .catch(() => {
-        // TODO: snackbar error
+      .catch((err) => {
+        projectSnackbar('000000', { variant: 'error' });
         localStorage.removeItem('user');
         dispatch(removeProfile());
 

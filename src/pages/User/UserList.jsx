@@ -11,6 +11,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useGetGraduatedExcelListMutation, useGetUsersQuery } from 'src/store/services/user/userApiSlice';
 import { clearUserData } from 'src/store/services/user/userSlice';
 import CustomIconButton from 'src/components/inputs/CustomIconButton';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function UserList() {
   const location = useLocation();
@@ -47,6 +48,10 @@ function UserList() {
   const handleDownloadExcel = async () => {
     try {
       const response = await getGraduatedExcelList();
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
       console.log(error);
     }

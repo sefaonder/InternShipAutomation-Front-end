@@ -3,6 +3,7 @@ import { setCredentials, logOut } from 'src/store/services/auth/authSlice';
 import { Mutex } from 'async-mutex';
 import { enqueueSnackbar } from 'notistack';
 import parseJWT from '../handlers/jwtHandler';
+import { projectSnackbar } from '../handlers/ProjectSnackbar';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:8080',
@@ -69,17 +70,17 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
   if (result.error && result.error.status === 400) {
     const message = result.error.data?.message?.errorCode || '';
-    enqueueSnackbar(message, { variant: 'error' });
+    projectSnackbar(message, { variant: 'error' });
   }
 
   if (result.error && result.error.status === 403) {
     const message = result.error.data?.message?.errorCode || '';
-    enqueueSnackbar(message, { variant: 'error' });
+    projectSnackbar(message, { variant: 'error' });
   }
 
   if (result.error && result.error.status === 500) {
     const message = result.error.data?.message?.errorCode || '';
-    enqueueSnackbar(message, { variant: 'error' });
+    projectSnackbar(message, { variant: 'error' });
   }
 
   return result;
