@@ -94,7 +94,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
     teach_type: yup.string().required('Öğrenim Türü Zorunlu'),
     gano: yup.string().required('Gano Bilgisi Zorunlu'),
     date: yup.date().required('Tarih alanı zorunludur'),
-    answers: yup.array().test('hasValidElements', 'Dizi Elemanları Geçerli Değil', function (value) {
+    answers: yup.array().test('hasValidElements', 'Bütün Sorular İşaretlenmeli', function (value) {
       if (!Array.isArray(value)) return false;
       if (value.length < arrayCheck) return false;
       const arrayElements = value.slice(27, 31);

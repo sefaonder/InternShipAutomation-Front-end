@@ -10,7 +10,7 @@ import {
 import { dataInterm, dataMulti, dataSingle } from '../SurveyComponents/SurveyQs';
 import { useDispatch } from 'react-redux';
 import { setSurvey } from 'src/store/services/survey/surveySlice';
-import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
+import { PDFDownloadLink, PDFViewer, pdf } from '@react-pdf/renderer';
 import DownloadButton from 'src/components/inputs/DownloadButton';
 import UpdateButton from 'src/components/inputs/UpdateButton';
 import PdfSurvey from 'src/PDF/survey/PdfSurvey';
@@ -122,8 +122,8 @@ const SurveyDetail = () => {
   const submitForm = async (event) => {
     event.preventDefault(); // prevent page reload
     setLoadingDownload(false);
-    const blob = await pdf(<PdfSurvey data={data.data} />).toBlob();
-    saveAs(blob, 'wycena.pdf');
+    const blob = await pdf(<PdfSurvey data={data?.data} />).toBlob();
+    saveAs(blob, 'anket.pdf');
     setLoadingDownload(true);
   };
   return (
