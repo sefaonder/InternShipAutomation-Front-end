@@ -11,6 +11,7 @@ import {
 } from 'src/store/services/internForm/internFormApiSlice';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   const [createNewStudentInfo, { isLoading }] = useCreateNewStudentInfoMutation();
@@ -62,11 +63,21 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
       let response = null;
       if (studentInfo?.id) {
         if (formik.status) {
-          response = await updateStudentInfo({ payload: payload, studentInfoId: studentInfo.id }).unwrap();
+          response = await updateStudentInfo({ payload: payload, studentInfoId: studentInfo.id });
         }
       } else {
-        response = await createNewStudentInfo(payload).unwrap();
+        response = await createNewStudentInfo(payload);
       }
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+        setIsLoading(false);
+        handleNext();
+      } else {
+        setIsLoading(false);
+        navigate('/intern-form');
+      }
+
       setIsLoading(false);
       handleNext();
       console.log(response);

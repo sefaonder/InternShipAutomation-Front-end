@@ -28,6 +28,8 @@ import DialogButton from 'src/components/inputs/DialogButton';
 import NavigateLink from 'src/components/details/NavigateLink';
 import WorkOnSaturdayAlert from 'src/components/details/WorkOnSaturdayAlert';
 import PdfWorkingSaturday from 'src/PDF/workingSaturday/WorkingSaturday';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 
 function InternFormDetail() {
   const dispatch = useDispatch();
@@ -40,7 +42,6 @@ function InternFormDetail() {
 
   const { data, isLoading, isSuccess, isError, error, refetch } = useGetFormDetailQuery(internFormId);
   const [deleteForm, { isLoading: isLoadingDeleteForm }] = useDeleteFormMutation();
-
   const [unlockForm, { isLoading: isLoadingUnlockForm }] = useUnlockFormMutation();
 
   const userRole = useSelector((state) => state.auth.roles);
@@ -50,7 +51,6 @@ function InternFormDetail() {
 
   useEffect(() => {
     if (error) {
-      //TODO:  error snackbar
       navigate('/intern-form');
     }
   }, [isError]);
@@ -67,25 +67,32 @@ function InternFormDetail() {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteForm(internFormId).unwrap();
+      const response = await deleteForm(internFormId);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
     }
     navigate('/intern-form');
   };
 
   const handleUnlock = async () => {
     try {
-      const response = await unlockForm(internFormId).unwrap();
+      const response = await unlockForm(internFormId);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
     }
     refetch();
   };
 
-  console.log('data', data);
   if (isLoading) {
-    return <CircularProgress />;
+    return <CustomCircularProgress />;
   }
 
   if (isSuccess) {

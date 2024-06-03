@@ -19,6 +19,7 @@ import DownloadButton from 'src/components/inputs/DownloadButton';
 import DialogButton from 'src/components/inputs/DialogButton';
 import { enqueueSnackbar } from 'notistack';
 import { saveAs } from 'file-saver';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function CompanyConfidentalReport() {
   const navigate = useNavigate();
@@ -177,11 +178,13 @@ function CompanyConfidentalReport() {
           },
         });
 
-        enqueueSnackbar(response.data.message, { variant: 'success' });
+        if (response.data) {
+          projectSnackbar(response.data.message, { variant: 'success' });
+        }
         refetch();
       }
     } catch (error) {
-      enqueueSnackbar(error, { variant: 'error' });
+      projectSnackbar('000000', { variant: 'error' });
       console.log(error);
     }
   };

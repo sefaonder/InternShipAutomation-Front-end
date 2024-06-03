@@ -21,6 +21,7 @@ import InterviewAlert from 'src/components/details/InterviewAlert';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 import { InternStatusEnum } from 'src/app/enums/internStatus';
 import dayjs from 'dayjs';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function InterviewDetail() {
   const dispatch = useDispatch();
@@ -48,7 +49,6 @@ function InterviewDetail() {
 
   useEffect(() => {
     if (error) {
-      //TODO:  error snackbar
       navigate('/interview');
     }
   }, [isError]);
@@ -58,9 +58,12 @@ function InterviewDetail() {
   }, [location, navigate]);
 
   const handleDelete = async () => {
-    // TODO: snackbar
     try {
-      const response = await deleteInterview(interviewId).unwrap();
+      const response = await deleteInterview(interviewId);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
       console.log('error', error);
     }
@@ -68,16 +71,17 @@ function InterviewDetail() {
   };
 
   const handleSendCompanyConfidental = async () => {
-    // TODO: snackbar
     try {
-      const response = await sendCompanyConfidental({ interviewId: interviewId }).unwrap();
+      const response = await sendCompanyConfidental({ interviewId: interviewId });
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
       refetch();
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
     }
   };
 
-  console.log('data', data);
   if (isLoading) {
     return <CustomCircularProgress />;
   }

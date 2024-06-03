@@ -6,8 +6,8 @@ import {
   useGetHolidaysQuery,
 } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
 import HolidayCreateDialog from './HolidayCreateDialog';
-import { enqueueSnackbar } from 'notistack';
 import dayjs from 'dayjs';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function HolidayList({ open }) {
   const { data, isLoading, refetch } = useGetHolidaysQuery({}, { skip: !open });
@@ -18,13 +18,15 @@ function HolidayList({ open }) {
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteHoliday(id).unwrap();
-      enqueueSnackbar(response.message, { variant: 'warning' });
+      const response = await deleteHoliday(id);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
       console.log(error);
-    } finally {
-      refetch();
     }
+    refetch();
   };
 
   console.log('data', data);

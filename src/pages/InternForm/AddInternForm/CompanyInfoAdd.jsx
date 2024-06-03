@@ -10,6 +10,7 @@ import {
 } from 'src/store/services/internForm/internFormApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   const navigate = useNavigate();
@@ -43,31 +44,17 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   };
 
   const validationSchema = yup.object({
-    name: yup
-      .string()
-      .required('Lütfen firma ismi girin')
-      .min(3, 'Firma adı en az 3 karakter olabilir')
-      .max(100, 'Firma adı en fazla 50 karakter olabilir'),
-    address: yup
-      .string()
-      .required('Lütfen adres girin')
-      .min(3, 'Firma adı en az 3 karakter olabilir')
-      .max(100, 'firma adresi en fazla 100 karakter olabilir'),
+    name: yup.string().required('Lütfen firma ismi girin').max(100, 'Firma adı en fazla 50 karakter olabilir'),
+    address: yup.string().required('Lütfen adres girin').max(100, 'firma adresi en fazla 100 karakter olabilir'),
     phone: yup.string().required('Lütfen geçerli bir telefon girin'),
-    fax: yup
-      .string()
-      .required('Lütfen geçerli bir fax girin')
-      .min(3, 'Fax en az 3 karakter olabilir')
-      .max(50, 'fax en fazla 50 karakter olabilir'),
+    fax: yup.string().required('Lütfen geçerli bir fax girin').max(50, 'fax en fazla 50 karakter olabilir'),
     email: yup
       .string()
       .required('Lütfen geçerli bir email adresi girin')
-      .min(3, 'Firma Maili en az 3 karakter olabilir')
       .max(50, 'Firma Maili en fazla 50 karakter olabilir'),
     serviceArea: yup
       .string()
       .required('Lütfen hizmet alanı girin')
-      .min(3, 'Firma Servis Alanı en az 3 karakter olabilir')
       .max(50, 'Firma Servis Alanı en fazla 50 karakter olabilir'),
   });
 
@@ -78,17 +65,22 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
       let response = null;
       if (companyInfo?.id) {
         if (formik.status) {
-          response = await updateCompanyInfo({ payload: payload, companyInfoId: companyInfo.id }).unwrap();
+          response = await updateCompanyInfo({ payload: payload, companyInfoId: companyInfo.id });
         }
       } else {
-        response = await createNewCompanyInfo(payload).unwrap();
+        response = await createNewCompanyInfo(payload);
       }
-      console.log(response);
 
-      setIsLoading(false);
-      navigate('/intern-form/' + internFormId);
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+        setIsLoading(false);
+        navigate('/intern-form/' + internFormId);
+      } else {
+        setIsLoading(false);
+        navigate('/intern-form');
+      }
     } catch (error) {
-      console.log('err', error);
+      console.log(error);
       setIsLoading(false);
     }
   }
@@ -99,8 +91,6 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
     onSubmit: handleSubmit,
     validationSchema: validationSchema,
   });
-
-  console.log('for', formik.errors);
 
   return (
     <div>

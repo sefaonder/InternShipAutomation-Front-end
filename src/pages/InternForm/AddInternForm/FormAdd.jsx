@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import CustomBooleanRadioInput from 'src/components/inputs/CustomBooleanRadioInput';
 import { useGetHolidaysQuery } from 'src/store/services/internshipPanel/internshipPanelApiSlice';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
       .test('is-valid-range', 'Tarih aralığı 60 iş gününden fazla olamaz', function (value) {
         const startDate = this.parent.startDate;
         const weekDayWork = this.parent.weekDayWork;
-        const businessDays = getBusinessDays(startDate, value, [], weekDayWork);
+        const businessDays = getBusinessDays(startDate, value, holidays, weekDayWork);
         return businessDays <= 60;
       }),
     eduYear: yup.object().shape({
@@ -111,7 +112,6 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
       } else {
         response = await createNewForm(payload);
       }
-      console.log(response);
       if (response?.data?.data) {
         dispatch(
           setInternFormData({
@@ -121,9 +121,9 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
             id: response.data.data,
           }),
         );
+        projectSnackbar(response.data.message, { variant: 'success' });
       }
       if (response.error) {
-        console.log('oops something bad req');
         navigate('/intern-form');
       }
       setIsLoading(false);

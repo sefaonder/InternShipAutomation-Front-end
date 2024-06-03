@@ -7,7 +7,7 @@ import NavGroup from './NavGroup';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import MiniDrawerStyled from './MiniDrawerStyled';
-import logo from '/public/images/uuLogoRenkli.png';
+import logo from '/images/uuLogoRenkli.png';
 import { Link } from 'react-router-dom';
 const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
   const theme = useTheme();

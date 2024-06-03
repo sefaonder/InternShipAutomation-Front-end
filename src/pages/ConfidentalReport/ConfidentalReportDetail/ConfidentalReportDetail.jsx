@@ -1,7 +1,6 @@
-import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
+import { Box, Container, Paper, Stack, Typography } from '@mui/material';
 import { PDFDownloadLink, PDFViewer, pdf } from '@react-pdf/renderer';
 import dayjs from 'dayjs';
-import { enqueueSnackbar } from 'notistack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +20,7 @@ import {
 import { setConfidentalReport } from 'src/store/services/confidentalReport/confidentalReportSlice';
 import { saveAs } from 'file-saver';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 const ConfidentalReportDetail = () => {
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ const ConfidentalReportDetail = () => {
   const { data, isLoading, isSuccess, isError, error, refetch, currentData } =
     useGetConfidentalReportQuery(confidentalReportId);
   const [deleteConfidentalReport, { isLoading: isLoadingDelete }] = useDeleteConfidentalReportMutation();
-  console.log(data);
 
   useEffect(() => {
     refetch();
@@ -49,8 +48,14 @@ const ConfidentalReportDetail = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteConfidentalReport(confidentalReportId).unwrap();
-    } catch (error) {}
+      const response = await deleteConfidentalReport(confidentalReportId);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
+    } catch (error) {
+      console.log(error);
+    }
     navigate('/confidental-report');
   };
   const submitForm = async (event) => {

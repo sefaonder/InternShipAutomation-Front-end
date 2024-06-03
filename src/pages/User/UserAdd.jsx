@@ -13,6 +13,7 @@ import CustomDateInput from 'src/components/inputs/CustomDateInput';
 import dayjs from 'dayjs';
 
 import { clearUserData } from 'src/store/services/user/userSlice';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function UserAdd() {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ function UserAdd() {
 
   useEffect(() => {
     if (userData?.id) {
-      console.log('formil', userData);
       formik.setFieldValue('name', userData.name, false);
       formik.setFieldValue('lastName', userData.last_name, false);
       formik.setFieldValue('email', userData.email, false);
@@ -84,7 +84,12 @@ function UserAdd() {
       } else {
         response = await addUser(payload);
       }
-      console.log('response', response);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      } else {
+        navigate('/user');
+      }
     } catch (error) {
       console.log(error);
     } finally {

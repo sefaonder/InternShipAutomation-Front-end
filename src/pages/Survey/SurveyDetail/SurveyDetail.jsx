@@ -31,6 +31,7 @@ import NavigateLink from 'src/components/details/NavigateLink';
 import DialogButton from 'src/components/inputs/DialogButton';
 import { saveAs } from 'file-saver';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 const SurveyDetail = () => {
   const { surveyId } = useParams();
@@ -80,7 +81,6 @@ const SurveyDetail = () => {
 
   useEffect(() => {
     if (error) {
-      //TODO:  error snackbar
       navigate('/survey');
     }
   }, [isError]);
@@ -91,18 +91,26 @@ const SurveyDetail = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteSurvey(surveyId).unwrap();
+      const response = await deleteSurvey(surveyId);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
     }
     navigate('/survey');
   };
 
   const handleUnlock = async () => {
     try {
-      const response = await unlockSurvey(surveyId).unwrap();
+      const response = await unlockSurvey(surveyId);
+
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
-      console.log('error', error);
+      console.log(error);
     }
     refetch();
   };

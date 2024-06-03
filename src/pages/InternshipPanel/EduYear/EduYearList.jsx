@@ -6,6 +6,7 @@ import {
 import EduYearCreateDialog from './EduYearCreateDialog';
 import { Box, Button } from '@mui/material';
 import CustomActionList from 'src/components/data/CustomActionList';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
 
 function EduYearList({ open }) {
   const { data, isLoading, refetch } = useGetEduYearsQuery({}, { skip: !open });
@@ -16,13 +17,14 @@ function EduYearList({ open }) {
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteEduYear(id).unwrap();
-      enqueueSnackbar(response.message, { variant: 'warning' });
+      const response = await deleteEduYear(id);
+      if (response.data) {
+        projectSnackbar(response.data.message, { variant: 'success' });
+      }
     } catch (error) {
       console.log(error);
-    } finally {
-      refetch();
     }
+    refetch();
   };
 
   console.log('data', data);

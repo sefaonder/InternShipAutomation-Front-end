@@ -16,6 +16,8 @@ import { useGetProfileQuery, useUpdateProfileMutation } from 'src/store/services
 import { Avatar, CircularProgress, Typography } from '@mui/material';
 import { UserRolesEnum } from 'src/app/enums/roleList';
 import usePermission from 'src/hooks/usePermission';
+import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 
 function Profile() {
   const [updateProfile, setUpdateProfile] = useState(false);
@@ -27,11 +29,8 @@ function Profile() {
 
   const isAdvancedComission = checkPermission(UserRolesEnum.COMISSION.id);
 
-  console.log('data', data);
-
   useEffect(() => {
     if (data?.data) {
-      console.log('data22', data.data);
       formik.setFieldValue('name', data.data.name, false);
       formik.setFieldValue('lastName', data.data.last_name, false);
       formik.setFieldValue('tcNumber', data.data.tc_number, false);
@@ -43,10 +42,9 @@ function Profile() {
     setUpdateProfile((prev) => !prev);
   };
   const validationSchema = yup.object({
-    name: yup.string().required('Name is required'),
+    name: yup.string().required('Ad Alanı'),
     lastName: yup.string().required('Last Name is required'),
     tcNumber: yup.string().optional('TC is required').min(11, 'TC 11 karakterden oluşmalıdır.').max(11),
-    schoolNumber: yup.string().optional('School Number is optional string'),
   });
   const formik = useFormik({
     initialValues: {
@@ -57,18 +55,21 @@ function Profile() {
     },
     onSubmit: async (values) => {
       try {
-        await update(values).unwrap();
-        setUpdateProfile(false);
-        refetch();
+        const response = await update(values);
+        if (response.data) {
+          projectSnackbar(response.data.message, { variant: 'success' });
+        }
       } catch (err) {
         console.log(err);
       }
+      setUpdateProfile(false);
+      refetch();
     },
     validationSchema: validationSchema,
   });
 
   if (isLoadingData) {
-    return <CircularProgress />;
+    return <CustomCircularProgress />;
   }
 
   return (
@@ -130,7 +131,7 @@ function Profile() {
             />
 
             <Button className="p-3" type="submit" color="primary" variant="outlined">
-              Gönder
+              Kaydet
             </Button>
           </form>
         ) : (
@@ -164,7 +165,7 @@ function Profile() {
           <Button
             onClick={handleClick}
             endIcon={updateProfile ? <CloseIcon /> : <PersonIcon />}
-            className="p-3"
+            className="p-3 w-full"
             type="submit"
             color={updateProfile ? 'error' : 'primary'}
             variant="outlined"
