@@ -61,8 +61,8 @@ const ConfidentalReportDetail = () => {
   const submitForm = async (event) => {
     event.preventDefault(); // prevent page reload
     setLoadingDownload(false);
-    const blob = await pdf(<PdfConfidentalReport data={data.data} />).toBlob();
-    saveAs(blob, 'wycena.pdf');
+    const blob = await pdf(<PdfConfidentalReport data={data?.data} />).toBlob();
+    saveAs(blob, 'sicil_fisi.pdf');
     setLoadingDownload(true);
   };
   console.log(data);
@@ -76,9 +76,9 @@ const ConfidentalReportDetail = () => {
       {
         text: 'Doğum Yeri / Tarihi ',
         value:
-          data?.data?.interview?.intern_status?.form?.student_info?.birth_place +
-          ' ' +
-          dayjs(data?.data?.interview?.intern_status?.form?.student_info.birth_date).format('DD.MM.YYYY'),
+          data?.data?.interview?.internStatus?.form?.student_info?.birth_place +
+          ' - ' +
+          dayjs(data?.data?.interview?.internStatus?.form?.student_info.birth_date).format('DD.MM.YYYY'),
       },
       { text: 'Tc Kimlik', value: data?.data?.interview.student.tc_number },
       { text: 'Bölümü', value: 'Bilgisayar Mühendisliği' },

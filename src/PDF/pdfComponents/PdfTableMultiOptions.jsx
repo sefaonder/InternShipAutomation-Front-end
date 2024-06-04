@@ -6,7 +6,6 @@ const PdfTableMultiOptions = ({ data, fontSize = 10 }) => {
   console.log(data);
   const styles = {
     table: {
-      marginBottom: 10,
       display: 'flex',
       width: '100%',
       borderStyle: 'solid',

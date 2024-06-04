@@ -32,7 +32,7 @@ const PdfWorkingSaturday = ({ data }) => {
             {studentInformation.no} numaralı öğrenciniz {studentInformation.name} zorunlu Stajını{' '}
             {studentInformation.startDate} - {studentInformation.endDate} tarihleri arasında firmamız bünyesinde
             yapacaktır. Firmamız <Text style={styles.bold}>Cumartesi</Text> günleri de mesai yaptığından öğrenciniz staj
-            süresince cumartesi günleri de firmamızda staj yapacaktır.
+            süresince cumartesi günleri de firmada staj yapacaktır.
           </Text>
         </View>
         <View style={styles.signature}>

@@ -83,15 +83,15 @@ const PdfSurvey = ({ data }) => {
                   <Text style={{ fontFamily: 'Turkishbold' }}>Öğretim Türü:</Text>
                   {['1. Öğretim', '2. Öğretim'].map((item, index) => (
                     <View style={styles.checkboxItem}>
-                      <PdfCheckbox text={item} checked={item === data?.intern_type} />
+                      <PdfCheckbox text={item} checked={item === data?.teach_type} />
                     </View>
                   ))}
                 </View>
                 <View style={styles.options}>
                   <Text style={{ fontFamily: 'Turkishbold' }}>Staj Grubu:</Text>
-                  {['I. Grup', 'II. Group'].map((item, index) => (
+                  {['I. Grup', 'II. Grup'].map((item, index) => (
                     <View style={styles.checkboxItem}>
-                      <PdfCheckbox text={item} checked={item === data?.intern_type} />
+                      <PdfCheckbox text={item} checked={item === data?.intern_group} />
                     </View>
                   ))}
                 </View>

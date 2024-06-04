@@ -13,9 +13,9 @@ const PdfConfidentalReport = ({ data }) => {
     {
       name: 'Doğum Yeri / Tarihi',
       value:
-        new Date(data?.interview?.internStatus?.form.student_info?.birth_date).toLocaleDateString('pt-PT') +
+        data?.interview?.internStatus?.form.student_info.birth_place +
         ' - ' +
-        data?.interview?.internStatus?.form.student_info.birth_place,
+        new Date(data?.interview?.internStatus?.form.student_info?.birth_date).toLocaleDateString('pt-PT'),
     },
     { name: 'TC Kimlik No', value: data?.interview?.student?.tc_number },
     { name: 'Bölümü', value: 'Bilgisayar Mühendisliği' },
@@ -38,7 +38,7 @@ const PdfConfidentalReport = ({ data }) => {
     { name: 'Staj Icerisinde Egitim Programi Uygulandı mı?', value: data?.is_edu_program ? 'Evet' : 'Hayır' },
   ];
   const authInfo = [
-    { name: 'Adi Soyadi / Görevi', value: data?.auth_position },
+    { name: 'Adi Soyadi / Görevi', value: data?.auth_name + ' - ' + data?.auth_position },
     { name: 'Diploma Unvani', value: data?.auth_position },
     { name: 'Oda Sicil No (varsa)', value: data?.reg_number },
     { name: 'Tarih / İmza', value: '' },
@@ -71,7 +71,7 @@ const PdfConfidentalReport = ({ data }) => {
             <PdfTable data={studentCredentials} fontSize={11} />
             <Text style={styles.subTitle}> Kurum Bilgileri:</Text>
 
-            <PdfTable secondLine={true} data={companyInfo} fontSize={10} />
+            <PdfTable secondLine={true} rowIndex={[0, 1]} data={companyInfo} fontSize={10} />
             <Text style={styles.subTitle}> Staj Tarihi Ve Calisma Konulari:</Text>
 
             <PdfTable data={internshipInfo} fontSize={11} />
@@ -82,7 +82,14 @@ const PdfConfidentalReport = ({ data }) => {
             <Text style={styles.subTitle}> Degerlendirmeyi Yapan Yetkilinin (Muhendis):</Text>
 
             <View style={styles.authContainer}>
-              <PdfTable data={authInfo} widthName="35%" widthValue="65%" fontSize={11} />
+              <PdfTable
+                data={authInfo}
+                secondLine={true}
+                rowIndex={[0]}
+                widthName="35%"
+                widthValue="65%"
+                fontSize={11}
+              />
               <View style={styles.sign}>
                 <Text>Onay</Text>
                 <Text>Mühür Kaşe</Text>

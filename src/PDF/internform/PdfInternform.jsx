@@ -26,7 +26,7 @@ const PdfInternform = ({ data }) => {
             YAPMAK İSTEDİĞİNİZ UYGULAMALI EĞİTİM SEÇENEĞİ
           </Text>
           <View style={styles.options}>
-            {['Zorunlu Staj', 'İsteğe Bağlı Staj', 'Dönem İçi Staj', 'iş Yerindeki Meslek Eğitimi'].map(
+            {['Zorunlu Staj', 'İsteğe Bağlı Staj', 'Dönem İçi Staj', 'İşyerindeki Meslek Eğitimi'].map(
               (item, index) => (
                 <View style={styles.checkboxItem}>
                   {!data.isInTerm ? (

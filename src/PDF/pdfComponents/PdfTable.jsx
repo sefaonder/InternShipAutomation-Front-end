@@ -10,6 +10,7 @@ const PdfTable = ({
   widthValue = '50%',
   fontSize = 8,
   secondLine = false,
+  rowIndex,
   width = 'auto',
 }) => {
   const styles = {
@@ -52,7 +53,7 @@ const PdfTable = ({
     <View style={styles.table}>
       {data.map((item, index) => (
         <View
-          style={[styles.tableRow, { height: (index === 0 || index === 1) && secondLine ? '30px' : 'auto' }]}
+          style={[styles.tableRow, { height: rowIndex?.includes(index) && secondLine ? '30px' : 'auto' }]}
           key={index}
         >
           <View style={styles.tableCol1}>
