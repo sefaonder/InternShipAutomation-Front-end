@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import Loadable from 'src/components/loader/Loadable';
 import { RequireAuth } from './RequireAuth';
 import MainLayout from 'src/Layout/MainLayout';
+import { UserRolesEnum } from 'src/app/enums/roleList';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('src/pages/Dashboard/Dashboard')));
@@ -49,22 +50,25 @@ const MainRoutes = {
     {
       path: '/',
       element: <RequireAuth />,
-      children: [{ path: '/', element: <DashboardDefault /> }],
+      children: [{ path: '/', role: UserRolesEnum.STUDENT.id, element: <DashboardDefault /> }],
     },
     {
       path: '/profile',
       element: <RequireAuth />,
-      children: [{ path: '/profile', element: <ProfileDefault /> }],
+      children: [{ path: '/profile', role: UserRolesEnum.STUDENT.id, element: <ProfileDefault /> }],
     },
     // InternStatusRoutes only for Auth users
     {
       path: '/intern-status',
       element: <RequireAuth />,
       children: [
-        { path: '/intern-status/', element: <InternStatusList /> },
-        { path: '/intern-status/:internStatusId', element: <InternStatusDetail /> },
-        // { path: '/intern-status/add', element: <InternStatusAdd /> },
-        { path: '/intern-status/update/:internFormId', element: <InternStatusUpdate /> },
+        { path: '/intern-status/', role: UserRolesEnum.STUDENT.id, element: <InternStatusList /> },
+        { path: '/intern-status/:internStatusId', role: UserRolesEnum.STUDENT.id, element: <InternStatusDetail /> },
+        {
+          path: '/intern-status/update/:internFormId',
+          role: UserRolesEnum.COMISSION.id,
+          element: <InternStatusUpdate />,
+        },
       ],
     },
     // InternFormRoutes only for Auth users
@@ -72,10 +76,10 @@ const MainRoutes = {
       path: '/intern-form',
       element: <RequireAuth />,
       children: [
-        { path: '/intern-form/', element: <InternFormList /> },
-        { path: '/intern-form/:internFormId', element: <InternFormDetail /> },
-        { path: '/intern-form/add', element: <InternFormAdd /> },
-        { path: '/intern-form/update/:internFormId', element: <InternFormUpdate /> },
+        { path: '/intern-form/', role: UserRolesEnum.STUDENT.id, element: <InternFormList /> },
+        { path: '/intern-form/:internFormId', role: UserRolesEnum.STUDENT.id, element: <InternFormDetail /> },
+        { path: '/intern-form/add', role: UserRolesEnum.STUDENT.id, element: <InternFormAdd /> },
+        { path: '/intern-form/update/:internFormId', role: UserRolesEnum.STUDENT.id, element: <InternFormUpdate /> },
       ],
     },
     // InterviewRoutes only for Auth users
@@ -83,10 +87,10 @@ const MainRoutes = {
       path: '/interview',
       element: <RequireAuth />,
       children: [
-        { path: '/interview/', element: <InterviewList /> },
-        { path: '/interview/:interviewId', element: <InterviewDetail /> },
-        { path: '/interview/add', element: <InterviewAdd /> },
-        { path: '/interview/update/:interviewId', element: <InterviewUpdate /> },
+        { path: '/interview/', role: UserRolesEnum.STUDENT.id, element: <InterviewList /> },
+        { path: '/interview/:interviewId', role: UserRolesEnum.STUDENT.id, element: <InterviewDetail /> },
+        { path: '/interview/add', role: UserRolesEnum.COMISSION.id, element: <InterviewAdd /> },
+        { path: '/interview/update/:interviewId', role: UserRolesEnum.COMISSION.id, element: <InterviewUpdate /> },
       ],
     },
     // SurveyList Only For Admin & Comission
@@ -94,16 +98,17 @@ const MainRoutes = {
       path: '/survey',
       element: <RequireAuth />,
       children: [
-        { path: '/survey/', element: <SurveyList /> },
-        { path: '/survey/:surveyId', element: <SurveyDetail /> },
-        { path: '/survey/add', element: <SurveyAdd /> },
-        { path: '/survey/update/:surveyId', element: <SurveyUpdate /> },
+        { path: '/survey/', role: UserRolesEnum.STUDENT.id, element: <SurveyList /> },
+        { path: '/survey/:surveyId', role: UserRolesEnum.STUDENT.id, element: <SurveyDetail /> },
+        { path: '/survey/add', role: UserRolesEnum.STUDENT.id, element: <SurveyAdd /> },
+        { path: '/survey/update/:surveyId', role: UserRolesEnum.STUDENT.id, element: <SurveyUpdate /> },
       ],
     },
     // confidential-report Only For Admin & Comission
     {
       path: '/confidental-report',
       element: <RequireAuth />,
+      role: UserRolesEnum.COMISSION.id,
       children: [
         { path: '/confidental-report/', element: <ConfidentalReportList /> },
         { path: '/confidental-report/:confidentalReportId', element: <ConfidentalReportDetail /> },
@@ -114,6 +119,7 @@ const MainRoutes = {
     {
       path: '/user',
       element: <RequireAuth />,
+      role: UserRolesEnum.COMISSION.id,
       children: [
         { path: '/user/', element: <UserList /> },
         { path: '/user/:userId', element: <UserDetail /> },
@@ -123,6 +129,7 @@ const MainRoutes = {
     },
     {
       path: '/internship-panel',
+      role: UserRolesEnum.ADMIN.id,
       element: <RequireAuth />,
       children: [{ path: '/internship-panel/', element: <InterShipPanel /> }],
     },
