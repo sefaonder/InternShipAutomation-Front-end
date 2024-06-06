@@ -20,18 +20,17 @@ function Login() {
   const [login, { isLoading }] = useLoginMutation();
 
   const validationSchema = yup.object({
-    email: yup.string().email().required('E-mail is required'),
-    password: yup.string().required('Password is required'),
+    email: yup.string().email().required('Email alanı zorunludur'),
+    password: yup.string().required('Şire alanı zorunludur'),
   });
 
-  const setToken = async (userData) => {
+  const setToken = async (token, role) => {
     try {
-      const authObject = { token: userData.accessToken };
+      const authObject = { token: token, roles: role };
 
-      localStorage.setItem('token', JSON.stringify(authObject));
+      localStorage.setItem('user_info', JSON.stringify(authObject));
     } catch (err) {
-      // TODO: snackbar error and navigate to login
-      console.log('Error occurred while fetching user data:', err);
+      console.log(err);
     }
   };
 
@@ -54,7 +53,7 @@ function Login() {
               userId: parsedData.userId,
             }),
           );
-          await setToken(response.data);
+          await setToken(response.data.accessToken, parsedData.roles);
           navigate('/');
         }
       } catch (err) {
@@ -90,7 +89,7 @@ function Login() {
           <TextField
             id="password"
             name="password"
-            label="Password"
+            label="Şifre"
             type="password"
             value={formik.values.password}
             onChange={formik.handleChange}

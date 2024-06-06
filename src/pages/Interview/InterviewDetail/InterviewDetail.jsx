@@ -117,12 +117,14 @@ function InterviewDetail() {
           gap: '1rem',
         }}
       >
-        <DeleteButton variant="outlined" onClick={handleDelete} />
-        <UpdateButton
-          loading={isLoading}
-          variant="outlined"
-          onClick={() => navigate('/interview/update/' + interviewId)}
-        />
+        {isAdvancedComission && <DeleteButton variant="outlined" onClick={handleDelete} />}
+        {isAdvancedComission && (
+          <UpdateButton
+            loading={isLoading}
+            variant="outlined"
+            onClick={() => navigate('/interview/update/' + interviewId)}
+          />
+        )}
 
         {!data?.data?.confidentalReport?.id && (
           <Tooltip title="Firmaya Doldurup imzalaması için Sicil Fişini ilet">
