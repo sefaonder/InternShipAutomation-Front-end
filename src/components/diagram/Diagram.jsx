@@ -54,7 +54,8 @@ const Diagram = ({ data, isAdvancedComission }) => {
       description: `Öğrenci stajını tamamlayarak mülakat aşamasına geçmeye hak kazanmıştır.
       Mülakat gününe kadar öğrencilerin gerekli belgeleri (Gizli Sicil Fişi, Staj Defteri, Öğrenci Değerlendirme Anketi) teslim etmesi etmesi zorunludur.
       Gizli Sicil Fişi, Otomasyon sistemi üzerinden ilgili mülakat kaydında 'Sicil Fişini İlet' özelliği ile firmaya doğrudan iletebilir.
-      Öğrenci Değerlendirme Anketi,  
+      Öğrenci Değerlendirme Anketi,  Otomasyon sistemi üzerinden Öğrenci Değerlendirme Anketi sayfasına giderek ilgili mülakat kaydını seçerek oluşturabilirsiniz.
+      Oluşturduğunuz Değerlendirme Anketini PDF formatında çıktı alıp imzalayıp teslim edebilirsiniz.
       `,
     },
     {
