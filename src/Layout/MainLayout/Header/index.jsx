@@ -117,44 +117,47 @@ const Header = ({ open, handleDrawerToggle }) => {
         {!open ? <MenuOpenOutlinedIcon /> : <MenuOutlinedIcon />}
       </IconButton>
 
-      <Typography>{UserRolesEnum[userProfile?.user_type]?.label}</Typography>
-      <Typography>{userProfile ? `${userProfile.name} ${userProfile.last_name}` : ''}</Typography>
-      <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title="Open settings">
-          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" />
-          </IconButton>
-        </Tooltip>
+      <Box className="flex items-center gap-5">
+        <Typography>{UserRolesEnum[userProfile?.user_type]?.label}</Typography>
+        <span> / </span>
+        <Typography>{userProfile ? `${userProfile.name} ${userProfile.last_name}` : ''}</Typography>
+        <Box sx={{ flexGrow: 0 }}>
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar className="bg-blue-300" alt="Remy Sharp" />
+            </IconButton>
+          </Tooltip>
 
-        <Menu
-          sx={{ mt: '45px' }}
-          id="menu-appbar"
-          anchorEl={anchorElUser}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          keepMounted
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={Boolean(anchorElUser)}
-          onClose={handleCloseUserMenu}
-        >
-          {settings.map((setting) => (
-            <MenuItem key={setting.navigate} onClick={handleCloseUserMenu}>
+          <Menu
+            sx={{ mt: '45px' }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            {settings.map((setting) => (
+              <MenuItem key={setting.navigate} onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Link to={'/' + setting.navigate}> {setting.label} </Link>
+                </Typography>
+              </MenuItem>
+            ))}
+            <MenuItem onClick={handleLogout}>
               <Typography textAlign="center">
-                <Link to={'/' + setting.navigate}> {setting.label} </Link>
+                <Link> Çıkış Yap </Link>
               </Typography>
             </MenuItem>
-          ))}
-          <MenuItem onClick={handleLogout}>
-            <Typography textAlign="center">
-              <Link> Çıkış Yap </Link>
-            </Typography>
-          </MenuItem>
-        </Menu>
+          </Menu>
+        </Box>
       </Box>
     </Toolbar>
   );

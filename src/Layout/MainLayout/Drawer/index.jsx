@@ -9,6 +9,7 @@ import Divider from '@mui/material/Divider';
 import MiniDrawerStyled from './MiniDrawerStyled';
 import logo from '/images/uuLogoRenkli.png';
 import { Link } from 'react-router-dom';
+import HeaderTitle from './HeaderTitle';
 const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -22,9 +23,9 @@ const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
       {!matchDownMD ? (
         <MiniDrawerStyled variant="permanent" open={open}>
           <Toolbar className="px-4 flex justify-between">
-            <Link to="/" className="flex justify-between items-center gap-2">
-              <Avatar alt="Remy Sharp" src={logo} />
-              <Typography>B.U.Ü. Staj Otomasyonu</Typography>
+            <Link to="/" className="flex justify-between items-center gap-1.5">
+              <Avatar className="p-0 m-0" alt="Remy Sharp" src={logo} />
+              <HeaderTitle />
             </Link>
           </Toolbar>
           <Divider />
@@ -50,7 +51,7 @@ const MainDrawer = ({ open, handleDrawerToggle, window, navigations }) => {
         >
           <Toolbar className="px-4 flex justify-between">
             <Avatar alt="Remy Sharp" src={logo} />
-            <Typography>B.U.Ü. Staj Otomasyonu</Typography>
+            <HeaderTitle />
           </Toolbar>
           <Divider />
           <NavGroup navigations={navigations} />
