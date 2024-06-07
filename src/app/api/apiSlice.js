@@ -45,7 +45,13 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
           // TODO: 404
           const parsedData = parseJWT(refreshResult.data.accessToken);
           console.log('userId', parsedData);
-          api.dispatch(setCredentials({ ...refreshResult.data, roles: parsedData.roles, userId: parsedData.userId }));
+          api.dispatch(
+            setCredentials({
+              accessToken: refreshResult.data.accessToken,
+              roles: parsedData.roles,
+              userId: parsedData.userId,
+            }),
+          );
 
           // re-try the original query with new acces token
 
