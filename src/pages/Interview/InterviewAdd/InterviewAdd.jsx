@@ -96,7 +96,7 @@ function InterviewAdd({ interview, interviewId, isLoadingState }) {
         <CustomAutocomplete
           name="internStatus"
           id="internStatus"
-          disabled={interviewData?.id}
+          disabled={!!interviewData?.id}
           required
           useACSlice={useGetInternStatusACQuery}
           label={'İlgili Staj Durumu'}

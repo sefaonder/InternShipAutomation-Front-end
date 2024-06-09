@@ -67,7 +67,7 @@ const CustomAutocomplete = ({
       options={data?.data || []}
       loading={isLoading}
       getOptionDisabled={(option) => {
-        return Boolean(option.disabled || option.surveyId || option.confidentalReportId);
+        return Boolean(option.disabled);
       }}
       freeSolo
       renderOption={(props, option) => (

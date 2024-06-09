@@ -181,7 +181,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
           disabled={survey?.data?.id}
           required
           // filterId={!isAdvancedComission && survey?.data?.userId}
-          disabledTooltipText="Mülakata ait bir kayıt var"
+          disabledTooltipText="Mülakata ait bir Öğrenci Değerlendirme kaydı var var"
           useACSlice={useGetInterviewACQuery}
           label={'İlgili Mülakat & Staj'}
           value={formik.values.interview}
