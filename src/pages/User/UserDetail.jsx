@@ -16,6 +16,7 @@ import { useDeleteUserMutation, useGetUserDetailQuery } from 'src/store/services
 import { setUserData } from 'src/store/services/user/userSlice';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import dayjs from 'dayjs';
 
 function UserDetail() {
   const dispatch = useDispatch();
@@ -79,18 +80,23 @@ function UserDetail() {
 
   const accordionData = [
     [
-      { text: 'Kullanıcı İsmi', value: data?.data?.name },
-      { text: 'Kullanıcı Soyismi', value: data?.data?.last_name },
+      { text: 'Kullanıcı Adı', value: data?.data?.name },
+      { text: 'Kullanıcı Soyadı', value: data?.data?.last_name },
     ],
     [
-      { text: 'Email Adresi', value: data?.data?.follow_up?.name },
-      { text: 'Kullanıcı Tipi', value: data?.data?.follow_up?.last_name },
+      { header: 'Hesap Bilgileri' },
+      { text: 'Email Adresi', value: data?.data?.email },
+      { text: 'Kullanıcı Rolü', value: data?.data?.user_type },
+      { text: 'T.C Kimlik Numarası', value: data?.data?.tc_number },
+      { text: 'Okul Numarası', value: data?.data?.school_number },
     ],
     [
-      { text: 'TC Kimlik Numarası', value: data?.data?.follow_up?.name },
-      { text: 'Okul Numarası', value: data?.data?.follow_up?.last_name },
-      { text: 'Staj Durumu', value: data?.data?.follow_up?.last_name },
-      { text: 'Staj Tamamlanma Tarihi', value: data?.data?.follow_up?.last_name },
+      { header: 'Staj Bilgileri' },
+      { text: 'Staj Durumu', value: data?.data?.isGraduate ? 'Tamamladı' : 'Tamamlamadı' },
+      {
+        text: 'Staj Tamamlanma Tarihi',
+        value: data?.data?.graduationDate ? dayjs(data?.data?.graduationDate).format('DD.MM.YYYY') : null,
+      },
     ],
   ];
 
@@ -226,8 +232,8 @@ function UserDetail() {
               </Box>
               {data?.data?.user_type === UserRolesEnum.STUDENT.id && (
                 <Box>
-                  <Typography variant="h3" className="my-2">
-                    Staj Bilgileri
+                  <Typography variant="h3" className="my-4">
+                    Kayıtlı Staj Bilgileri
                   </Typography>
                   <Box>
                     <EnhancedTable

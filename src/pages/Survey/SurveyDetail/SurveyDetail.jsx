@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Box, Container, Paper, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -32,6 +32,7 @@ import DialogButton from 'src/components/inputs/DialogButton';
 import { saveAs } from 'file-saver';
 import CustomCircularProgress from 'src/components/loader/CustomCircularProgress';
 import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
 
 const SurveyDetail = () => {
   const { surveyId } = useParams();
@@ -115,10 +116,21 @@ const SurveyDetail = () => {
     refetch();
   };
 
-  console.log('data', data);
   if (isLoading) {
     return <CustomCircularProgress />;
   }
+
+  const accordionData = [
+    [
+      { header: 'Anket Bilgileri' },
+      { text: 'Staj Yapılan Firma Adı', value: data?.data?.company_name },
+      { text: 'Staj Yapılan Firma Adresi', value: data?.data?.company_address },
+      { text: 'Öğretim Türü', value: data?.data.teach_type },
+      { text: 'GANO', value: data?.data?.gano },
+      { text: 'Staj Grubu', value: data?.data?.intern_group },
+      { text: 'Staj Türü', value: data?.data?.intern_type },
+    ],
+  ];
   const submitForm = async (event) => {
     event.preventDefault(); // prevent page reload
     setLoadingDownload(false);
@@ -128,6 +140,7 @@ const SurveyDetail = () => {
   };
   return (
     <div>
+      <Typography variant="h2">Öğrenci Değerlendirme Anketi</Typography>
       <Paper
         sx={{
           display: 'flex',
@@ -158,7 +171,7 @@ const SurveyDetail = () => {
           />
         )}
 
-        {!data?.data?.isSealed && isAdvancedComission && (
+        {(isAdvancedComission || !data?.data?.isSealed) && (
           <CustomIconButton
             color={'primary'}
             loading={isLoading}
@@ -182,100 +195,69 @@ const SurveyDetail = () => {
 
         {data?.data && <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />}
       </Paper>
-      <Box className="flex flex-col sm:flex-row gap-4">
-        <Paper sx={{ flex: 2, padding: '1rem' }}>
-          <NavigateLink text={'İlgili Mülakat'} linkId={data?.data?.interview?.id} route={'interview'} />
-          <Box className="flex flex-col gap-3">
-            <Typography variant="h4" className="font-extrabold flex justify-center items-center mb-4">
-              STAJ DEĞERLENDİRME ANKET FORMU
-            </Typography>
-          </Box>
+      <Box className="flex flex-col md:flex-row gap-4">
+        <Paper sx={{ flex: 2 }}>
+          <Container>
+            <NavigateLink text={'İlgili Mülakat'} linkId={data?.data?.interview?.id} route={'interview'} />
+          </Container>
 
-          <Box className=" gap-2 flex flex-col">
-            <Box className="flex flex-col items-start justify-between">
-              <Typography className="font-extrabold">Staj Yapılan Firma Adı</Typography>
-              <Typography> {data?.data.company_name} </Typography>
-            </Box>
+          <CustomDetailPageBox data={accordionData} />
 
-            <Box className="flex flex-col items-start justify-between">
-              <Typography className="font-extrabold">Staj Yapılan Firma Adresi</Typography>
-              <Typography>{data?.data.company_address}</Typography>
-            </Box>
-
-            <Box className="flex flex-col items-start justify-between">
-              <Typography className="font-extrabold">Öğretim Türü</Typography>
-              <Typography>{data?.data.teach_type}</Typography>
-            </Box>
-
-            <Box className="flex flex-col items-start justify-between">
-              <Typography className="font-extrabold">GANO</Typography>
-              <Typography>{data?.data.gano}</Typography>
-            </Box>
-
-            <Box className="flex flex-col items-start justify-between">
-              <Typography className="font-extrabold">Staj Grubu</Typography>
-              <Typography>{data?.data.intern_group}</Typography>
-            </Box>
-
-            <Box className="flex flex-col items-start justify-between">
-              <Typography className="font-extrabold">Staj Türü</Typography>
-              <Typography>{data?.data.intern_type}</Typography>
-            </Box>
-          </Box>
-
-          <Box className="flex items-center  justify-between flex-col py-4">
-            <Typography variant="h4" className="font-extrabold text-red-400 mb-4">
-              Anket Soruları
-            </Typography>
-            <Box className="flex flex-col gap-2">
-              {mixedSingleQuestions?.map((item, index) => (
-                <Box>
-                  <Typography className="font-semibold">
-                    {' '}
-                    {index + 1}: {item.question}{' '}
-                  </Typography>
-                  <Typography className=""> -{item.answer} </Typography>
-                </Box>
-              ))}
-              <Typography variant="h5" className="font-extrabold text-red-400 mb-4">
-                Çok Cevaplı Soruları
+          <Container>
+            <Box className="flex items-center  justify-between flex-col py-4">
+              <Typography variant="h4" className="font-extrabold text-red-400 mb-4">
+                Anket Soruları
               </Typography>
-
-              {mixedMultiQuestions?.map((item, index) => (
-                <Box>
-                  <Typography className="font-semibold">
-                    {' '}
-                    {index + 1}: {item.question}{' '}
-                  </Typography>
-                  <Box className="flex gap-2 flex-col">
-                    {item?.answer?.map((item) => (
-                      <Typography className=""> -{item} </Typography>
-                    ))}
+              <Box className="flex flex-col gap-2">
+                {mixedSingleQuestions?.map((item, index) => (
+                  <Box>
+                    <Typography className="font-semibold">
+                      {' '}
+                      {index + 1}: {item.question}{' '}
+                    </Typography>
+                    <Typography className=""> -{item.answer} </Typography>
                   </Box>
-                </Box>
-              ))}
-              {mixedIntermQuestions?.length > 0 && (
+                ))}
                 <Typography variant="h5" className="font-extrabold text-red-400 mb-4">
-                  Dönem İçi Staj Yapanlar için Sorular
+                  Çok Cevaplı Soruları
                 </Typography>
-              )}
 
-              {mixedIntermQuestions?.map((item, index) => (
-                <Box>
-                  <Typography className="font-semibold">
-                    {' '}
-                    {index + 1}: {item.question}{' '}
+                {mixedMultiQuestions?.map((item, index) => (
+                  <Box>
+                    <Typography className="font-semibold">
+                      {' '}
+                      {index + 1}: {item.question}{' '}
+                    </Typography>
+                    <Box className="flex gap-2 flex-col">
+                      {item?.answer?.map((item) => (
+                        <Typography className=""> -{item} </Typography>
+                      ))}
+                    </Box>
+                  </Box>
+                ))}
+                {mixedIntermQuestions?.length > 0 && (
+                  <Typography variant="h5" className="font-extrabold text-red-400 mb-4">
+                    Dönem İçi Staj Yapanlar için Sorular
                   </Typography>
-                  <Typography className=""> -{item.answer} </Typography>
-                </Box>
-              ))}
+                )}
+
+                {mixedIntermQuestions?.map((item, index) => (
+                  <Box>
+                    <Typography className="font-semibold">
+                      {' '}
+                      {index + 1}: {item.question}{' '}
+                    </Typography>
+                    <Typography className=""> -{item.answer} </Typography>
+                  </Box>
+                ))}
+              </Box>
             </Box>
-          </Box>
+          </Container>
         </Paper>
-        <Paper sx={{ flex: 1, padding: '1rem' }}>
+        <Box className="flex flex-1 flex-col gap-4">
           {data?.data?.isSealed && <SealedRecordAlert />}
           <RecordTraceCard record={data?.data} />
-        </Paper>
+        </Box>
       </Box>
     </div>
   );

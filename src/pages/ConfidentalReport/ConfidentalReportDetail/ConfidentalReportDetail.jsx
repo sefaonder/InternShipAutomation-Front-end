@@ -80,9 +80,9 @@ const ConfidentalReportDetail = () => {
           ' - ' +
           dayjs(data?.data?.interview?.internStatus?.form?.student_info.birth_date).format('DD.MM.YYYY'),
       },
-      { text: 'Tc Kimlik', value: data?.data?.interview.student.tc_number },
+      { text: 'T.C Kimlik Numarası', value: data?.data?.interview.student.tc_number },
       { text: 'Bölümü', value: 'Bilgisayar Mühendisliği' },
-      { text: 'Okul No', value: data?.data?.interview.student.school_number },
+      { text: 'Okul Numarası', value: data?.data?.interview.student.school_number },
     ],
     [
       { header: 'Staj Tarihi ve Çalışma Konuları' },
@@ -107,16 +107,17 @@ const ConfidentalReportDetail = () => {
       { text: 'Puanlama', value: data?.data?.intern_evaluation?.score },
     ],
     [
-      { header: 'Değerlendirmeyi Yapan Yetkilinin (mühendis)' },
+      { header: 'Değerlendirmeyi Yapan Yetkilinin Bilgileri' },
       { text: 'Adı - Soyadı', value: data?.data?.auth_name },
       { text: 'Diploma Ünvanı', value: data?.data?.auth_position },
-      { text: 'Sicil No', value: data?.data?.reg_number },
-      { text: 'Tc Kimlik No', value: data?.data?.auth_tc_number },
-      { text: 'Tarih', value: '26/05/2024' },
+      { text: 'Sicil Numarası', value: data?.data?.reg_number },
+      { text: 'T.C Kimlik Numarası', value: data?.data?.auth_tc_number },
+      { text: 'Tarih', value: dayjs(data?.data?.createdAt).format('DD.MM.YYYY') },
     ],
   ];
   return (
     <div>
+      <Typography variant="h2">Gizli Sicil Fişi</Typography>
       <Paper
         sx={{
           display: 'flex',
@@ -153,7 +154,7 @@ const ConfidentalReportDetail = () => {
         />
         {data?.data && <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />}
       </Paper>
-      <Box className="flex flex-col sm:flex-row gap-4">
+      <Box className="flex flex-col md:flex-row gap-4">
         <Paper sx={{ flex: 2, padding: '1rem' }}>
           <Box className=" w-full gap-2 flex flex-col ">
             <Container>

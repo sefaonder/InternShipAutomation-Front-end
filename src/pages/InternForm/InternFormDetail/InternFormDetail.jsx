@@ -50,10 +50,10 @@ function InternFormDetail() {
   let internFormData = {};
 
   useEffect(() => {
-    if (error) {
+    if (isError) {
       navigate('/intern-form');
     }
-  }, [isError]);
+  }, [error]);
 
   useEffect(() => {
     if (isSuccess && data.data) {
@@ -121,15 +121,15 @@ function InternFormDetail() {
       ],
       [
         { header: 'Staj Sorumlusu' },
-        { text: 'Adı', value: data?.data?.follow_up?.name },
-        { text: 'Soyadı', value: data?.data?.follow_up?.last_name },
+        { text: 'Yetkili Adı', value: data?.data?.follow_up?.name },
+        { text: 'Yetkili Soyadı', value: data?.data?.follow_up?.last_name },
       ],
       [
         { header: 'Öğrenci Bilgileri' },
         { text: 'Adı', value: data?.data?.student?.name },
         { text: 'Soyadı', value: data?.data?.student?.last_name },
         { text: 'Okul Numarası', value: data?.data?.student?.school_number },
-        { text: 'Tc Kimlik No', value: data?.data?.student?.tc_number },
+        { text: 'T.C Kimlik Numarası', value: data?.data?.student?.tc_number },
         { text: 'Adresi', value: data?.data?.student_info?.address },
         { text: 'Doğum Tarihi', value: dayjs(data?.data?.student_info?.birth_date).format('DD.MM.YYYY') },
         { text: 'Doğum Yeri', value: data?.data?.student_info?.birth_place },
@@ -215,25 +215,25 @@ function InternFormDetail() {
             />
           )}
         </Paper>
-        <Box className="flex flex-col sm:flex-row gap-4">
+        <Box className="flex flex-col md:flex-row gap-4">
           <Paper sx={{ flex: 2 }}>
             <Container>
               <NavigateLink text={'İlgili Staj Durumu'} linkId={data?.data?.internStatus?.id} route={'intern-status'} />
             </Container>
             <CustomDetailPageBox data={accordionData} />
           </Paper>
-          <Box className="flex flex-1 flex-col">
-            {data?.data && (
+          <Box className="flex flex-1 flex-col gap-4">
+            {internFormData.workOnSaturday && <WorkOnSaturdayAlert />}
+            {internFormData.workOnSaturday && data?.data && (
               <Paper sx={{ padding: '1rem' }}>
                 <DownloadButton
                   loadingDownload={loadingDownload}
                   text={true}
                   submitForm={(event) => submitForm(event, 2)}
                   variant="outlined"
-                />{' '}
+                />
               </Paper>
             )}
-            {internFormData.workOnSaturday && <WorkOnSaturdayAlert />}
 
             {internFormData?.isSealed && <SealedRecordAlert />}
 

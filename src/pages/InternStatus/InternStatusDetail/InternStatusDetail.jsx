@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Container, Tooltip } from '@mui/material';
+import { Box, Button, Paper, Container, Tooltip, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CustomDetailPageBox from 'src/components/inputs/CustomDetailPageBox';
@@ -34,7 +34,7 @@ function InternStatusDetail() {
     useGetStatusDetailQuery(internStatusId);
 
   let internStatusData = {};
-  const internStatusTracks = data?.data.internStatusTracks;
+  const internStatusTracks = data?.data?.internStatusTracks || [];
   useEffect(() => {
     if (isSuccess && data.data) {
       dispatch(setInternStatusData(data?.data));
@@ -44,6 +44,12 @@ function InternStatusDetail() {
   useEffect(() => {
     refetch();
   }, [location, navigate]);
+
+  useEffect(() => {
+    if (isError) {
+      navigate('/intern-status');
+    }
+  }, [error]);
 
   console.log('data', data);
 
@@ -56,21 +62,24 @@ function InternStatusDetail() {
   }
 
   const accordionData = [
-    [{ text: 'Statüs: ', value: data?.data.status }],
+    [{ header: 'Staj Bilgileri' }, { text: 'Staj Durumu', value: InternStatusEnum[data?.data?.status]?.label }],
 
     [
-      { text: 'Komisyon Adı: ', value: data?.data.interview?.comission?.name },
-      { text: 'Soyadı: ', value: data?.data.interview?.comission?.last_name },
+      { header: 'Mülakat Komisyon Bilgileri' },
+      { text: 'Komisyon Adı', value: data?.data?.interview?.comission?.name },
+      { text: 'Komisyon Soyadı', value: data?.data?.interview?.comission?.last_name },
     ],
     [
-      { text: 'Staj Sorumlusu Adı: ', value: data?.data.form?.follow_up?.name },
-      { text: 'Staj Sorumlusu Soyadı: ', value: data?.data.form?.follow_up?.last_name },
+      { header: 'Staj Sorumlusu Bilgileri' },
+      { text: 'Staj Sorumlusu Adı', value: data?.data?.form?.follow_up?.name },
+      { text: 'Staj Sorumlusu Soyadı', value: data?.data?.form?.follow_up?.last_name },
     ],
     [
-      { text: 'Öğrenci Ad: ', value: data?.data?.student?.name },
-      { text: 'Öğrenci Soyadı: ', value: data?.data?.student?.last_name },
-      { text: 'Okul Numarası: ', value: data?.data?.student?.school_number },
-      { text: 'Tc Kimlik No: ', value: data?.data?.student?.tc_number },
+      { header: 'Öğrenci Bilgileri' },
+      { text: 'Öğrenci Ad', value: data?.data?.student?.name },
+      { text: 'Öğrenci Soyadı', value: data?.data?.student?.last_name },
+      { text: 'Okul Numarası', value: data?.data?.student?.school_number },
+      { text: 'T.C Kimlik Numarası', value: data?.data?.student?.tc_number },
     ],
   ];
 
@@ -111,10 +120,20 @@ function InternStatusDetail() {
       cellComponent: (value) => <p className="">{InternStatusEnum[value]?.label}</p>,
       notSortable: true,
     },
+    {
+      id: 'desc',
+      numeric: false,
+      disablePadding: true,
+      label: 'Açıklama',
+      style: 'text-left',
+      cellComponent: (value) => <p className="">{value}</p>,
+      notSortable: true,
+    },
   ];
 
   return (
     <div>
+      <Typography variant="h2">Staj Durumu</Typography>
       <Paper
         sx={{
           display: 'flex',
@@ -141,7 +160,7 @@ function InternStatusDetail() {
           />
         )}
       </Paper>
-      <Box className="flex flex-col xl:flex-row gap-4">
+      <Box className="flex flex-col 2xl:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
           <Container className="my-2 px-6 gap-2 flex">
             {data?.data.interview_id && (
@@ -159,6 +178,9 @@ function InternStatusDetail() {
           <CustomDetailPageBox data={accordionData} />
           {internStatusTracks.length > 0 && (
             <Container>
+              <Typography variant="h4" className="mb-4">
+                Staj Durumu Takip Tablosu
+              </Typography>
               <EnhancedTable
                 columns={headers}
                 filter={[]}
@@ -172,7 +194,9 @@ function InternStatusDetail() {
             </Container>
           )}
         </Paper>
-        <RecordTraceCard record={internStatusData} />
+        <Box>
+          <RecordTraceCard record={internStatusData} />
+        </Box>
       </Box>
     </div>
   );

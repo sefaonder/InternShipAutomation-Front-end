@@ -48,10 +48,10 @@ function InterviewDetail() {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (error) {
+    if (isError) {
       navigate('/interview');
     }
-  }, [isError]);
+  }, [error]);
 
   useEffect(() => {
     refetch();
@@ -91,23 +91,29 @@ function InterviewDetail() {
   }
 
   const accordionData = [
-    [{ text: 'Staj Durumu: ', value: InternStatusEnum[data?.data?.internStatus?.status].label }],
     [
+      { header: 'Staj Durumu' },
+      { text: 'Staj Durumu', value: InternStatusEnum[data?.data?.internStatus?.status]?.label },
+    ],
+    [
+      { header: 'Mülakatı Detayları' },
       { text: 'Komisyon Adı', value: data?.data?.comission?.name },
       { text: 'Komisyon Soyadı', value: data?.data?.comission?.last_name },
       { text: 'Mülakat Tarihi', value: data?.data?.date ? dayjs(data?.data?.date).format('DD.MM.YYYY HH:mm') : '-' },
     ],
 
     [
+      { header: 'Öğrenci Bilgileri' },
       { text: 'Öğrenci Adı', value: data?.data?.student?.name },
       { text: 'Öğrenci Soyadı', value: data?.data?.student?.last_name },
       { text: 'Okul Numarası', value: data?.data?.student?.school_number },
-      { text: 'TC Kimlik No', value: data?.data?.student?.tc_number },
+      { text: 'T.C Kimlik Numarası', value: data?.data?.student?.tc_number },
     ],
   ];
 
   return (
     <div>
+      <Typography variant="h2">Mülakat</Typography>
       <Paper
         sx={{
           display: 'flex',
@@ -139,7 +145,7 @@ function InterviewDetail() {
           </Tooltip>
         )}
       </Paper>
-      <Box className="flex flex-col sm:flex-row gap-4">
+      <Box className="flex flex-col md:flex-row gap-4">
         <Paper sx={{ flex: 2 }}>
           <Container className="flex-col my-2 px-6 gap-4 flex sm:flex-row">
             <NavigateLink text={'İlgili Staj Durumu'} linkId={data?.data?.internStatus?.id} route={'intern-status'} />

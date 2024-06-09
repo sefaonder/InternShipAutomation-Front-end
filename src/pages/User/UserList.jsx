@@ -70,7 +70,7 @@ function UserList() {
       id: 'name',
       numeric: false,
       disablePadding: true,
-      label: 'İsim',
+      label: 'Ad',
       style: 'text-left',
       cellComponent: (value) => <p className="">{value}</p>,
     },
@@ -78,7 +78,7 @@ function UserList() {
       id: 'last_name',
       numeric: false,
       disablePadding: true,
-      label: 'Soyisim',
+      label: 'Soyad',
       style: 'text-left',
       cellComponent: (value) => <p className="">{value}</p>,
     },
@@ -95,7 +95,7 @@ function UserList() {
       id: 'tc_number',
       numeric: false,
       disablePadding: true,
-      label: 'T.C Kimlik numarası',
+      label: 'T.C Kimlik Numarası',
       style: 'text-left',
       cellComponent: (value) => <p className="">{value}</p>,
     },
@@ -114,7 +114,7 @@ function UserList() {
     { id: 'userType', type: 'enum', componentProps: { enumObject: UserRolesEnum, label: 'Kullanıcı Yetkisi' } },
     { id: 'name', type: 'text', componentProps: { label: 'Ad' } },
     { id: 'lastName', type: 'text', componentProps: { label: 'Soyad' } },
-    { id: 'isGraduate', type: 'boolean', componentProps: { label: 'Sadece Mezunlar' } },
+    { id: 'isGraduate', type: 'boolean', componentProps: { label: 'Sadece Stajını Tamamlamışlar' } },
   ];
 
   return (
