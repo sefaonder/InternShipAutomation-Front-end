@@ -27,11 +27,11 @@ function PasswordRefresh() {
   }, [token]);
 
   const validationSchema = yup.object({
-    password: yup.string().required('Password is required'),
+    password: yup.string().required('Şifre zorunlu bir alandır'),
     password2: yup
       .string()
       .oneOf([yup.ref('password'), null], 'Şifreler eşleşmiyor')
-      .required('Password2 is required'),
+      .required('Lütfen şifrenizi doğrulayınız'),
   });
 
   const handleSubmit = async (values) => {

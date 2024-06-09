@@ -12,7 +12,7 @@ function EmailControl({ setMailSended }) {
   const [passwordResetRequest, { isLoading }] = usePasswordResetRequestMutation();
 
   const validationSchema = yup.object({
-    email: yup.string().email().required('E-mail is required'),
+    email: yup.string().email().required('E-mail alanı zorunludur'),
   });
 
   const handleSubmit = async (values) => {

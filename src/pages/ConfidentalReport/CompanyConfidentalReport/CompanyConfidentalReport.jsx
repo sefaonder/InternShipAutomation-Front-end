@@ -103,25 +103,33 @@ function CompanyConfidentalReport() {
     interview: yup.object().shape({
       id: yup.string().required('Lütfen İlgili Mülakatı seçin'),
     }),
-    desc: yup.string().optional('Bu alan'),
-    company_name: yup.string().required('Bu Alan'),
-    address: yup.string().required('Bu Alan'),
-    days_of_absence: yup.number().required('Bu Alan'),
-    department: yup.string().required('Bu Alan'),
-    is_edu_program: yup.string().required('Bu Alan'),
-    responsibility: yup.string().required('Bu Alan'),
-    success: yup.string().required('Bu Alan'),
-    interest: yup.string().required('Bu Alan'),
-    behaviour_to_auths: yup.string().required('Bu Alan'),
-    behaviour_to_coworkers: yup.string().required('Bu Alan'),
-    work_safety: yup.string().required('Bu Alan'),
-    competence: yup.string().required('Bu Alan'),
-    auth_name: yup.string().required('Bu Alan'),
-    auth_position: yup.string().required('Bu Alan'),
-    reg_number: yup.string().optional('Bu Alan'),
-    auth_tc_number: yup.string().required('Bu Alan').min(11, 'En az 11 karakter').max(11, 'En fazla 11 karakter'),
-    auth_title: yup.string().required('Bu Alan'),
-    score: yup.number().required('Bu Alan').min(0, 'en az 0 puan olabilir').max(100, 'en fazla 100 puan olabilir'),
+    desc: yup.string().optional('Bu alan zorunludur'),
+    company_name: yup.string().required('Bu alan zorunludur'),
+    address: yup.string().required('Bu alan zorunludur'),
+    days_of_absence: yup.number().required('Bu alan zorunludur'),
+    department: yup.string().required('Bu alan zorunludur'),
+    is_edu_program: yup.string().required('Bu alan zorunludur'),
+    responsibility: yup.string().required('Bu alan zorunludur'),
+    success: yup.string().required('Bu alan zorunludur'),
+    interest: yup.string().required('Bu alan zorunludur'),
+    behaviour_to_auths: yup.string().required('Bu alan zorunludur'),
+    behaviour_to_coworkers: yup.string().required('Bu alan zorunludur'),
+    work_safety: yup.string().required('Bu alan zorunludur'),
+    competence: yup.string().required('Bu alan zorunludur'),
+    auth_name: yup.string().required('Bu alan zorunludur'),
+    auth_position: yup.string().required('Bu alan zorunludur'),
+    reg_number: yup.string().optional('Bu alan zorunludur'),
+    auth_tc_number: yup
+      .string()
+      .required('Bu alan zorunludur')
+      .min(11, 'En az 11 karakter')
+      .max(11, 'En fazla 11 karakter'),
+    auth_title: yup.string().required('Bu alan zorunludur'),
+    score: yup
+      .number()
+      .required('Bu alan zorunludur')
+      .min(0, 'en az 0 puan olabilir')
+      .max(100, 'en fazla 100 puan olabilir'),
   });
 
   const initialValues = {

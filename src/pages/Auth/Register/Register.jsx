@@ -17,9 +17,9 @@ function Register() {
 
   const validationSchema = yup.object({
     email: yup.string().matches(emailRegex, 'Geçersiz e-posta formatı').required('E-posta zorunludur'),
-    lastName: yup.string().required('Last Name is required'),
-    name: yup.string().required('name is required'),
-    tcNumber: yup.string().required('TC number req'),
+    lastName: yup.string().required('Soyad zorunludur'),
+    name: yup.string().required('Ad zorunludur'),
+    tcNumber: yup.string().required('T.C Kimlik Numarası zorunludur'),
   });
 
   const formik = useFormik({
