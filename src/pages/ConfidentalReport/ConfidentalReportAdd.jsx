@@ -394,7 +394,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               name="auth_name"
               label="Adı-Soyadı"
               value={formik.values.auth_name}
-              onChange={formik.handleChange}
+              onChange={(value) => formik.setFieldValue('auth_name', capitalizeFirstLetter(value.target.value), true)}
               error={formik.touched.auth_name && Boolean(formik.errors.auth_name)}
               helperText={formik.touched.auth_name && formik.errors.auth_name}
             />

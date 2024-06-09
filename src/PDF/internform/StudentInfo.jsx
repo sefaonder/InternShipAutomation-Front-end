@@ -1,6 +1,7 @@
 import { View, Text } from '@react-pdf/renderer';
 import React from 'react';
 import PdfTable from '../pdfComponents/PdfTable';
+import { cleanString } from 'src/app/handlers/stringParsers';
 
 const StudentInfo = ({ data }) => {
   console.log(data);
@@ -33,7 +34,7 @@ const StudentInfo = ({ data }) => {
 
   const address = {
     name: 'İkametgah Adresi ve Telefonu:',
-    value: data?.student_info?.address,
+    value: cleanString(data?.student_info?.address),
   };
   return (
     <View style={styles.container}>
