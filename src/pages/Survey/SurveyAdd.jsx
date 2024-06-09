@@ -1,4 +1,4 @@
-import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, FormLabel, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
@@ -50,6 +50,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
     if (!survey?.data && data?.data?.form) {
       formik.setFieldValue('company_name', data.data.form.company_info.name, false);
       formik.setFieldValue('company_address', data.data.form.company_info.address, false);
+      formik.setFieldValue('intern_type', data?.data?.form?.isInTerm ? 'Dönem içi' : 'Dönem dışı');
     }
   }, [isSuccess]);
 
@@ -145,7 +146,6 @@ const SurveyAdd = ({ survey, surveyId }) => {
   useEffect(() => {
     if (formik.values?.interview?.id && !survey?.id) {
       setInterviewId(formik.values.interview.id);
-      console.log('new id', interviewId);
     }
   }, [formik.values.interview]);
 
@@ -161,7 +161,7 @@ const SurveyAdd = ({ survey, surveyId }) => {
   const teach_type_data = { name: 'Öğretim Türü', type: 'teach_type', data: ['1. Öğretim', '2. Öğretim'] };
 
   const intern_group_data = { name: 'Staj Grubu', type: 'intern_group', data: ['I. Grup', 'II. Grup'] };
-  const intern_type_data = { name: 'Staj Türü', type: 'intern_type', data: ['Dönem içi', 'Dönem Dışı'] };
+  const intern_type_data = { name: 'Staj Türü', type: 'intern_type', data: ['Dönem içi', 'Dönem dışı'] };
 
   const gano_data = {
     name: 'GANO',
@@ -170,9 +170,11 @@ const SurveyAdd = ({ survey, surveyId }) => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center flex-col">
-      <Typography className="m-4 text-xl text-red-500 lg:text-3xl">Öğrenci Değerlendirme Anketi</Typography>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 justify-center w-3/4 items-between">
+    <Container className="flex flex-col items-center">
+      <Typography variant="h2" className="m-4">
+        Öğrenci Değerlendirme Anketi
+      </Typography>
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full sm:w-2/3">
         <CustomAutocomplete
           name="interview"
           id="interview"
@@ -187,33 +189,37 @@ const SurveyAdd = ({ survey, surveyId }) => {
           error={Boolean(formik.errors?.interview)}
           helperText={formik.errors.interview?.id}
         />
-        <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-          <FormLabel className="font-extrabold">Staj Yapılan Firma Adı:</FormLabel>
-          <TextField
-            className="w-full lg:w-1/2"
-            id="company_name"
-            name="company_name"
-            label="Firma adı"
-            margin="normal"
-            value={formik.values.company_name}
-            onChange={formik.handleChange}
-            error={formik.touched.company_name && Boolean(formik.errors.company_name)}
-            helperText={formik.touched.company_name && formik.errors.company_name}
-          />
-        </Box>
-        <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-          <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi:</FormLabel>
-          <TextField
-            className="w-full lg:w-1/2"
-            id="company_address"
-            name="company_address"
-            label="Firma adresi"
-            margin="normal"
-            value={formik.values.company_address}
-            onChange={formik.handleChange}
-            error={formik.touched.company_address && Boolean(formik.errors.company_address)}
-            helperText={formik.touched.company_address && formik.errors.company_address}
-          />
+        <Box className="flex flex-col gap-4 my-4">
+          <Box className="flex flex-col items-start justify-between ">
+            <FormLabel className="font-extrabold">Staj Yapılan Firma Adı</FormLabel>
+            <TextField
+              className="w-full"
+              id="company_name"
+              name="company_name"
+              label="Firma adı"
+              margin="normal"
+              value={formik.values.company_name}
+              onChange={formik.handleChange}
+              error={formik.touched.company_name && Boolean(formik.errors.company_name)}
+              helperText={formik.touched.company_name && formik.errors.company_name}
+            />
+          </Box>
+          <Box className="flex flex-col items-start  justify-between ">
+            <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi</FormLabel>
+            <TextField
+              className="w-full"
+              id="company_address"
+              name="company_address"
+              label="Firma adresi"
+              margin="normal"
+              multiline
+              rows={3}
+              value={formik.values.company_address}
+              onChange={formik.handleChange}
+              error={formik.touched.company_address && Boolean(formik.errors.company_address)}
+              helperText={formik.touched.company_address && formik.errors.company_address}
+            />
+          </Box>
         </Box>
 
         <Box className="flex items-center justify-between">
@@ -243,12 +249,16 @@ const SurveyAdd = ({ survey, surveyId }) => {
         <Box className="flex items-center justify-between">
           <CustomRadioGroup
             data={intern_type_data}
+            disabled
             formik={formik}
             error={Boolean(formik.errors.intern_type)}
             helperText={formik.errors.intern_type}
           />
         </Box>
         <Box>
+          <Typography className="my-4 flex justify-center" variant="h3">
+            Anket Soruları
+          </Typography>
           <SurveyQuestions
             selectedAnswersSingle={selectedAnswersSingle}
             setSelectedAnswersSingle={setSelectedAnswersSingle}
@@ -264,11 +274,19 @@ const SurveyAdd = ({ survey, surveyId }) => {
             )}
           </Typography>
         </Box>
-        <Button className="px-4 w-1/3 flex my-2" type="submit" color="success" variant="outlined">
-          Gönder
-        </Button>
+        <Box className="px-4 flex my-2  self-center">
+          <Button
+            className="w-full"
+            type="submit"
+            color="success"
+            variant="outlined"
+            disabled={isLoading || isLoadingUpdate}
+          >
+            Kaydet
+          </Button>
+        </Box>
       </form>
-    </div>
+    </Container>
   );
 };
 

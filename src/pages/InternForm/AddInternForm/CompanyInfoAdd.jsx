@@ -63,18 +63,22 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
     try {
       const payload = { ...values, internFormId: internFormId };
       let response = null;
-      if (companyInfo?.id) {
-        if (formik.status) {
-          response = await updateCompanyInfo({ payload: payload, companyInfoId: companyInfo.id });
-        }
-      } else {
-        response = await createNewCompanyInfo(payload);
-      }
 
-      if (response.data) {
-        projectSnackbar(response.data.message, { variant: 'success' });
-        setIsLoading(false);
-        navigate('/intern-form/' + internFormId);
+      if (formik.status) {
+        if (companyInfo?.id) {
+          response = await updateCompanyInfo({ payload: payload, companyInfoId: companyInfo.id });
+        } else {
+          response = await createNewCompanyInfo(payload);
+        }
+
+        if (response.data) {
+          projectSnackbar(response.data.message, { variant: 'success' });
+          setIsLoading(false);
+          navigate('/intern-form/' + internFormId);
+        } else {
+          setIsLoading(false);
+          navigate('/intern-form');
+        }
       } else {
         setIsLoading(false);
         navigate('/intern-form');
@@ -93,11 +97,11 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   });
 
   return (
-    <div>
-      <Typography className="my-4" variant="h4">
+    <div className="flex flex-col items-center">
+      <Typography className="my-4" variant="h3">
         3.Adım Şirket Bilgileri
       </Typography>
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+      <form className="flex flex-col gap-4 w-full sm:w-2/3" onSubmit={formik.handleSubmit}>
         <CustomTextInput
           id="name"
           name="name"
@@ -111,6 +115,8 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
         <CustomTextInput
           id="address"
           name="address"
+          multiline
+          rows={3}
           label="Firma Adresi"
           value={formik.values.address}
           onChange={(value) => formik.setFieldValue('address', value.target.value, true) && formik.setStatus(true)}
@@ -159,7 +165,7 @@ function CompanyInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
         />
 
         <Button type="submit" variant="outlined" disabled={!formik.isValid}>
-          ilerle
+          Kaydet
         </Button>
       </form>
     </div>

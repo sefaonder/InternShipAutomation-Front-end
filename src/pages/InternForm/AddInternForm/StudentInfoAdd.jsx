@@ -12,13 +12,13 @@ import {
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import { capitalizeFirstLetter } from 'src/app/handlers/stringParsers';
 
 function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   const [createNewStudentInfo, { isLoading }] = useCreateNewStudentInfoMutation();
   const [updateStudentInfo, { isLoadingUpdate }] = useUpdateStudentInfoMutation();
 
   const internFormId = useSelector((state) => state.internForm.id);
-  console.log('internFormData', internFormData);
   const studentInfo = internFormData?.student_info;
 
   const handleNext = () => {
@@ -31,7 +31,6 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
 
   useEffect(() => {
     if (studentInfo?.id) {
-      console.log('formil2', internFormData);
       formik.setFieldValue('fathersName', studentInfo.fathers_name, false);
       formik.setFieldValue('mothersName', studentInfo.mothers_name, false);
       formik.setFieldValue('birthDate', studentInfo.birth_date, false);
@@ -53,7 +52,7 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
     mothersName: yup.string().required('Lütfen anne adını girin').max(35, 'anne adı en fazla 35 karakter olabilir'),
     birthDate: yup.date().required('Lütfen doğum tarihini girin'),
     birthPlace: yup.string().required('Lütfen doğum yerini girin'),
-    address: yup.string().required('Lütfen adresi girin').max(100, 'adres adı en fazla 100 karakter olabilir'),
+    address: yup.string().required('Lütfen adresi girin').max(250, 'adres adı en fazla 250 karakter olabilir'),
   });
 
   async function handleSubmit(values) {
@@ -61,21 +60,21 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
     try {
       const payload = { ...values, internFormId: internFormId };
       let response = null;
-      if (studentInfo?.id) {
-        if (formik.status) {
+      if (formik.status) {
+        if (studentInfo?.id) {
           response = await updateStudentInfo({ payload: payload, studentInfoId: studentInfo.id });
+        } else {
+          response = await createNewStudentInfo(payload);
         }
-      } else {
-        response = await createNewStudentInfo(payload);
-      }
 
-      if (response.data) {
-        projectSnackbar(response.data.message, { variant: 'success' });
-        setIsLoading(false);
-        handleNext();
-      } else {
-        setIsLoading(false);
-        navigate('/intern-form');
+        if (response.data) {
+          projectSnackbar(response.data.message, { variant: 'success' });
+          setIsLoading(false);
+          handleNext();
+        } else {
+          setIsLoading(false);
+          navigate('/intern-form');
+        }
       }
 
       setIsLoading(false);
@@ -83,7 +82,7 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
       console.log(response);
     } catch (error) {
       setIsLoading(false);
-      console.log('err', error);
+      console.log(error);
     }
   }
 
@@ -95,18 +94,21 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
   });
 
   return (
-    <div>
-      <Typography className="my-4" variant="h4">
+    <div className="flex flex-col items-center">
+      <Typography className="my-4" variant="h3">
         2.Adım Öğrenci Bilgileri
       </Typography>
 
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+      <form className="flex flex-col gap-4 w-full sm:w-2/3" onSubmit={formik.handleSubmit}>
         <CustomTextInput
           id="fathersName"
           name="fathersName"
           label="Baba Adı"
           value={formik.values.fathersName}
-          onChange={(value) => formik.setFieldValue('fathersName', value.target.value, true) && formik.setStatus(true)}
+          onChange={(value) =>
+            formik.setFieldValue('fathersName', capitalizeFirstLetter(value.target.value), true) &&
+            formik.setStatus(true)
+          }
           error={Boolean(formik.errors.fathersName)}
           helperText={formik.errors.fathersName}
         />
@@ -115,7 +117,10 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
           name="mothersName"
           label="Anne Adı"
           value={formik.values.mothersName}
-          onChange={(value) => formik.setFieldValue('mothersName', value.target.value, true) && formik.setStatus(true)}
+          onChange={(value) =>
+            formik.setFieldValue('mothersName', capitalizeFirstLetter(value.target.value), true) &&
+            formik.setStatus(true)
+          }
           error={Boolean(formik.errors.mothersName)}
           helperText={formik.errors.mothersName}
         />
@@ -149,7 +154,7 @@ function StudentInfoAdd({ nextStep, prevStep, internFormData, setIsLoading }) {
           rows={4}
         />
         <Button type="submit" variant="outlined" disabled={!formik.isValid}>
-          ilerle
+          Kaydet
         </Button>
       </form>
     </div>

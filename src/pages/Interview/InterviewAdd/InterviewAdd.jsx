@@ -1,4 +1,4 @@
-import { Alert, Button, Typography } from '@mui/material';
+import { Alert, Button, Container, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 import * as yup from 'yup';
@@ -82,11 +82,11 @@ function InterviewAdd({ interview, interviewId, isLoadingState }) {
   });
 
   return (
-    <div>
+    <Container className="flex flex-col items-center">
       <Typography variant="h4" className="my-4">
         Mülakat
       </Typography>
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+      <form className="flex flex-col gap-4 w-full sm:w-2/3" onSubmit={formik.handleSubmit}>
         <Alert severity="warning">
           <Typography>
             <b>Dikkat</b>, Mülakatın Tanımlanması veya Mevcut Mülakatın Güncellenmesi otomatik olarak staj durumunu{' '}
@@ -133,7 +133,7 @@ function InterviewAdd({ interview, interviewId, isLoadingState }) {
           Kaydet
         </Button>
       </form>
-    </div>
+    </Container>
   );
 }
 

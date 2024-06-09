@@ -36,7 +36,7 @@ const DialogButton = ({
   };
 
   return (
-    <div>
+    <>
       <Button
         variant="outlined"
         color={buttonColor}
@@ -71,7 +71,7 @@ const DialogButton = ({
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import CustomTextInput from 'src/components/inputs/CustomTextInput';
 import { useRegisterMutation } from 'src/store/services/auth/authApiSlice';
 import { Box, Button, Link } from '@mui/material';
 import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import { capitalizeFirstLetter } from 'src/app/handlers/stringParsers';
 
 function Register() {
   const navigate = useNavigate();
@@ -56,10 +57,10 @@ function Register() {
         <CustomTextInput
           id="name"
           name="name"
-          label="İsim"
+          label="Ad"
           required
           value={formik.values.name}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('name', capitalizeFirstLetter(value.target.value), true)}
           error={Boolean(formik.errors.name)}
           helperText={formik.errors.name}
         />
@@ -67,10 +68,10 @@ function Register() {
         <CustomTextInput
           id="lastName"
           name="lastName"
-          label="Soy İsim"
+          label="Soyad"
           required
           value={formik.values.lastName}
-          onChange={formik.handleChange}
+          onChange={(value) => formik.setFieldValue('lastName', capitalizeFirstLetter(value.target.value), true)}
           error={Boolean(formik.errors.lastName)}
           helperText={formik.errors.lastName}
         />

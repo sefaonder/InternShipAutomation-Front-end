@@ -20,6 +20,7 @@ import DialogButton from 'src/components/inputs/DialogButton';
 import { enqueueSnackbar } from 'notistack';
 import { saveAs } from 'file-saver';
 import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import { capitalizeFirstLetter } from 'src/app/handlers/stringParsers';
 
 function CompanyConfidentalReport() {
   const navigate = useNavigate();
@@ -259,8 +260,8 @@ function CompanyConfidentalReport() {
                   <Typography>{`Öğrenci Adı Soyadı : ${data.data.student.name} ${data.data.student.last_name}`}</Typography>
                   <Typography>{`Bölümü : ${data.data.form.edu_program}`}</Typography>
                   <Typography>{`Doğum Yeri / Tarihi : ${data.data.form.student_info.birth_place} ${dayjs(data.data.form.student_info.birth_date).format('DD.MM.YYYY')}`}</Typography>
-                  <Typography>{`Numarası : ${data.data.student?.school_number || ''}`}</Typography>
-                  <Typography>{`TC Kimlik No : ${data.data.student?.tc_number || ''}`}</Typography>
+                  <Typography>{`Okul Numarası : ${data.data.student?.school_number || ''}`}</Typography>
+                  <Typography>{`T.C Kimlik Numarası : ${data.data.student?.tc_number || ''}`}</Typography>
                 </Box>
               </Box>
             )}
@@ -398,7 +399,7 @@ function CompanyConfidentalReport() {
               name="auth_name"
               label="Adı-Soyadı"
               value={formik.values.auth_name}
-              onChange={formik.handleChange}
+              onChange={(value) => formik.setFieldValue('auth_name', capitalizeFirstLetter(value.target.value), true)}
               error={Boolean(formik.errors.auth_name)}
               helperText={formik.errors.auth_name}
             />
@@ -445,20 +446,20 @@ function CompanyConfidentalReport() {
             />
           </Box>
           <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">TC Kimlik:</FormLabel>
+            <FormLabel className="font-extrabold mb-2">T.C Kimlik Numarası</FormLabel>
             <TextField
               className="w-full lg:w-1/2 !p-0"
               id="auth_tc_number"
               required
               name="auth_tc_number"
-              label="TC Kimlik"
+              label="T.C Kimlik Numarası"
               value={formik.values.auth_tc_number}
               onChange={formik.handleChange}
               error={Boolean(formik.errors.auth_tc_number)}
               helperText={formik.errors.auth_tc_number}
             />
           </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+          {/* <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold mb-2">Açıklama:</FormLabel>
             <TextField
               multiline
@@ -472,7 +473,7 @@ function CompanyConfidentalReport() {
               error={Boolean(formik.errors.desc)}
               helperText={formik.errors.desc}
             />
-          </Box>
+          </Box> */}
         </Container>
         <Box className="flex flex-row  my-2 gap-4 w-full justify-evenly">
           <DialogButton

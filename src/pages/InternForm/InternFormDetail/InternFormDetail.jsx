@@ -171,7 +171,7 @@ function InternFormDetail() {
         >
           {studentPermission && (
             <DialogButton
-              className="px-4 flex"
+              className="px-4 flex flex-shrink-0"
               onSubmit={handleDelete}
               buttonColor="error"
               Icon={<DeleteIcon />}

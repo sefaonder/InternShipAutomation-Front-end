@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import React, { useEffect } from 'react';
@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 
 import { clearUserData } from 'src/store/services/user/userSlice';
 import { projectSnackbar } from 'src/app/handlers/ProjectSnackbar';
+import { capitalizeFirstLetter } from 'src/app/handlers/stringParsers';
 
 function UserAdd() {
   const navigate = useNavigate();
@@ -119,16 +120,20 @@ function UserAdd() {
   console.log('formik', formik.values);
 
   return (
-    <div>
-      <Typography variant="h6">Kullanıcı</Typography>
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+    <Container className="flex flex-col items-center">
+      <Typography className="my-4" variant="h3">
+        Kullanıcı
+      </Typography>
+      <form className="flex flex-col gap-4 w-full sm:w-2/3" onSubmit={formik.handleSubmit}>
         <CustomTextInput
           id="name"
           name="name"
           label="İsim"
           required
           value={formik.values.name}
-          onChange={(value) => formik.setFieldValue('name', value.target.value, true) && formik.setStatus(true)}
+          onChange={(value) =>
+            formik.setFieldValue('name', capitalizeFirstLetter(value.target.value), true) && formik.setStatus(true)
+          }
           error={Boolean(formik.errors.name)}
           helperText={formik.errors.name}
         />
@@ -139,7 +144,9 @@ function UserAdd() {
           label="Soyisim"
           required
           value={formik.values.lastName}
-          onChange={(value) => formik.setFieldValue('lastName', value.target.value, true) && formik.setStatus(true)}
+          onChange={(value) =>
+            formik.setFieldValue('lastName', capitalizeFirstLetter(value.target.value), true) && formik.setStatus(true)
+          }
           error={Boolean(formik.errors.lastName)}
           helperText={formik.errors.lastName}
         />
@@ -197,7 +204,7 @@ function UserAdd() {
             <CustomBooleanInput
               name="isGraduate"
               id="isGraduate"
-              label="Mezuniyet Durumu"
+              label="Staj Tamamlama Durumu"
               value={formik.values.isGraduate}
               onChange={(value) => formik.setFieldValue('isGraduate', value, true) && formik.setStatus(true)}
             />
@@ -206,7 +213,7 @@ function UserAdd() {
               id="graduationDate"
               name="graduationDate"
               required
-              label="Mezuniyet Tarihi"
+              label="Staj Tamamlama Tarihi"
               value={dayjs(formik.values.graduationDate)}
               onChange={(value) => formik.setFieldValue('graduationDate', value ? dayjs(value).toDate() : null, true)}
               error={Boolean(formik.errors.graduationDate)}
@@ -219,7 +226,7 @@ function UserAdd() {
           Kaydet
         </Button>
       </form>
-    </div>
+    </Container>
   );
 }
 

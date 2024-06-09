@@ -104,28 +104,28 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
     try {
       const payload = { ...values, studentId: values.student.id, eduYearId: values.eduYear.id };
       let response = null;
-
-      if (internFormData?.id) {
-        if (formik.status) {
+      if (formik.status) {
+        if (internFormData?.id) {
           response = await updateForm({ payload: payload, internFormId: internFormData?.id });
+        } else {
+          response = await createNewForm(payload);
         }
-      } else {
-        response = await createNewForm(payload);
+        if (response?.data?.data) {
+          dispatch(
+            setInternFormData({
+              ...values,
+              startDate: moment(values.startDate).format(),
+              endDate: moment(values.endDate).format(),
+              id: response.data.data,
+            }),
+          );
+          projectSnackbar(response.data.message, { variant: 'success' });
+        }
+        if (response.error) {
+          navigate('/intern-form');
+        }
       }
-      if (response?.data?.data) {
-        dispatch(
-          setInternFormData({
-            ...values,
-            startDate: moment(values.startDate).format(),
-            endDate: moment(values.endDate).format(),
-            id: response.data.data,
-          }),
-        );
-        projectSnackbar(response.data.message, { variant: 'success' });
-      }
-      if (response.error) {
-        navigate('/intern-form');
-      }
+
       setIsLoading(false);
       handleNext();
     } catch (error) {
@@ -159,11 +159,11 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
   }
 
   return (
-    <div>
-      <Typography className="my-4" variant="h4">
+    <div className="flex flex-col items-center">
+      <Typography className="my-4" variant="h3">
         1.Adım Staj Formu Bilgileri
       </Typography>
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+      <form className="flex flex-col gap-4 w-full sm:w-2/3" onSubmit={formik.handleSubmit}>
         <Box>
           <CustomBooleanRadioInput
             name="isInTerm"
@@ -231,7 +231,7 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
 
         {formik.values.endDate && formik.values.startDate && formik.values.weekDayWork && (
           <Typography>
-            {`Total Day : ${getBusinessDays(formik.values.startDate, formik.values.endDate, holidays, formik.values.weekDayWork)}`}
+            {`Toplam Staj Günü : ${getBusinessDays(formik.values.startDate, formik.values.endDate, holidays, formik.values.weekDayWork)}`}
           </Typography>
         )}
 
@@ -248,7 +248,7 @@ function FormAdd({ prevStep, nextStep, internFormData, setIsLoading }) {
         />
 
         <Button type="submit" variant="outlined" disabled={!formik.isValid}>
-          Gönder
+          Kaydet
         </Button>
       </form>
     </div>

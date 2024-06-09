@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Container, FormLabel, TextField, Typography } from '@mui/material';
+import { Box, Button, Collapse, Container, Divider, FormLabel, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import CustomRadioGroup from '../Survey/SurveyComponents/CustomRadioGroup';
@@ -216,15 +216,12 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
   }, [formik.values.interview]);
 
   return (
-    <div>
-      {' '}
-      <form
-        onSubmit={formik.handleSubmit}
-        className="p-8 flex items-center gap-6 justify-center flex-col lg:w-full mt-12"
-      >
-        {' '}
-        <Typography className="my-2 text-blue-700 text-3xl"> Staj Sicil Belgesi: </Typography>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col">
+    <Container className="flex flex-col items-center">
+      <Typography variant="h2" className="m-4">
+        Gizli Sicil Fişi
+      </Typography>
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full sm:w-2/3">
+        <Container className="flex flex-col">
           <CustomAutocomplete
             name="interview"
             id="interview"
@@ -242,7 +239,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           <Collapse in={data?.data?.form}>
             {data?.data?.form && (
               <Box>
-                <Typography className="my-2 text-red-500">Öğrenci Bilgileri: </Typography>
+                <Typography className="my-2 text-red-500">Öğrenci Bilgileri</Typography>
                 <Box className="flex items-center justify-between">
                   <Typography>{`Öğrenci Adı Soyadı : ${data.data.student.name} ${data.data.student.last_name}`}</Typography>
                   <Typography>{`Bölümü : ${data.data.form.edu_program}`}</Typography>
@@ -254,34 +251,38 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
                 </Box>
 
                 <Box className="flex items-center justify-between">
-                  <Typography>{`TC Kimlik No : ${data.data.student?.tc_number || ''}`}</Typography>
+                  <Typography>{`T.C Kimlik Numarası : ${data.data.student?.tc_number || ''}`}</Typography>
                 </Box>
               </Box>
             )}
           </Collapse>
 
           <Box className="flex gap-4 flex-col">
-            <Typography className="my-2 text-red-500 text-lg	border-b-2"> Kurum Bilgileri: </Typography>
-            <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-              <FormLabel className="font-extrabold">Staj Yapılan Firma Adı: </FormLabel>
+            <Typography className="my-2 text-red-500 text-lg	border-b-2"> Kurum Bilgileri</Typography>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold">Staj Yapılan Firma Adı</FormLabel>
               <TextField
-                className="w-full lg:w-1/2 my-0"
+                className="w-full"
                 id="company_name"
                 name="company_name"
                 label="Firma adı"
+                margin="normal"
                 value={formik.values.company_name}
                 onChange={formik.handleChange}
                 error={formik.touched.company_name && Boolean(formik.errors.company_name)}
                 helperText={formik.touched.company_name && formik.errors.company_name}
               />
             </Box>
-            <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-              <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi:</FormLabel>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold">Staj Yapılan Firma Adresi</FormLabel>
               <TextField
-                className="w-full lg:w-1/2 !p-0"
+                className="w-full"
                 id="address"
                 name="address"
+                multiline
+                rows={3}
                 label="Firma adresi"
+                margin="normal"
                 value={formik.values.address}
                 onChange={formik.handleChange}
                 error={formik.touched.address && Boolean(formik.errors.address)}
@@ -290,27 +291,30 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             </Box>
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full  flex flex-col gap-4">
-          <Typography className="my-2 text-red-500 text-lg	border-b-2"> Staj Tarihi Ve Çalışma Konuları: </Typography>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold my-2">Staj Başlama Tarihi: </FormLabel>
+
+        <Container className="flex flex-col gap-4">
+          <Typography className="my-2 text-red-500 text-lg	border-b-2"> Staj Tarihi Ve Çalışma Konuları</Typography>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold my-2">Staj Başlama Tarihi</FormLabel>
             <CustomDateInput
               id="start_date"
               name="start_date"
-              className="w-full lg:w-1/2"
+              style={{ width: '100%' }}
               label="Başlangıç Tarihi"
+              margin="normal"
               value={dayjs(formik.values.start_date)}
               onChange={(value) => formik.setFieldValue('start_date', dayjs(value).toDate(), true)}
               error={formik.touched.start_date && Boolean(formik.errors.start_date)}
               helperText={formik.touched.start_date && formik.errors.start_date}
             />
           </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold my-2">Staj Bitiş Tarihi:</FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold my-2">Staj Bitiş Tarihi</FormLabel>
             <CustomDateInput
               id="end_date"
-              className="w-full lg:w-1/2"
+              style={{ width: '100%' }}
               name="end_date"
+              margin="normal"
               label="Başlangıç Tarihi"
               value={dayjs(formik.values.end_date)}
               onChange={(value) => formik.setFieldValue('end_date', dayjs(value).toDate(), true)}
@@ -319,10 +323,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             />
           </Box>
 
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Staj Yapılan Departman:</FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold">Staj Yapılan Departman</FormLabel>
             <TextField
-              className="w-full lg:w-1/2"
+              className="w-full"
               id="department"
               name="department"
               label="Departman"
@@ -332,10 +336,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.department && formik.errors.department}
             />
           </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Öğrencinin Devamsızlık Sayısı: </FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold">Öğrencinin Devamsızlık Sayısı</FormLabel>
             <TextField
-              className="w-full lg:w-1/2 my-0"
+              className="w-full"
               id="days_of_absence"
               name="days_of_absence"
               label="Devamsızlık"
@@ -347,11 +351,13 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             />
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col">
+
+        <Container className="flex flex-col">
           <CustomRadioGroup data={is_edu_program} formik={formik} />
         </Container>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col">
-          <Typography className="my-2 text-lg	border-b-2 text-red-500"> Staj Çalışma Değerlendirmesi: </Typography>
+
+        <Container className="flex flex-col">
+          <Typography className="my-2 text-lg	border-b-2 text-red-500"> Staj Çalışma Değerlendirmesi</Typography>
 
           {internship_evulation.map((data, index) => (
             <CustomRadioGroup
@@ -362,10 +368,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               formik={formik}
             />
           ))}
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold">Puanlama: </FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4 mt-4">
+            <FormLabel className="font-extrabold">Puanlama</FormLabel>
             <TextField
-              className="w-full lg:w-1/2 my-2"
+              className="w-full"
               id="score"
               name="score"
               label="Puan"
@@ -377,12 +383,13 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
             />
           </Box>
         </Container>
-        <Container className="lg:w-1/2 sm:w-full flex flex-col gap-4">
-          <Typography className="my-2 text-red-500 text-lg	border-b-2">Değerlendirmeyi Yapan Yetkilinin: </Typography>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold m-2">Adı-Soyadı: </FormLabel>
+
+        <Container className="flex flex-col gap-4">
+          <Typography className="my-2 text-red-500 text-lg	border-b-2">Değerlendirmeyi Yapan Yetkilinin</Typography>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold m-2">Adı-Soyadı</FormLabel>
             <TextField
-              className="w-full lg:w-1/2 my-0"
+              className="w-full "
               id="auth_name"
               name="auth_name"
               label="Adı-Soyadı"
@@ -392,10 +399,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.auth_name && formik.errors.auth_name}
             />
           </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold m-2">Görevi: </FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold m-2">Görevi</FormLabel>
             <TextField
-              className="w-full lg:w-1/2 !p-0"
+              className="w-full "
               id="auth_position"
               name="auth_position"
               label="Görevi"
@@ -405,10 +412,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.auth_position && formik.errors.auth_position}
             />
           </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold  m-2">Diploma Ünvanı:</FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold  m-2">Diploma Ünvanı</FormLabel>
             <TextField
-              className="w-full lg:w-1/2 !p-0"
+              className="w-full "
               id="auth_title"
               name="auth_title"
               label="Diploma Ünvanı"
@@ -418,10 +425,10 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.auth_title && formik.errors.auth_title}
             />
           </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold m-2">Sicil No / İsteğe Bağlı:</FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold m-2">Sicil No / İsteğe Bağlı</FormLabel>
             <TextField
-              className="w-full lg:w-1/2 !p-0"
+              className="w-full"
               id="reg_number"
               name="reg_number"
               label="Sicil No"
@@ -431,13 +438,13 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
               helperText={formik.touched.reg_number && formik.errors.reg_number}
             />
           </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold m-2">TC Kimlik:</FormLabel>
+          <Box className="flex items-start justify-between flex-col gap-4">
+            <FormLabel className="font-extrabold m-2">T.C Kimlik Numarası</FormLabel>
             <TextField
-              className="w-full lg:w-1/2 !p-0"
+              className="w-full"
               id="auth_tc_number"
               name="auth_tc_number"
-              label="TC Kimlik"
+              label="T.C Kimlik Numarası"
               value={formik.values.auth_tc_number}
               onChange={formik.handleChange}
               error={formik.touched.auth_tc_number && Boolean(formik.errors.auth_tc_number)}
@@ -449,7 +456,7 @@ const ConfidentalReportAdd = ({ confidentalReport, confidentalReportId }) => {
           </Button>
         </Container>
       </form>
-    </div>
+    </Container>
   );
 };
 
