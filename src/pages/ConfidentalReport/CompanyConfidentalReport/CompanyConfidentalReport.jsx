@@ -147,6 +147,15 @@ function CompanyConfidentalReport() {
     score: '',
   };
 
+  const ScrollToTopButton = () => {
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    };
+  };
+
   const handleSubmit = async (values) => {
     try {
       console.log('values', values);
@@ -183,6 +192,7 @@ function CompanyConfidentalReport() {
           projectSnackbar(response.data.message, { variant: 'success' });
         }
         refetch();
+        ScrollToTopButton();
       }
     } catch (error) {
       projectSnackbar('000000', { variant: 'error' });
@@ -200,11 +210,51 @@ function CompanyConfidentalReport() {
   const submitForm = async (event) => {
     event.preventDefault(); // prevent page reload
     setLoadingDownload(false);
-    const blob = await pdf(<PdfConfidentalReport data={data.data} />).toBlob();
+    const blob = await pdf(<PdfConfidentalReport data={pdfDataPrep(data.data)} />).toBlob();
     saveAs(blob, 'uludag.pdf');
     setLoadingDownload(true);
   };
 
+  const pdfDataPrep = (data) => {
+    if (!data) return [];
+    return {
+      interview: {
+        student: {
+          name: data.student.name,
+          last_name: data.student.last_name,
+          school_number: data.student.school_number,
+          tc_number: data.student.tc_number,
+        },
+        internStatus: {
+          form: {
+            student_info: {
+              birth_place: data.form.student_info.birth_place,
+              birth_date: data.form.student_info.birth_date,
+            },
+          },
+        },
+      },
+      company_name: data.interview.confidentalReport.company_name,
+      address: data.interview.confidentalReport.address,
+      start_date: data.interview.confidentalReport.start_date,
+      end_date: data.interview.confidentalReport.end_date,
+      days_of_absence: data.interview.confidentalReport.days_of_absence,
+      department: data.interview.confidentalReport.department,
+      is_edu_program: data.interview.confidentalReport.is_edu_program,
+      auth_name: data.interview.confidentalReport.auth_name,
+      auth_position: data.interview.confidentalReport.auth_position,
+      reg_number: data.interview.confidentalReport.reg_number,
+      intern_evaluation: {
+        responsibility: data.interview.confidentalReport.intern_evaluation.responsibility,
+        success: data.interview.confidentalReport.intern_evaluation.success,
+        interest: data.interview.confidentalReport.intern_evaluation.interest,
+        behaviour_to_auths: data.interview.confidentalReport.intern_evaluation.behaviour_to_auths,
+        behaviour_to_coworkers: data.interview.confidentalReport.intern_evaluation.behaviour_to_coworkers,
+        work_safety: data.interview.confidentalReport.intern_evaluation.work_safety,
+        competence: data.interview.confidentalReport.intern_evaluation.competence,
+      },
+    };
+  };
   console.log('formik', formik.values);
   console.log('formikerrors', formik.errors);
 
@@ -215,251 +265,262 @@ function CompanyConfidentalReport() {
         src="https://uludag.edu.tr/img/uu.svg"
         alt=""
       />
-      <form
-        onSubmit={formik.handleSubmit}
-        className="p-8 flex items-center gap-6 justify-center flex-col lg:w-full mt-auto"
-      >
-        <Container className="flex xl:flex-row flex-col relative items-center justify-center w-full">
-          <Typography className=" text-red-700 text-3xl mt-4 border-b-2">Staj Sicil Belgesi</Typography>
-          {data?.data && (
-            <Box className="xl:absolute right-0 p-6">
-              <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />
-            </Box>
-          )}
-        </Container>
-        {isAlreadySubmitted && (
-          <Alert severity="warning" className="my-4 flex items-center">
-            <Typography variant="h5">
-              Dikkat Bu form daha önce doldurulmuştur Herhangi bir düzenleme yapılamaz.Sadece bilgi amaçlıdır.
-            </Typography>
-            <Typography variant="h6">
-              Bir yanlışlık olduğunu düşünüyorsanız lütfen staj komisyonu ile iletişime geçiniz staj@otomasyon.com
-            </Typography>
-          </Alert>
-        )}
-        <Container className="lg:w-full sm:w-full flex flex-col">
-          <CustomAutocomplete
-            name="interview"
-            id="interview"
-            disabled
-            required
-            filterId={data?.data?.interview?.id}
-            useACSlice={useGetInterviewACQuery}
-            label={'İlgili Mülakat & Staj'}
-            value={formik.values.interview}
-            onChange={(value) => formik.setFieldValue('interview', value, true) && formik.setStatus(true)}
-            error={Boolean(formik.errors?.interview)}
-            helperText={formik.errors.interview?.id}
-          />
-
-          <Collapse in={data?.data?.form}>
-            {data?.data?.form && (
-              <Box>
-                <Typography className="my-2 text-red-500">Öğrenci Bilgileri: </Typography>
-                <Box className="flex items-start flex-col">
-                  <Typography>{`Öğrenci Adı Soyadı : ${data.data.student.name} ${data.data.student.last_name}`}</Typography>
-                  <Typography>{`Bölümü : ${data.data.form.edu_program}`}</Typography>
-                  <Typography>{`Doğum Yeri / Tarihi : ${data.data.form.student_info.birth_place} ${dayjs(data.data.form.student_info.birth_date).format('DD.MM.YYYY')}`}</Typography>
-                  <Typography>{`Okul Numarası : ${data.data.student?.school_number || ''}`}</Typography>
-                  <Typography>{`T.C Kimlik Numarası : ${data.data.student?.tc_number || ''}`}</Typography>
-                </Box>
+      <Container className="flex flex-col items-center">
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full mt-auto">
+          <Container className="flex flex-col relative items-center justify-center w-full mt-10 gap-4">
+            <Typography className=" text-red-700 text-3xl mt-4 border-b-2">Staj Sicil Belgesi</Typography>
+            {data?.data && (
+              <Box className="">
+                <DownloadButton loadingDownload={loadingDownload} submitForm={submitForm} variant="outlined" />
               </Box>
             )}
-          </Collapse>
+          </Container>
+          <Box className="flex flex-col gap-4 mb-4">
+            <Alert severity="info" className="flex items-center">
+              <Typography variant="h5">
+                Ulaşımın daha pratik olması maksadıyla uygun görülürse, Gizli Sicil Fişi kapalı ve mühürlenmiş bir zarfa
+                konulmak suretiyle, öğrenci ile gönderilebilir.
+              </Typography>
+            </Alert>
+            {isAlreadySubmitted && (
+              <Alert severity="warning" className=" flex items-center">
+                <Typography variant="h5">
+                  Dikkat Bu form daha önce doldurulmuştur Herhangi bir düzenleme yapılamaz.Sadece bilgi amaçlıdır.
+                </Typography>
+                <Typography variant="h6">
+                  Bir yanlışlık olduğunu düşünüyorsanız lütfen staj komisyonu ile iletişime geçiniz staj@otomasyon.com
+                </Typography>
+              </Alert>
+            )}
+          </Box>
+          <Container className="flex flex-col gap-4">
+            <CustomAutocomplete
+              name="interview"
+              id="interview"
+              disabled
+              required
+              filterId={data?.data?.interview?.id}
+              useACSlice={useGetInterviewACQuery}
+              label={'İlgili Mülakat & Staj'}
+              value={formik.values.interview}
+              onChange={(value) => formik.setFieldValue('interview', value, true) && formik.setStatus(true)}
+              error={Boolean(formik.errors?.interview)}
+              helperText={formik.errors.interview?.id}
+            />
 
-          <Box className="flex gap-4 flex-col">
-            <Typography className="my-2 text-red-500"> Kurum Bilgileri: </Typography>
-            <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-              <FormLabel className="font-extrabold mb-2">Staj Yapılan Firma Adı: </FormLabel>
-              <TextField
-                className="w-full lg:w-1/2 !p-0"
-                id="company_name"
+            <Collapse in={data?.data?.form}>
+              {data?.data?.form && (
+                <Box>
+                  <Typography className="my-2 text-red-500 text-lg border-b-2">Öğrenci Bilgileri</Typography>
+                  <Box className="flex items-start flex-col">
+                    <Typography>{`Öğrenci Adı Soyadı : ${data.data.student.name} ${data.data.student.last_name}`}</Typography>
+                    <Typography>{`Bölümü : ${data.data.form.edu_program}`}</Typography>
+                    <Typography>{`Doğum Yeri / Tarihi : ${data.data.form.student_info.birth_place} / ${dayjs(data.data.form.student_info.birth_date).format('DD.MM.YYYY')}`}</Typography>
+                    <Typography>{`Okul Numarası : ${data.data.student?.school_number || ''}`}</Typography>
+                    <Typography>{`T.C Kimlik Numarası : ${data.data.student?.tc_number || ''}`}</Typography>
+                  </Box>
+                </Box>
+              )}
+            </Collapse>
+
+            <Box className="flex gap-4 flex-col">
+              <Typography className="my-2 text-lg text-red-500 border-b-2"> Kurum Bilgileri</Typography>
+
+              <Box className="flex items-start justify-between flex-col gap-4">
+                <FormLabel className="font-extrabold mb-2">Staj Yapılan Firma Adı</FormLabel>
+                <TextField
+                  className="w-full"
+                  id="company_name"
+                  required
+                  name="company_name"
+                  label="Firma adı"
+                  value={formik.values.company_name}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.company_name)}
+                  helperText={formik.errors.company_name}
+                />
+              </Box>
+              <Box className="flex items-start justify-between flex-col gap-4">
+                <FormLabel className="font-extrabold mb-2">Staj Yapılan Firma Adresi</FormLabel>
+                <TextField
+                  className="w-full"
+                  id="address"
+                  required
+                  name="address"
+                  label="Firma adresi"
+                  multiline
+                  rows={3}
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  error={Boolean(formik.errors.address)}
+                  helperText={formik.errors.address}
+                />
+              </Box>
+            </Box>
+          </Container>
+          <Container className="flex flex-col gap-4">
+            <Typography className="my-2 text-red-500 text-lg border-b-2"> Staj Tarihi Ve Çalışma Konuları</Typography>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Staj Başlama Tarihi</FormLabel>
+              <CustomDateInput
+                id="start_date"
                 required
-                name="company_name"
-                label="Firma adı"
-                value={formik.values.company_name}
-                onChange={formik.handleChange}
-                error={Boolean(formik.errors.company_name)}
-                helperText={formik.errors.company_name}
+                style={{ width: '100%' }}
+                name="start_date"
+                label="Başlangıç Tarihi"
+                value={dayjs(formik.values.start_date)}
+                onChange={(value) => formik.setFieldValue('start_date', dayjs(value).toDate(), true)}
+                error={Boolean(formik.errors.start_date)}
+                helperText={formik.errors.start_date}
               />
             </Box>
-            <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-              <FormLabel className="font-extrabold mb-2">Staj Yapılan Firma Adresi:</FormLabel>
-              <TextField
-                className="w-full lg:w-1/2 !p-0"
-                id="address"
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Staj Bitiş Tarihi:</FormLabel>
+              <CustomDateInput
+                id="end_date"
                 required
-                name="address"
-                label="Firma adresi"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                error={Boolean(formik.errors.address)}
-                helperText={formik.errors.address}
+                style={{ width: '100%' }}
+                name="end_date"
+                label="Başlangıç Tarihi"
+                value={dayjs(formik.values.end_date)}
+                onChange={(value) => formik.setFieldValue('end_date', dayjs(value).toDate(), true)}
+                error={Boolean(formik.errors.end_date)}
+                helperText={formik.errors.end_date}
               />
             </Box>
-          </Box>
-        </Container>
-        <Container className="w-full sm:w-full flex flex-col gap-4">
-          <Typography className="my-2 text-red-500"> Staj Tarihi Ve Çalışma Konuları: </Typography>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Staj Başlama Tarihi: </FormLabel>
-            <CustomDateInput
-              id="start_date"
-              required
-              name="start_date"
-              label="Başlangıç Tarihi"
-              value={dayjs(formik.values.start_date)}
-              onChange={(value) => formik.setFieldValue('start_date', dayjs(value).toDate(), true)}
-              error={Boolean(formik.errors.start_date)}
-              helperText={formik.errors.start_date}
-            />
-          </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Staj Bitiş Tarihi:</FormLabel>
-            <CustomDateInput
-              id="end_date"
-              required
-              name="end_date"
-              label="Başlangıç Tarihi"
-              value={dayjs(formik.values.end_date)}
-              onChange={(value) => formik.setFieldValue('end_date', dayjs(value).toDate(), true)}
-              error={Boolean(formik.errors.end_date)}
-              helperText={formik.errors.end_date}
-            />
-          </Box>
 
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Staj Yapılan Departman:</FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              required
-              id="department"
-              name="department"
-              label="Departman"
-              value={formik.values.department}
-              onChange={(e) => formik.setFieldValue('department', e.target.value, true)}
-              error={Boolean(formik.errors.department)}
-              helperText={formik.errors.department}
-            />
-          </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Öğrencinin Devamsızlık Sayısı: </FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              required
-              id="days_of_absence"
-              name="days_of_absence"
-              label="Devamsızlık"
-              type="number"
-              value={formik.values.days_of_absence}
-              onChange={formik.handleChange}
-              error={Boolean(formik.errors.days_of_absence)}
-              helperText={formik.errors.days_of_absence}
-            />
-          </Box>
-        </Container>
-        <Container className="w-full sm:w-full flex flex-col">
-          <CustomRadioGroup data={is_edu_program} formik={formik} />
-        </Container>
-        <Container className="w-full sm:w-full flex flex-col">
-          <Typography className="my-2 text-red-500"> Staj Çalışma Değerlendirmesi: </Typography>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Staj Yapılan Departman</FormLabel>
+              <TextField
+                className="w-full"
+                required
+                id="department"
+                name="department"
+                label="Departman"
+                value={formik.values.department}
+                onChange={(e) => formik.setFieldValue('department', e.target.value, true)}
+                error={Boolean(formik.errors.department)}
+                helperText={formik.errors.department}
+              />
+            </Box>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Öğrencinin Devamsızlık Sayısı</FormLabel>
+              <TextField
+                className="w-full"
+                required
+                id="days_of_absence"
+                name="days_of_absence"
+                label="Devamsızlık"
+                type="number"
+                value={formik.values.days_of_absence}
+                onChange={formik.handleChange}
+                error={Boolean(formik.errors.days_of_absence)}
+                helperText={formik.errors.days_of_absence}
+              />
+            </Box>
+          </Container>
+          <Container className="w-full flex flex-col">
+            <CustomRadioGroup data={is_edu_program} formik={formik} />
+          </Container>
+          <Container className="w-full flex flex-col">
+            <Typography className="my-2 text-red-500 text-lg border-b-2"> Staj Çalışma Değerlendirmesi</Typography>
 
-          {internship_evulation.map((data) => (
-            <CustomRadioGroup
-              error={formik.touched[data.type] && Boolean(formik.errors[data.type])}
-              helperText={formik.touched[data.type] && formik.errors[data.type]}
-              data={data}
-              formik={formik}
-            />
-          ))}
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Puanlama: </FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              id="score"
-              required
-              name="score"
-              label="Puan"
-              type="number"
-              value={formik.values.score}
-              onChange={formik.handleChange}
-              error={Boolean(formik.errors.score)}
-              helperText={formik.errors.score}
-            />
-          </Box>
-        </Container>
-        <Container className="w-full sm:w-full flex flex-col gap-4">
-          <Typography className="my-2 text-red-500">Değerlendirmeyi Yapan Yetkilinin: </Typography>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Adı-Soyadı: </FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              id="auth_name"
-              required
-              name="auth_name"
-              label="Adı-Soyadı"
-              value={formik.values.auth_name}
-              onChange={(value) => formik.setFieldValue('auth_name', capitalizeFirstLetter(value.target.value), true)}
-              error={Boolean(formik.errors.auth_name)}
-              helperText={formik.errors.auth_name}
-            />
-          </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Görevi: </FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              id="auth_position"
-              required
-              name="auth_position"
-              label="Görevi"
-              value={formik.values.auth_position}
-              onChange={formik.handleChange}
-              error={Boolean(formik.errors.auth_position)}
-              helperText={formik.errors.auth_position}
-            />
-          </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Diploma Ünvanı:</FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              id="auth_title"
-              required
-              name="auth_title"
-              label="Diploma Ünvanı"
-              value={formik.values.auth_title}
-              onChange={formik.handleChange}
-              error={Boolean(formik.errors.auth_title)}
-              helperText={formik.errors.auth_title}
-            />
-          </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">Sicil No / İsteğe Bağlı:</FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              id="reg_number"
-              name="reg_number"
-              label="Sicil No"
-              value={formik.values.reg_number}
-              onChange={formik.handleChange}
-              error={Boolean(formik.errors.reg_number)}
-              helperText={formik.errors.reg_number}
-            />
-          </Box>
-          <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
-            <FormLabel className="font-extrabold mb-2">T.C Kimlik Numarası</FormLabel>
-            <TextField
-              className="w-full lg:w-1/2 !p-0"
-              id="auth_tc_number"
-              required
-              name="auth_tc_number"
-              label="T.C Kimlik Numarası"
-              value={formik.values.auth_tc_number}
-              onChange={formik.handleChange}
-              error={Boolean(formik.errors.auth_tc_number)}
-              helperText={formik.errors.auth_tc_number}
-            />
-          </Box>
-          {/* <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
+            {internship_evulation.map((data) => (
+              <CustomRadioGroup
+                error={formik.touched[data.type] && Boolean(formik.errors[data.type])}
+                helperText={formik.touched[data.type] && formik.errors[data.type]}
+                data={data}
+                formik={formik}
+              />
+            ))}
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Puanlama</FormLabel>
+              <TextField
+                className="w-full"
+                id="score"
+                required
+                name="score"
+                label="Puan"
+                type="number"
+                value={formik.values.score}
+                onChange={formik.handleChange}
+                error={Boolean(formik.errors.score)}
+                helperText={formik.errors.score}
+              />
+            </Box>
+          </Container>
+          <Container className="flex flex-col gap-4">
+            <Typography className="my-2 text-red-500 text-lg border-b-2">Değerlendirmeyi Yapan Yetkilinin</Typography>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Adı-Soyadı</FormLabel>
+              <TextField
+                className="w-full"
+                id="auth_name"
+                required
+                name="auth_name"
+                label="Adı-Soyadı"
+                value={formik.values.auth_name}
+                onChange={(value) => formik.setFieldValue('auth_name', capitalizeFirstLetter(value.target.value), true)}
+                error={Boolean(formik.errors.auth_name)}
+                helperText={formik.errors.auth_name}
+              />
+            </Box>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Görevi</FormLabel>
+              <TextField
+                className="w-full"
+                id="auth_position"
+                required
+                name="auth_position"
+                label="Görevi"
+                value={formik.values.auth_position}
+                onChange={formik.handleChange}
+                error={Boolean(formik.errors.auth_position)}
+                helperText={formik.errors.auth_position}
+              />
+            </Box>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Diploma Ünvanı</FormLabel>
+              <TextField
+                className="w-full"
+                id="auth_title"
+                required
+                name="auth_title"
+                label="Diploma Ünvanı"
+                value={formik.values.auth_title}
+                onChange={formik.handleChange}
+                error={Boolean(formik.errors.auth_title)}
+                helperText={formik.errors.auth_title}
+              />
+            </Box>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">Sicil No / İsteğe Bağlı</FormLabel>
+              <TextField
+                className="w-full"
+                id="reg_number"
+                name="reg_number"
+                label="Sicil No"
+                value={formik.values.reg_number}
+                onChange={formik.handleChange}
+                error={Boolean(formik.errors.reg_number)}
+                helperText={formik.errors.reg_number}
+              />
+            </Box>
+            <Box className="flex items-start justify-between flex-col gap-4">
+              <FormLabel className="font-extrabold mb-2">T.C Kimlik Numarası</FormLabel>
+              <TextField
+                className="w-full"
+                id="auth_tc_number"
+                required
+                name="auth_tc_number"
+                label="T.C Kimlik Numarası"
+                value={formik.values.auth_tc_number}
+                onChange={formik.handleChange}
+                error={Boolean(formik.errors.auth_tc_number)}
+                helperText={formik.errors.auth_tc_number}
+              />
+            </Box>
+            {/* <Box className="flex flex-col items-start lg:items-center justify-between lg:flex-row">
             <FormLabel className="font-extrabold mb-2">Açıklama:</FormLabel>
             <TextField
               multiline
@@ -474,20 +535,21 @@ function CompanyConfidentalReport() {
               helperText={formik.errors.desc}
             />
           </Box> */}
-        </Container>
-        <Box className="flex flex-row  my-2 gap-4 w-full justify-evenly">
-          <DialogButton
-            className="w-full lg:w-1/2 !p-0"
-            type="submit"
-            onSubmit={formik.submitForm}
-            color="success"
-            variant="outlined"
-            disabled={!formik.isValid || isAlreadySubmitted}
-            button="Gönder"
-            message={'Bu form bir kez oluşturulduktan sonra değiştirilemez'}
-          />
-        </Box>
-      </form>
+          </Container>
+          <Box className="flex flex-col my-4 gap-4 w-full justify-evenly">
+            <DialogButton
+              className="w-full"
+              type="submit"
+              onSubmit={formik.submitForm}
+              color="success"
+              variant="outlined"
+              disabled={!formik.isValid || isAlreadySubmitted}
+              button="Gönder"
+              message={'Bu form bir kez oluşturulduktan sonra değiştirilemez'}
+            />
+          </Box>
+        </form>
+      </Container>
     </div>
   );
 }

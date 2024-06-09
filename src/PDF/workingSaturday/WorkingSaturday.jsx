@@ -11,8 +11,8 @@ const PdfWorkingSaturday = ({ data }) => {
     name: data?.student?.name + ' ' + data?.student?.last_name,
     date: '..../..../20....',
     no: data?.student?.school_number,
-    startDate: new Date(data?.start_date).toLocaleDateString('pt-PT'),
-    endDate: new Date(data?.end_date).toLocaleDateString('pt-PT'),
+    startDate: new Date(data?.start_date).toLocaleDateString('tr-TR'),
+    endDate: new Date(data?.end_date).toLocaleDateString('tr-TR'),
   };
   Font.register({ family: 'Turkish', src: turkish });
   Font.register({ family: 'Turkish2', src: turkish2 });

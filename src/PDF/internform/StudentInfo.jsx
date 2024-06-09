@@ -11,7 +11,7 @@ const StudentInfo = ({ data }) => {
       { name: 'Baba Adı', value: data?.student_info?.fathers_name },
       { name: 'Anne Adı', value: data?.student_info?.mothers_name },
       { name: 'Doğum Yeri', value: data?.student_info?.birth_place },
-      { name: 'Doğum Tarihi', value: new Date(data?.student_info?.birth_date).toLocaleDateString('pt-PT') },
+      { name: 'Doğum Tarihi', value: new Date(data?.student_info?.birth_date).toLocaleDateString('tr-TR') },
     ],
     right: [
       { name: 'Öğrenci No', value: data?.student?.school_number },
@@ -20,12 +20,12 @@ const StudentInfo = ({ data }) => {
       { name: 'Uygulamalı Eğitim Gün/İş Günü', value: data?.total_work_day, bold: true },
       {
         name: 'Uygulamalı Eğitim Başlangıç Tarihi',
-        value: new Date(data?.start_date).toLocaleDateString('pt-PT'),
+        value: new Date(data?.start_date).toLocaleDateString('tr-TR'),
         bold: true,
       },
       {
         name: 'Uygulamalı Eğitim Bitiş Tarihi',
-        value: new Date(data?.end_date).toLocaleDateString('pt-PT'),
+        value: new Date(data?.end_date).toLocaleDateString('tr-TR'),
         bold: true,
       },
     ],

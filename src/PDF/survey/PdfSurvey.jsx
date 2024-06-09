@@ -20,7 +20,7 @@ const PdfSurvey = ({ data }) => {
     { name: 'GANO', value: data?.gano },
     { name: 'Staj Grubu', value: data?.intern_group },
     { name: 'Staj Turu', value: data?.intern_type },
-    { name: 'Tarih', value: new Date(data?.date).toLocaleDateString('pt-PT') },
+    { name: 'Tarih', value: new Date(data?.date).toLocaleDateString('tr-TR') },
   ];
 
   if (!data) {

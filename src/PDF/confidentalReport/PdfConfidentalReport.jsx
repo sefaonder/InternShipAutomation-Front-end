@@ -8,6 +8,7 @@ import turkishbold from '../pdfComponents/extrabold.ttf';
 Font.register({ family: 'Turkishbold', src: turkishbold });
 
 const PdfConfidentalReport = ({ data }) => {
+  console.log('dataıvır', data);
   const studentCredentials = [
     { name: 'Adı Soyadı', value: data?.interview?.student?.name + ' ' + data?.interview?.student?.last_name },
     {
@@ -15,7 +16,7 @@ const PdfConfidentalReport = ({ data }) => {
       value:
         data?.interview?.internStatus?.form.student_info.birth_place +
         ' - ' +
-        new Date(data?.interview?.internStatus?.form.student_info?.birth_date).toLocaleDateString('pt-PT'),
+        new Date(data?.interview?.internStatus?.form.student_info?.birth_date).toLocaleDateString('tr-TR'),
     },
     { name: 'TC Kimlik No', value: data?.interview?.student?.tc_number },
     { name: 'Bölümü', value: 'Bilgisayar Mühendisliği' },
@@ -29,17 +30,17 @@ const PdfConfidentalReport = ({ data }) => {
     {
       name: 'Staja Başlama ve Bitiş Tarihleri',
       value:
-        new Date(data?.start_date).toLocaleDateString('pt-PT') +
+        new Date(data?.start_date).toLocaleDateString('tr-TR') +
         ' - ' +
-        new Date(data?.end_date).toLocaleDateString('pt-PT'),
+        new Date(data?.end_date).toLocaleDateString('tr-TR'),
     },
     { name: 'Öğrencinin Devamsızlık Günleri ve Sayısı', value: data?.days_of_absence },
     { name: 'Staj Yapilan Departman', value: data?.department },
-    { name: 'Staj Icerisinde Egitim Programi Uygulandı mı?', value: data?.is_edu_program ? 'Evet' : 'Hayır' },
+    { name: 'Staj İçerisinde Eğitim Programi Uygulandı mı?', value: data?.is_edu_program ? 'Evet' : 'Hayır' },
   ];
   const authInfo = [
-    { name: 'Adi Soyadi / Görevi', value: data?.auth_name + ' - ' + data?.auth_position },
-    { name: 'Diploma Unvani', value: data?.auth_position },
+    { name: 'Adı Soyadı / Görevi', value: data?.auth_name + ' - ' + data?.auth_position },
+    { name: 'Diploma nvanı', value: data?.auth_position },
     { name: 'Oda Sicil No (varsa)', value: data?.reg_number },
     { name: 'Tarih / İmza', value: '' },
   ];
@@ -47,13 +48,13 @@ const PdfConfidentalReport = ({ data }) => {
   const internEvuluation = {
     titles: ['Başari Ölçüleri', 'İyi', 'Orta', 'İyi Değil', 'Açıklama'],
     data: [
-      { name: 'Calisma Dikkat ve Sorumluluk', value: data?.intern_evaluation?.responsibility },
-      { name: 'İsi Yapmadaki Basarisi', value: data?.intern_evaluation?.success },
-      { name: 'Ogrenme ve Arastirma Ilgisi', value: data?.intern_evaluation?.interest },
-      { name: 'Ustelerine Karsi Davranisi', value: data?.intern_evaluation?.behaviour_to_auths },
-      { name: 'Calisma Arkadaslarina Davranisi', value: data?.intern_evaluation?.behaviour_to_coworkers },
-      { name: 'Is Guvenligi Kurallarina Uyumu', value: data?.intern_evaluation?.work_safety },
-      { name: 'Meslek Bilgi Duzeyi', value: data?.intern_evaluation?.competence },
+      { name: 'Çalışma Dikkat ve Sorumluluk', value: data?.intern_evaluation?.responsibility },
+      { name: 'İşi Yapmadaki Başarısı', value: data?.intern_evaluation?.success },
+      { name: 'Öğrenme ve Araştırma İlgisi', value: data?.intern_evaluation?.interest },
+      { name: 'Üstelerine Karşı Davranışı', value: data?.intern_evaluation?.behaviour_to_auths },
+      { name: 'Çalışma Arkadaşlarına Davranışı', value: data?.intern_evaluation?.behaviour_to_coworkers },
+      { name: 'İş Güvenliği Kurallarına Uyumu', value: data?.intern_evaluation?.work_safety },
+      { name: 'Meslek Bilgi Düzeyi', value: data?.intern_evaluation?.competence },
     ],
   };
   const headerText = ['T.C.', 'ULUDAĞ ÜNİVERSİTESİ', 'MÜHENDİSLİK FAKÜLTESİ'];
