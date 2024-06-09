@@ -44,7 +44,11 @@ function Profile() {
   const validationSchema = yup.object({
     name: yup.string().required('Ad Alanı'),
     lastName: yup.string().required('Last Name is required'),
-    tcNumber: yup.string().optional('TC is required').min(11, 'TC 11 karakterden oluşmalıdır.').max(11),
+    tcNumber: yup
+      .string()
+      .optional('T.C Kimlik Numarası zorunlu alandır')
+      .min(11, 'T.C Kimlik Numarası 11 karakterden oluşmalıdır.')
+      .max(11),
   });
   const formik = useFormik({
     initialValues: {
@@ -121,7 +125,7 @@ function Profile() {
             <TextField
               id="tcNumber"
               name="tcNumber"
-              label="Tc Kimlik"
+              label="T.C Kimlik Numarası"
               margin="normal"
               inputProps={{ maxLength: 11 }}
               value={formik.values.tcNumber}
@@ -149,12 +153,12 @@ function Profile() {
 
                 {!isAdvancedComission && (
                   <ListItem className="flex justify-between  border-b-2">
-                    <ListItemText> Okul Numarası </ListItemText>
+                    <ListItemText> Okul Numarası</ListItemText>
                     <ListItemText className="flex justify-end"> {data?.data?.school_number} </ListItemText>
                   </ListItem>
                 )}
                 <ListItem className="flex justify-between  border-b-2">
-                  <ListItemText> Tc Kimlik Numarası: </ListItemText>
+                  <ListItemText> T.C Kimlik Numarası</ListItemText>
                   <ListItemText className="flex justify-end"> {data?.data?.tc_number} </ListItemText>
                 </ListItem>
               </List>
